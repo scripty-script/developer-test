@@ -5630,22 +5630,627 @@ $parcel$ReactRefreshHelpers$f00f.prelude(module);
 try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ACTION", ()=>ACTION);
+parcelHelpers.export(exports, "CategoriesContext", ()=>CategoriesContext);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _table = require("./components/table");
+var _tableDefault = parcelHelpers.interopDefault(_table);
+var _react = require("react");
+var _products = require("./components/products");
+var _useModal = require("./hooks/useModal");
+var _useModalDefault = parcelHelpers.interopDefault(_useModal);
+var _react1 = require("@headlessui/react");
+var _s = $RefreshSig$();
+const ACTION = {
+    NEW_PRODUCTS: 1,
+    INSERT_PRODUCT: 2,
+    UPDATE_PRODUCT: 3,
+    DELETE_PRODUCT: 4,
+    NEW_CATEGORIES: 5
+};
+const initReducer = {
+    products: [],
+    categories: []
+};
+function reducer(state, action) {
+    switch(action.type){
+        case ACTION.NEW_PRODUCTS:
+            state.products = [
+                ...action.payload
+            ];
+            return {
+                ...state
+            };
+        case ACTION.INSERT_PRODUCT:
+            state.products.push(action.payload);
+            return {
+                ...state
+            };
+        case ACTION.UPDATE_PRODUCT:
+            for(let i = 0; i < state.products.length; i++)if (state.products[i].id == action.payload.id) {
+                state.products[i] = action.payload;
+                break;
+            }
+            return {
+                ...state
+            };
+        case ACTION.DELETE_PRODUCT:
+            state.products = state.products.filter(({ id  })=>id != action.payload.id);
+            return {
+                ...state
+            };
+        case ACTION.NEW_CATEGORIES:
+            state.categories = [
+                ...action.payload
+            ];
+            return {
+                ...state
+            };
+        default:
+            throw new Error();
+    }
+}
+const CategoriesContext = /*#__PURE__*/ (0, _react.createContext)();
 function App() {
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
-        children: "Hello"
-    }, void 0, false, {
+    _s();
+    const [state, dispatch] = (0, _react.useReducer)(reducer, initReducer);
+    const modal = (0, _useModalDefault.default)();
+    const [query1, setQuery] = (0, _react.useState)(undefined);
+    const [filter1, setFilter] = (0, _react.useState)(false);
+    console.log(filter1);
+    const insertModal = (0, _react.useId)();
+    const updateModal = (0, _react.useId)();
+    const deleteModal = (0, _react.useId)();
+    const loadProducts = async (query, filter = false)=>{
+        try {
+            let url = `${"http://localhost:8000"}/api/products`;
+            const params = new URLSearchParams();
+            if (query !== undefined) params.append("q", query);
+            if (filter) params.append("filter", "no-stock");
+            url += "?" + params.toString();
+            const res = await fetch(url);
+            if (res.ok) {
+                const data = await res.json();
+                dispatch({
+                    type: ACTION.NEW_PRODUCTS,
+                    payload: data
+                });
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+        try {
+            const res = await fetch(`${"http://localhost:8000"}/api/categories`);
+            if (res.ok) {
+                const data = await res.json();
+                dispatch({
+                    type: ACTION.NEW_CATEGORIES,
+                    payload: data
+                });
+            }
+        } catch (error1) {
+            console.log(error1.message);
+        }
+    };
+    (0, _react.useEffect)(()=>{
+        loadProducts();
+    }, []);
+    (0, _react.useEffect)(()=>{
+        if (query1 === undefined) return;
+        const handler = setTimeout(()=>{
+            loadProducts(query1, filter1);
+        }, 700);
+        return ()=>clearTimeout(handler);
+    }, [
+        query1
+    ]);
+    (0, _react.useEffect)(()=>{
+        loadProducts(query1, filter1);
+    }, [
+        filter1
+    ]);
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("main", {
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("section", {
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                    className: "container py-6",
+                    children: [
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("header", {
+                            className: "text-4xl",
+                            children: "Products"
+                        }, void 0, false, {
+                            fileName: "src/App.js",
+                            lineNumber: 121,
+                            columnNumber: 21
+                        }, this),
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                            className: "flex justify-between",
+                            children: [
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                    className: "w-96",
+                                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
+                                        className: "relative block",
+                                        children: [
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                                className: "sr-only",
+                                                children: "Search"
+                                            }, void 0, false, {
+                                                fileName: "src/App.js",
+                                                lineNumber: 125,
+                                                columnNumber: 33
+                                            }, this),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                                className: "absolute inset-y-0 left-0 flex items-center pl-2",
+                                                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("svg", {
+                                                    xmlns: "http://www.w3.org/2000/svg",
+                                                    className: "h-5 w-5 text-slate-500",
+                                                    fill: "none",
+                                                    viewBox: "0 0 24 24",
+                                                    stroke: "currentColor",
+                                                    strokeWidth: 2,
+                                                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("path", {
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round",
+                                                        d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                                    }, void 0, false, {
+                                                        fileName: "src/App.js",
+                                                        lineNumber: 128,
+                                                        columnNumber: 41
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "src/App.js",
+                                                    lineNumber: 127,
+                                                    columnNumber: 37
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "src/App.js",
+                                                lineNumber: 126,
+                                                columnNumber: 33
+                                            }, this),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                                                className: "input-group block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm placeholder:italic placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm",
+                                                placeholder: "Search for anything...",
+                                                type: "text",
+                                                name: "search",
+                                                onChange: (e)=>{
+                                                    setQuery(e.target.value);
+                                                }
+                                            }, void 0, false, {
+                                                fileName: "src/App.js",
+                                                lineNumber: 131,
+                                                columnNumber: 33
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "src/App.js",
+                                        lineNumber: 124,
+                                        columnNumber: 29
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "src/App.js",
+                                    lineNumber: 123,
+                                    columnNumber: 25
+                                }, this),
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                    className: "flex items-center space-x-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                            className: "btn",
+                                            onClick: ()=>{
+                                                loadProducts();
+                                                setFilter(false);
+                                            },
+                                            children: "Refresh"
+                                        }, void 0, false, {
+                                            fileName: "src/App.js",
+                                            lineNumber: 140,
+                                            columnNumber: 29
+                                        }, this),
+                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                            className: "btn-fill",
+                                            onClick: ()=>{
+                                                modal.dispatch({
+                                                    type: (0, _useModal.ACTION).SHOW,
+                                                    payload: {
+                                                        sub: insertModal
+                                                    }
+                                                });
+                                            },
+                                            children: "New Product"
+                                        }, void 0, false, {
+                                            fileName: "src/App.js",
+                                            lineNumber: 145,
+                                            columnNumber: 29
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "src/App.js",
+                                    lineNumber: 139,
+                                    columnNumber: 25
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "src/App.js",
+                            lineNumber: 122,
+                            columnNumber: 21
+                        }, this),
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                            className: "py-4",
+                            children: [
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                    className: "block",
+                                    children: "Filter"
+                                }, void 0, false, {
+                                    fileName: "src/App.js",
+                                    lineNumber: 153,
+                                    columnNumber: 25
+                                }, this),
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react1.Switch), {
+                                    checked: filter1,
+                                    onChange: setFilter,
+                                    className: `${filter1 ? "bg-sky-700" : ""} inline-flex items-center rounded-full mt-1`,
+                                    children: [
+                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                            className: "sr-only",
+                                            children: "no stacks"
+                                        }, void 0, false, {
+                                            fileName: "src/App.js",
+                                            lineNumber: 159,
+                                            columnNumber: 29
+                                        }, this),
+                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                            className: `${filter1 ? "btn-fill" : "btn"} rounded-full`,
+                                            children: "No Stacks"
+                                        }, void 0, false, {
+                                            fileName: "src/App.js",
+                                            lineNumber: 160,
+                                            columnNumber: 29
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "src/App.js",
+                                    lineNumber: 154,
+                                    columnNumber: 25
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "src/App.js",
+                            lineNumber: 152,
+                            columnNumber: 21
+                        }, this),
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _tableDefault.default), {
+                            products: state.products,
+                            onEdit: (props)=>{
+                                modal.dispatch({
+                                    type: (0, _useModal.ACTION).SHOW,
+                                    payload: {
+                                        sub: updateModal,
+                                        data: props
+                                    }
+                                });
+                            },
+                            onDelete: (id)=>{
+                                modal.dispatch({
+                                    type: (0, _useModal.ACTION).SHOW,
+                                    payload: {
+                                        sub: deleteModal,
+                                        data: id
+                                    }
+                                });
+                            }
+                        }, void 0, false, {
+                            fileName: "src/App.js",
+                            lineNumber: 165,
+                            columnNumber: 21
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "src/App.js",
+                    lineNumber: 120,
+                    columnNumber: 17
+                }, this)
+            }, void 0, false, {
+                fileName: "src/App.js",
+                lineNumber: 119,
+                columnNumber: 13
+            }, this),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(CategoriesContext.Provider, {
+                value: state.categories,
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _products.InsertProduct), {
+                        open: modal.visible && modal.sub === insertModal,
+                        onClose: ()=>modal.dispatch({
+                                type: (0, _useModal.ACTION).HIDE
+                            }),
+                        onSubmit: (data)=>dispatch({
+                                type: ACTION.INSERT_PRODUCT,
+                                payload: data
+                            })
+                    }, void 0, false, {
+                        fileName: "src/App.js",
+                        lineNumber: 173,
+                        columnNumber: 17
+                    }, this),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _products.UpdateProduct), {
+                        open: modal.visible && modal.sub === updateModal,
+                        onClose: ()=>modal.dispatch({
+                                type: (0, _useModal.ACTION).HIDE
+                            }),
+                        defaultValue: modal.data,
+                        onSubmit: (data)=>{
+                            dispatch({
+                                type: ACTION.UPDATE_PRODUCT,
+                                payload: data
+                            });
+                        }
+                    }, void 0, false, {
+                        fileName: "src/App.js",
+                        lineNumber: 178,
+                        columnNumber: 17
+                    }, this),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _products.DeleteProduct), {
+                        open: modal.visible && modal.sub === deleteModal,
+                        onClose: ()=>modal.dispatch({
+                                type: (0, _useModal.ACTION).HIDE
+                            }),
+                        id: modal.data,
+                        onDelete: (id)=>{
+                            dispatch({
+                                type: ACTION.DELETE_PRODUCT,
+                                payload: {
+                                    id
+                                }
+                            });
+                        }
+                    }, void 0, false, {
+                        fileName: "src/App.js",
+                        lineNumber: 184,
+                        columnNumber: 17
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "src/App.js",
+                lineNumber: 172,
+                columnNumber: 13
+            }, this)
+        ]
+    }, void 0, true, {
         fileName: "src/App.js",
-        lineNumber: 2,
-        columnNumber: 12
+        lineNumber: 118,
+        columnNumber: 9
     }, this);
 }
 exports.default = App;
+_s(App, "o1I6HHrQJkNNSdbFeJmTL1w5qOg=", false, function() {
+    return [
+        (0, _useModalDefault.default),
+        (0, _react.useId),
+        (0, _react.useId),
+        (0, _react.useId)
+    ];
+});
 _c = App;
 var _c;
 $RefreshReg$(_c, "App");
 
   $parcel$ReactRefreshHelpers$f00f.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","./components/table":"geu6O","react":"21dqq","./components/products":"4wJd9","./hooks/useModal":"giSQw","@headlessui/react":"4Afcd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"geu6O":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$d5c4 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$d5c4.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+function Table({ products =[] , onEdit , onDelete  }) {
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "mt-4 border rounded-md shadow overflow-auto",
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("table", {
+            className: "border-collapse table-fixed w-full text-sm",
+            children: [
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("thead", {
+                    className: "bg-slate-50",
+                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tr", {
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                className: "border-b font-medium p-4 pl-8 pb-3 text-left",
+                                children: "No."
+                            }, void 0, false, {
+                                fileName: "src/components/table.js",
+                                lineNumber: 8,
+                                columnNumber: 25
+                            }, this),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                className: "border-b font-medium p-4 pb-3 text-left",
+                                children: "Name"
+                            }, void 0, false, {
+                                fileName: "src/components/table.js",
+                                lineNumber: 9,
+                                columnNumber: 25
+                            }, this),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                className: "border-b font-medium p-4 pb-3 text-left",
+                                children: "Description"
+                            }, void 0, false, {
+                                fileName: "src/components/table.js",
+                                lineNumber: 10,
+                                columnNumber: 25
+                            }, this),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                className: "border-b font-medium p-4 pb-3 text-left",
+                                children: "Price"
+                            }, void 0, false, {
+                                fileName: "src/components/table.js",
+                                lineNumber: 11,
+                                columnNumber: 25
+                            }, this),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                className: "border-b font-medium p-4 pb-3 text-left",
+                                children: "Quantity"
+                            }, void 0, false, {
+                                fileName: "src/components/table.js",
+                                lineNumber: 12,
+                                columnNumber: 25
+                            }, this),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                className: "border-b font-medium p-4 pb-3 text-left",
+                                children: "Category"
+                            }, void 0, false, {
+                                fileName: "src/components/table.js",
+                                lineNumber: 13,
+                                columnNumber: 25
+                            }, this),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
+                                className: "border-b font-medium p-4 pr-8 pb-3 text-left",
+                                children: "\xa0"
+                            }, void 0, false, {
+                                fileName: "src/components/table.js",
+                                lineNumber: 14,
+                                columnNumber: 25
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/table.js",
+                        lineNumber: 7,
+                        columnNumber: 21
+                    }, this)
+                }, void 0, false, {
+                    fileName: "src/components/table.js",
+                    lineNumber: 6,
+                    columnNumber: 17
+                }, this),
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tbody", {
+                    children: products.length > 0 ? products.map(({ id , name , description , price , qty , category: { name: catName  }  }, index)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tr", {
+                            className: "border-b border-slate-100 last:border-b-0",
+                            children: [
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                    className: "p-4 pl-8",
+                                    children: id
+                                }, void 0, false, {
+                                    fileName: "src/components/table.js",
+                                    lineNumber: 23,
+                                    columnNumber: 37
+                                }, this),
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                    className: "p-4 capitalize",
+                                    children: name
+                                }, void 0, false, {
+                                    fileName: "src/components/table.js",
+                                    lineNumber: 24,
+                                    columnNumber: 37
+                                }, this),
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                    className: "p-4",
+                                    children: description
+                                }, void 0, false, {
+                                    fileName: "src/components/table.js",
+                                    lineNumber: 25,
+                                    columnNumber: 37
+                                }, this),
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                    className: "p-4",
+                                    children: price
+                                }, void 0, false, {
+                                    fileName: "src/components/table.js",
+                                    lineNumber: 26,
+                                    columnNumber: 37
+                                }, this),
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                    className: "p-4",
+                                    children: qty
+                                }, void 0, false, {
+                                    fileName: "src/components/table.js",
+                                    lineNumber: 27,
+                                    columnNumber: 37
+                                }, this),
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                    className: "p-4",
+                                    children: catName
+                                }, void 0, false, {
+                                    fileName: "src/components/table.js",
+                                    lineNumber: 28,
+                                    columnNumber: 37
+                                }, this),
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                                    className: " flex space-x-6 p-4 pr-8",
+                                    children: [
+                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                            className: "font-semibold text-sky-700",
+                                            onClick: ()=>{
+                                                onEdit(products[index]);
+                                            },
+                                            children: "Edit"
+                                        }, void 0, false, {
+                                            fileName: "src/components/table.js",
+                                            lineNumber: 30,
+                                            columnNumber: 41
+                                        }, this),
+                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                            className: "font-semibold text-rose-500",
+                                            onClick: ()=>{
+                                                onDelete(id);
+                                            },
+                                            children: "Delete"
+                                        }, void 0, false, {
+                                            fileName: "src/components/table.js",
+                                            lineNumber: 36,
+                                            columnNumber: 41
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "src/components/table.js",
+                                    lineNumber: 29,
+                                    columnNumber: 37
+                                }, this)
+                            ]
+                        }, id, true, {
+                            fileName: "src/components/table.js",
+                            lineNumber: 22,
+                            columnNumber: 33
+                        }, this)) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tr", {
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
+                            className: "py-4 px-8 text-center italic",
+                            colSpan: 7,
+                            children: "No products yet."
+                        }, void 0, false, {
+                            fileName: "src/components/table.js",
+                            lineNumber: 45,
+                            columnNumber: 33
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "src/components/table.js",
+                        lineNumber: 44,
+                        columnNumber: 29
+                    }, this)
+                }, void 0, false, {
+                    fileName: "src/components/table.js",
+                    lineNumber: 17,
+                    columnNumber: 17
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "src/components/table.js",
+            lineNumber: 5,
+            columnNumber: 13
+        }, this)
+    }, void 0, false, {
+        fileName: "src/components/table.js",
+        lineNumber: 4,
+        columnNumber: 9
+    }, this);
+}
+exports.default = Table;
+_c = Table;
+var _c;
+$RefreshReg$(_c, "Table");
+
+  $parcel$ReactRefreshHelpers$d5c4.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
@@ -5800,28 +6405,2877 @@ function registerExportsForReactRefresh(module) {
     }
 }
 
-},{"react-refresh/runtime":"786KC"}],"lOjBx":[function(require,module,exports) {
-"use strict";
-var m = require("react-dom");
-var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
-exports.createRoot = function(c, o) {
-    i.usingClientEntryPoint = true;
-    try {
-        return m.createRoot(c, o);
-    } finally{
-        i.usingClientEntryPoint = false;
-    }
+},{"react-refresh/runtime":"786KC"}],"4wJd9":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$9920 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$9920.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "InsertProduct", ()=>InsertProduct);
+parcelHelpers.export(exports, "UpdateProduct", ()=>UpdateProduct);
+parcelHelpers.export(exports, "DeleteProduct", ()=>DeleteProduct);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("@headlessui/react");
+var _react1 = require("react");
+var _useAlert = require("~/src/hooks/useAlert");
+var _useAlertDefault = parcelHelpers.interopDefault(_useAlert);
+var _app = require("../App");
+var _alerts = require("./alerts");
+var _s = $RefreshSig$(), _s1 = $RefreshSig$(), _s2 = $RefreshSig$();
+const InsertProduct = ({ open , onClose , onSubmit  })=>{
+    _s();
+    const { message , type , dispatch  } = (0, _useAlertDefault.default)();
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        const data = new FormData(e.target);
+        try {
+            const res = await fetch(`${"http://localhost:8000"}/api/products`, {
+                method: "POST",
+                body: data
+            });
+            if (res.status === 201) {
+                const data = await res.json();
+                dispatch({
+                    type: (0, _useAlert.ALERT_TYPE).SUCCESS,
+                    payload: {
+                        message: data.message
+                    }
+                });
+                onSubmit(data.data);
+                e.target.reset();
+            } else throw new Error();
+        } catch (error) {
+            dispatch({
+                type: (0, _useAlert.ALERT_TYPE).ERROR,
+                payload: {
+                    message: "Something went wrong!"
+                }
+            });
+            return;
+        }
+    };
+    (0, _react1.useEffect)(()=>{
+        dispatch({
+            type: (0, _useAlert.ALERT_TYPE).RESET
+        });
+    }, [
+        open
+    ]);
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition), {
+        show: open,
+        as: (0, _react1.Fragment),
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Dialog), {
+            as: "div",
+            className: "fixed z-10 inset-0 overflow-y-auto",
+            onClose: ()=>onClose(true),
+            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "min-h-screen px-4 text-center",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition).Child, {
+                        as: (0, _react1.Fragment),
+                        enter: "ease-out duration-300",
+                        enterFrom: "opacity-0",
+                        enterTo: "opacity-100",
+                        leave: "ease-in duration-200",
+                        leaveFrom: "opacity-100",
+                        leaveTo: "opacity-0",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Dialog).Overlay, {
+                            className: "fixed inset-0 bg-black bg-opacity-40 transition-opacity"
+                        }, void 0, false, {
+                            fileName: "src/components/products.js",
+                            lineNumber: 46,
+                            columnNumber: 25
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 42,
+                        columnNumber: 21
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                        className: "inline-block h-screen align-middle",
+                        "aria-hidden": "true",
+                        children: "\u200B"
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 50,
+                        columnNumber: 21
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition).Child, {
+                        as: (0, _react1.Fragment),
+                        enter: "ease-out duration-300",
+                        enterFrom: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+                        enterTo: "opacity-100 translate-y-0 sm:scale-100",
+                        leave: "ease-in duration-200",
+                        leaveFrom: "opacity-100 translate-y-0 sm:scale-100",
+                        leaveTo: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                            className: "inline-block align-bottom my-8 w-full max-w-2xl text-left transition-all transform shadow-xl sm:align-middle sm:max-w-md sm:w-full",
+                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
+                                onSubmit: handleSubmit,
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                        className: "bg-white px-4 pt-5 pb-4 rounded-t-lg sm:p-6 sm:pb-4",
+                                        children: [
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Dialog).Title, {
+                                                as: "h3",
+                                                className: "text-xl leading-6 font-medium text-gray-900",
+                                                children: "New Product"
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 59,
+                                                columnNumber: 37
+                                            }, undefined),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                                className: "text-sm",
+                                                children: "Only provide information that is true and correct."
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 60,
+                                                columnNumber: 37
+                                            }, undefined),
+                                            type && (type === (0, _useAlert.ALERT_TYPE).SUCCESS ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _alerts.Success), {
+                                                message: message
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 65,
+                                                columnNumber: 51
+                                            }, undefined) : type === (0, _useAlert.ALERT_TYPE).ERROR && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _alerts.Danger), {
+                                                message: message
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 66,
+                                                columnNumber: 80
+                                            }, undefined)),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(UserInputs, {}, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 69,
+                                                columnNumber: 37
+                                            }, undefined)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "src/components/products.js",
+                                        lineNumber: 58,
+                                        columnNumber: 33
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                        className: "bg-gray-50 px-4 py-3 rounded-b-lg sm:px-6 sm:flex sm:flex-row-reverse",
+                                        children: [
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                                className: "btn-fill w-full inline-flex justify-center sm:ml-3 sm:w-auto",
+                                                children: "Submit"
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 72,
+                                                columnNumber: 37
+                                            }, undefined),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                                className: "btn mt-3 w-full inline-flex justify-center sm:mt-0 sm:ml-3 sm:w-auto",
+                                                type: "button",
+                                                onClick: ()=>onClose(true),
+                                                children: "Cancel"
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 73,
+                                                columnNumber: 37
+                                            }, undefined)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "src/components/products.js",
+                                        lineNumber: 71,
+                                        columnNumber: 33
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/components/products.js",
+                                lineNumber: 57,
+                                columnNumber: 29
+                            }, undefined)
+                        }, void 0, false, {
+                            fileName: "src/components/products.js",
+                            lineNumber: 56,
+                            columnNumber: 25
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 52,
+                        columnNumber: 21
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/products.js",
+                lineNumber: 41,
+                columnNumber: 17
+            }, undefined)
+        }, void 0, false, {
+            fileName: "src/components/products.js",
+            lineNumber: 40,
+            columnNumber: 13
+        }, undefined)
+    }, void 0, false, {
+        fileName: "src/components/products.js",
+        lineNumber: 39,
+        columnNumber: 9
+    }, undefined);
 };
-exports.hydrateRoot = function(c, h, o) {
-    i.usingClientEntryPoint = true;
-    try {
-        return m.hydrateRoot(c, h, o);
-    } finally{
-        i.usingClientEntryPoint = false;
+_s(InsertProduct, "ejEvBgoSN2qSVGozP1lVQ1Rq5Mg=", false, function() {
+    return [
+        (0, _useAlertDefault.default)
+    ];
+});
+_c = InsertProduct;
+const UpdateProduct = ({ open , onClose , defaultValue , onSubmit  })=>{
+    _s1();
+    const { message , type , dispatch  } = (0, _useAlertDefault.default)();
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        const data = new FormData(e.target);
+        try {
+            const res = await fetch(`${"http://localhost:8000"}/api/products/${defaultValue.id}?_method=PUT`, {
+                method: "POST",
+                body: data
+            });
+            if (res.ok) {
+                const data = await res.json();
+                dispatch({
+                    type: (0, _useAlert.ALERT_TYPE).SUCCESS,
+                    payload: {
+                        message: data.message
+                    }
+                });
+                onSubmit(data.data);
+            } else throw new Error();
+        } catch (error) {
+            dispatch({
+                type: (0, _useAlert.ALERT_TYPE).ERROR,
+                payload: {
+                    message: "Something went wrong!"
+                }
+            });
+            return;
+        }
+    };
+    (0, _react1.useEffect)(()=>{
+        dispatch({
+            type: (0, _useAlert.ALERT_TYPE).RESET
+        });
+    }, [
+        open
+    ]);
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition), {
+        show: open,
+        as: (0, _react1.Fragment),
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Dialog), {
+            as: "div",
+            className: "fixed z-10 inset-0 overflow-y-auto",
+            onClose: ()=>onClose(true),
+            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "min-h-screen px-4 text-center",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition).Child, {
+                        as: (0, _react1.Fragment),
+                        enter: "ease-out duration-300",
+                        enterFrom: "opacity-0",
+                        enterTo: "opacity-100",
+                        leave: "ease-in duration-200",
+                        leaveFrom: "opacity-100",
+                        leaveTo: "opacity-0",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Dialog).Overlay, {
+                            className: "fixed inset-0 bg-black bg-opacity-40 transition-opacity"
+                        }, void 0, false, {
+                            fileName: "src/components/products.js",
+                            lineNumber: 121,
+                            columnNumber: 25
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 117,
+                        columnNumber: 21
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                        className: "inline-block h-screen align-middle",
+                        "aria-hidden": "true",
+                        children: "\u200B"
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 125,
+                        columnNumber: 21
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition).Child, {
+                        as: (0, _react1.Fragment),
+                        enter: "ease-out duration-300",
+                        enterFrom: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+                        enterTo: "opacity-100 translate-y-0 sm:scale-100",
+                        leave: "ease-in duration-200",
+                        leaveFrom: "opacity-100 translate-y-0 sm:scale-100",
+                        leaveTo: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                            className: "inline-block align-bottom my-8 w-full max-w-2xl text-left transition-all transform shadow-xl sm:align-middle sm:max-w-md sm:w-full",
+                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
+                                onSubmit: handleSubmit,
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                        className: "bg-white px-4 pt-5 pb-4 rounded-t-lg sm:p-6 sm:pb-4",
+                                        children: [
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Dialog).Title, {
+                                                as: "h3",
+                                                className: "text-2xl leading-6 font-medium text-gray-900",
+                                                children: "Update Product"
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 134,
+                                                columnNumber: 37
+                                            }, undefined),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                                className: "text-sm",
+                                                children: "Only provide information that is true and correct."
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 135,
+                                                columnNumber: 37
+                                            }, undefined),
+                                            type && (type === (0, _useAlert.ALERT_TYPE).SUCCESS ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _alerts.Success), {
+                                                message: message
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 140,
+                                                columnNumber: 51
+                                            }, undefined) : type === (0, _useAlert.ALERT_TYPE).ERROR && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _alerts.Danger), {
+                                                message: message
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 141,
+                                                columnNumber: 80
+                                            }, undefined)),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(UserInputs, {
+                                                defaultValue: defaultValue
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 144,
+                                                columnNumber: 37
+                                            }, undefined)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "src/components/products.js",
+                                        lineNumber: 133,
+                                        columnNumber: 33
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                        className: "bg-gray-50 px-4 py-3 rounded-b-lg sm:px-6 sm:flex sm:flex-row-reverse",
+                                        children: [
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                                className: "btn-fill w-full inline-flex justify-center sm:ml-3 sm:w-auto",
+                                                children: "Save Changes"
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 147,
+                                                columnNumber: 37
+                                            }, undefined),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                                className: "btn mt-3 w-full inline-flex justify-center sm:mt-0 sm:ml-3 sm:w-auto",
+                                                type: "button",
+                                                onClick: ()=>onClose(true),
+                                                children: "Cancel"
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 148,
+                                                columnNumber: 37
+                                            }, undefined)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "src/components/products.js",
+                                        lineNumber: 146,
+                                        columnNumber: 33
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/components/products.js",
+                                lineNumber: 132,
+                                columnNumber: 29
+                            }, undefined)
+                        }, void 0, false, {
+                            fileName: "src/components/products.js",
+                            lineNumber: 131,
+                            columnNumber: 25
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 127,
+                        columnNumber: 21
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/products.js",
+                lineNumber: 116,
+                columnNumber: 17
+            }, undefined)
+        }, void 0, false, {
+            fileName: "src/components/products.js",
+            lineNumber: 115,
+            columnNumber: 13
+        }, undefined)
+    }, void 0, false, {
+        fileName: "src/components/products.js",
+        lineNumber: 114,
+        columnNumber: 9
+    }, undefined);
+};
+_s1(UpdateProduct, "ejEvBgoSN2qSVGozP1lVQ1Rq5Mg=", false, function() {
+    return [
+        (0, _useAlertDefault.default)
+    ];
+});
+_c1 = UpdateProduct;
+const DeleteProduct = ({ open , onClose , id , onDelete  })=>{
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        try {
+            const res = await fetch(`${"http://localhost:8000"}/api/products/${id}`, {
+                method: "DELETE"
+            });
+            if (res.ok) {
+                onDelete(id);
+                onClose(true);
+            } else throw new Error();
+        } catch (error) {
+            console.log("Something went wrong!");
+            return;
+        }
+    };
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition), {
+        show: open,
+        as: (0, _react1.Fragment),
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Dialog), {
+            as: "div",
+            className: "fixed z-10 inset-0 overflow-y-auto",
+            onClose: ()=>onClose(true),
+            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "min-h-screen px-4 text-center",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition).Child, {
+                        as: (0, _react1.Fragment),
+                        enter: "ease-out duration-300",
+                        enterFrom: "opacity-0",
+                        enterTo: "opacity-100",
+                        leave: "ease-in duration-200",
+                        leaveFrom: "opacity-100",
+                        leaveTo: "opacity-0",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Dialog).Overlay, {
+                            className: "fixed inset-0 bg-black bg-opacity-40 transition-opacity"
+                        }, void 0, false, {
+                            fileName: "src/components/products.js",
+                            lineNumber: 189,
+                            columnNumber: 25
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 185,
+                        columnNumber: 21
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                        className: "inline-block h-screen align-middle",
+                        "aria-hidden": "true",
+                        children: "\u200B"
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 193,
+                        columnNumber: 21
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition).Child, {
+                        as: (0, _react1.Fragment),
+                        enter: "ease-out duration-300",
+                        enterFrom: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+                        enterTo: "opacity-100 translate-y-0 sm:scale-100",
+                        leave: "ease-in duration-200",
+                        leaveFrom: "opacity-100 translate-y-0 sm:scale-100",
+                        leaveTo: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
+                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                            className: "inline-block align-bottom my-8 w-full max-w-2xl text-left transition-all transform shadow-xl sm:align-middle sm:max-w-md sm:w-full",
+                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
+                                onSubmit: handleSubmit,
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                        className: "bg-white px-4 pt-5 pb-4 rounded-t-lg sm:p-6 sm:pb-4",
+                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                            className: "sm:flex sm:items-start",
+                                            children: [
+                                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                                    className: "mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10",
+                                                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("svg", {
+                                                        className: "h-6 w-6 text-red-600",
+                                                        xmlns: "http://www.w3.org/2000/svg",
+                                                        fill: "none",
+                                                        viewBox: "0 0 24 24",
+                                                        strokeWidth: "2",
+                                                        stroke: "currentColor",
+                                                        "aria-hidden": "true",
+                                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("path", {
+                                                            strokeLinecap: "round",
+                                                            strokeLinejoin: "round",
+                                                            d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                                        }, void 0, false, {
+                                                            fileName: "src/components/products.js",
+                                                            lineNumber: 205,
+                                                            columnNumber: 49
+                                                        }, undefined)
+                                                    }, void 0, false, {
+                                                        fileName: "src/components/products.js",
+                                                        lineNumber: 204,
+                                                        columnNumber: 45
+                                                    }, undefined)
+                                                }, void 0, false, {
+                                                    fileName: "src/components/products.js",
+                                                    lineNumber: 203,
+                                                    columnNumber: 41
+                                                }, undefined),
+                                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                                    className: "mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Dialog).Title, {
+                                                            as: "h3",
+                                                            className: "text-lg leading-6 font-medium text-gray-900",
+                                                            children: "Delete Product"
+                                                        }, void 0, false, {
+                                                            fileName: "src/components/products.js",
+                                                            lineNumber: 209,
+                                                            columnNumber: 45
+                                                        }, undefined),
+                                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                                            className: "mt-2",
+                                                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                                                className: "text-sm text-gray-500",
+                                                                children: "Are you sure you want to delete this product? This action cannot be undone."
+                                                            }, void 0, false, {
+                                                                fileName: "src/components/products.js",
+                                                                lineNumber: 213,
+                                                                columnNumber: 49
+                                                            }, undefined)
+                                                        }, void 0, false, {
+                                                            fileName: "src/components/products.js",
+                                                            lineNumber: 212,
+                                                            columnNumber: 45
+                                                        }, undefined)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "src/components/products.js",
+                                                    lineNumber: 208,
+                                                    columnNumber: 41
+                                                }, undefined)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "src/components/products.js",
+                                            lineNumber: 202,
+                                            columnNumber: 37
+                                        }, undefined)
+                                    }, void 0, false, {
+                                        fileName: "src/components/products.js",
+                                        lineNumber: 201,
+                                        columnNumber: 33
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                        className: "bg-gray-50 px-4 py-3 rounded-b-lg sm:px-6 sm:flex sm:flex-row-reverse",
+                                        children: [
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                                className: "btn-danger w-full inline-flex justify-center sm:ml-3 sm:w-auto",
+                                                children: "Delete"
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 221,
+                                                columnNumber: 37
+                                            }, undefined),
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                                className: "btn mt-3 w-full inline-flex justify-center sm:mt-0 sm:ml-3 sm:w-auto",
+                                                type: "button",
+                                                onClick: ()=>onClose(true),
+                                                children: "Cancel"
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 222,
+                                                columnNumber: 37
+                                            }, undefined)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "src/components/products.js",
+                                        lineNumber: 220,
+                                        columnNumber: 33
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/components/products.js",
+                                lineNumber: 200,
+                                columnNumber: 29
+                            }, undefined)
+                        }, void 0, false, {
+                            fileName: "src/components/products.js",
+                            lineNumber: 199,
+                            columnNumber: 25
+                        }, undefined)
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 195,
+                        columnNumber: 21
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/products.js",
+                lineNumber: 184,
+                columnNumber: 17
+            }, undefined)
+        }, void 0, false, {
+            fileName: "src/components/products.js",
+            lineNumber: 183,
+            columnNumber: 13
+        }, undefined)
+    }, void 0, false, {
+        fileName: "src/components/products.js",
+        lineNumber: 182,
+        columnNumber: 9
+    }, undefined);
+};
+_c2 = DeleteProduct;
+const UserInputs = ({ defaultValue  })=>{
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "mt-2 space-y-4",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
+                        htmlFor: "name",
+                        className: "block font-medium text-gray-700",
+                        children: "Name"
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 238,
+                        columnNumber: 17
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                        type: "text",
+                        name: "name",
+                        id: "name",
+                        className: "mt-1 block shadow-sm w-full rounded-md capitalize",
+                        defaultValue: defaultValue?.name,
+                        required: true
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 239,
+                        columnNumber: 17
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/products.js",
+                lineNumber: 237,
+                columnNumber: 13
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
+                        htmlFor: "description",
+                        className: "block font-medium text-gray-700",
+                        children: "Description"
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 243,
+                        columnNumber: 17
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("textarea", {
+                        name: "description",
+                        id: "description",
+                        className: "mt-1 block shadow-sm w-full rounded-md min-h-min h-36",
+                        defaultValue: defaultValue?.description,
+                        required: true
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 244,
+                        columnNumber: 17
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/products.js",
+                lineNumber: 242,
+                columnNumber: 13
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "grid grid-cols-2 gap-5",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
+                                htmlFor: "price",
+                                className: "block font-medium text-gray-700",
+                                children: "Price"
+                            }, void 0, false, {
+                                fileName: "src/components/products.js",
+                                lineNumber: 249,
+                                columnNumber: 21
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                                type: "number",
+                                name: "price",
+                                id: "price",
+                                className: "mt-1 block shadow-sm w-full rounded-md capitalize",
+                                defaultValue: defaultValue?.price,
+                                required: true
+                            }, void 0, false, {
+                                fileName: "src/components/products.js",
+                                lineNumber: 250,
+                                columnNumber: 21
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 248,
+                        columnNumber: 17
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
+                                htmlFor: "qty",
+                                className: "block font-medium text-gray-700",
+                                children: "Qty"
+                            }, void 0, false, {
+                                fileName: "src/components/products.js",
+                                lineNumber: 254,
+                                columnNumber: 21
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                                type: "number",
+                                name: "qty",
+                                id: "qty",
+                                className: "mt-1 block shadow-sm w-full rounded-md capitalize",
+                                defaultValue: defaultValue?.qty,
+                                required: true
+                            }, void 0, false, {
+                                fileName: "src/components/products.js",
+                                lineNumber: 255,
+                                columnNumber: 21
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 253,
+                        columnNumber: 17
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/products.js",
+                lineNumber: 247,
+                columnNumber: 13
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
+                        htmlFor: "category_id",
+                        className: "block font-medium text-gray-700",
+                        children: "Category"
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 261,
+                        columnNumber: 17
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(Categories, {
+                        value: defaultValue?.category.id
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 262,
+                        columnNumber: 17
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/products.js",
+                lineNumber: 260,
+                columnNumber: 13
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/components/products.js",
+        lineNumber: 236,
+        columnNumber: 9
+    }, undefined);
+};
+_c3 = UserInputs;
+const Categories = ({ value  })=>{
+    _s2();
+    const [selected1, setSelected] = (0, _react1.useState)(value);
+    const categories = (0, _react1.useContext)((0, _app.CategoriesContext));
+    const name1 = categories.filter(({ id  })=>id == selected1)[0]?.name;
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Listbox), {
+        value: selected1,
+        onChange: setSelected,
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "relative mt-1 text-sm",
+            children: [
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                    type: "hidden",
+                    name: "category_id",
+                    defaultValue: selected1
+                }, void 0, false, {
+                    fileName: "src/components/products.js",
+                    lineNumber: 277,
+                    columnNumber: 17
+                }, undefined),
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Listbox).Button, {
+                    className: "flex item-center w-full py-2 px-3 text-left bg-white border border-gray-300 shadow-sm rounded-lg cursor-default focus:outline-none focus:border-sky-500",
+                    children: [
+                        selected1 !== undefined ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                            className: "flex-1 capitalize",
+                            children: name1
+                        }, void 0, false, {
+                            fileName: "src/components/products.js",
+                            lineNumber: 281,
+                            columnNumber: 31
+                        }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                            className: "flex-1 italic text-slate-500",
+                            children: "No selected category"
+                        }, void 0, false, {
+                            fileName: "src/components/products.js",
+                            lineNumber: 282,
+                            columnNumber: 31
+                        }, undefined),
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                            className: "flex items-center pointer-events-none",
+                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("svg", {
+                                xmlns: "http://www.w3.org/2000/svg",
+                                className: "w-5 h-5 text-gray-400",
+                                fill: "none",
+                                viewBox: "0 0 24 24",
+                                stroke: "currentColor",
+                                strokeWidth: "2",
+                                "aria-hidden": "true",
+                                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("path", {
+                                    strokeLinecap: "round",
+                                    strokeLinejoin: "round",
+                                    d: "M8 9l4-4 4 4m0 6l-4 4-4-4"
+                                }, void 0, false, {
+                                    fileName: "src/components/products.js",
+                                    lineNumber: 286,
+                                    columnNumber: 29
+                                }, undefined)
+                            }, void 0, false, {
+                                fileName: "src/components/products.js",
+                                lineNumber: 285,
+                                columnNumber: 25
+                            }, undefined)
+                        }, void 0, false, {
+                            fileName: "src/components/products.js",
+                            lineNumber: 284,
+                            columnNumber: 21
+                        }, undefined)
+                    ]
+                }, void 0, true, {
+                    fileName: "src/components/products.js",
+                    lineNumber: 278,
+                    columnNumber: 17
+                }, undefined),
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Transition), {
+                    as: (0, _react1.Fragment),
+                    leave: "transition-opacity ease-in duration-100",
+                    leaveFrom: "opacity-100",
+                    leaveTo: "opacity-0",
+                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Listbox).Options, {
+                        className: "absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none",
+                        children: categories.map(({ id , name  })=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _react.Listbox).Option, {
+                                value: id,
+                                className: ({ active  })=>`cursor-default select-none relative py-2 pl-10 pr-4 text-sm ${active ? "bg-sky-100" : "text-gray-900"}`,
+                                children: ({ selected  })=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
+                                        children: [
+                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                                className: `block truncate capitalize ${selected ? "font-medium" : "font-normal"}`,
+                                                children: name
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 299,
+                                                columnNumber: 45
+                                            }, undefined),
+                                            selected && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                                className: "absolute inset-y-0 left-0 flex items-center pl-3 text-sky-700",
+                                                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("svg", {
+                                                    xmlns: "http://www.w3.org/2000/svg",
+                                                    className: "w-5 h-5",
+                                                    fill: "none",
+                                                    viewBox: "0 0 24 24",
+                                                    stroke: "currentColor",
+                                                    strokeWidth: "2",
+                                                    "aria-hidden": "true",
+                                                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("path", {
+                                                        strokeLinecap: "round",
+                                                        strokeLinejoin: "round",
+                                                        d: "M5 13l4 4L19 7"
+                                                    }, void 0, false, {
+                                                        fileName: "src/components/products.js",
+                                                        lineNumber: 304,
+                                                        columnNumber: 57
+                                                    }, undefined)
+                                                }, void 0, false, {
+                                                    fileName: "src/components/products.js",
+                                                    lineNumber: 303,
+                                                    columnNumber: 53
+                                                }, undefined)
+                                            }, void 0, false, {
+                                                fileName: "src/components/products.js",
+                                                lineNumber: 302,
+                                                columnNumber: 49
+                                            }, undefined)
+                                        ]
+                                    }, void 0, true)
+                            }, id, false, {
+                                fileName: "src/components/products.js",
+                                lineNumber: 294,
+                                columnNumber: 33
+                            }, undefined))
+                    }, void 0, false, {
+                        fileName: "src/components/products.js",
+                        lineNumber: 291,
+                        columnNumber: 21
+                    }, undefined)
+                }, void 0, false, {
+                    fileName: "src/components/products.js",
+                    lineNumber: 290,
+                    columnNumber: 17
+                }, undefined)
+            ]
+        }, void 0, true, {
+            fileName: "src/components/products.js",
+            lineNumber: 276,
+            columnNumber: 13
+        }, undefined)
+    }, void 0, false, {
+        fileName: "src/components/products.js",
+        lineNumber: 275,
+        columnNumber: 9
+    }, undefined);
+};
+_s2(Categories, "5sDamTPsj0h9G26l+zAKASb9mhA=");
+_c4 = Categories;
+var _c, _c1, _c2, _c3, _c4;
+$RefreshReg$(_c, "InsertProduct");
+$RefreshReg$(_c1, "UpdateProduct");
+$RefreshReg$(_c2, "DeleteProduct");
+$RefreshReg$(_c3, "UserInputs");
+$RefreshReg$(_c4, "Categories");
+
+  $parcel$ReactRefreshHelpers$9920.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","@headlessui/react":"4Afcd","react":"21dqq","~/src/hooks/useAlert":"jYsML","../App":"2kQhy","./alerts":"2wxwh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"4Afcd":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _comboboxJs = require("./components/combobox/combobox.js");
+parcelHelpers.exportAll(_comboboxJs, exports);
+var _dialogJs = require("./components/dialog/dialog.js");
+parcelHelpers.exportAll(_dialogJs, exports);
+var _disclosureJs = require("./components/disclosure/disclosure.js");
+parcelHelpers.exportAll(_disclosureJs, exports);
+var _focusTrapJs = require("./components/focus-trap/focus-trap.js");
+parcelHelpers.exportAll(_focusTrapJs, exports);
+var _listboxJs = require("./components/listbox/listbox.js");
+parcelHelpers.exportAll(_listboxJs, exports);
+var _menuJs = require("./components/menu/menu.js");
+parcelHelpers.exportAll(_menuJs, exports);
+var _popoverJs = require("./components/popover/popover.js");
+parcelHelpers.exportAll(_popoverJs, exports);
+var _portalJs = require("./components/portal/portal.js");
+parcelHelpers.exportAll(_portalJs, exports);
+var _radioGroupJs = require("./components/radio-group/radio-group.js");
+parcelHelpers.exportAll(_radioGroupJs, exports);
+var _switchJs = require("./components/switch/switch.js");
+parcelHelpers.exportAll(_switchJs, exports);
+var _tabsJs = require("./components/tabs/tabs.js");
+parcelHelpers.exportAll(_tabsJs, exports);
+var _transitionJs = require("./components/transitions/transition.js");
+parcelHelpers.exportAll(_transitionJs, exports);
+
+},{"./components/combobox/combobox.js":"le9hv","./components/dialog/dialog.js":"h8hJd","./components/disclosure/disclosure.js":"6xLpd","./components/focus-trap/focus-trap.js":"2524Y","./components/listbox/listbox.js":"8moQv","./components/menu/menu.js":"bPwuu","./components/popover/popover.js":"gUcnZ","./components/portal/portal.js":"cvXUT","./components/radio-group/radio-group.js":"hNdSk","./components/switch/switch.js":"j277f","./components/tabs/tabs.js":"adwu2","./components/transitions/transition.js":"gjUKC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"le9hv":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Combobox", ()=>Ot);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _useComputedJs = require("../../hooks/use-computed.js");
+var _useDisposablesJs = require("../../hooks/use-disposables.js");
+var _useEventJs = require("../../hooks/use-event.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _useIsoMorphicEffectJs = require("../../hooks/use-iso-morphic-effect.js");
+var _useLatestValueJs = require("../../hooks/use-latest-value.js");
+var _useOutsideClickJs = require("../../hooks/use-outside-click.js");
+var _useResolveButtonTypeJs = require("../../hooks/use-resolve-button-type.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _useTreeWalkerJs = require("../../hooks/use-tree-walker.js");
+var _calculateActiveIndexJs = require("../../utils/calculate-active-index.js");
+var _disposablesJs = require("../../utils/disposables.js");
+var _renderJs = require("../../utils/render.js");
+var _bugsJs = require("../../utils/bugs.js");
+var _matchJs = require("../../utils/match.js");
+var _formJs = require("../../utils/form.js");
+var _focusManagementJs = require("../../utils/focus-management.js");
+var _hiddenJs = require("../../internal/hidden.js");
+var _openClosedJs = require("../../internal/open-closed.js");
+var _keyboardJs = require("../keyboard.js");
+var Se = ((o)=>(o[o.Open = 0] = "Open", o[o.Closed = 1] = "Closed", o))(Se || {}), Pe = ((o)=>(o[o.Single = 0] = "Single", o[o.Multi = 1] = "Multi", o))(Pe || {}), Ae = ((o)=>(o[o.Pointer = 0] = "Pointer", o[o.Other = 1] = "Other", o))(Ae || {}), Ie = ((t)=>(t[t.OpenCombobox = 0] = "OpenCombobox", t[t.CloseCombobox = 1] = "CloseCombobox", t[t.GoToOption = 2] = "GoToOption", t[t.RegisterOption = 3] = "RegisterOption", t[t.UnregisterOption = 4] = "UnregisterOption", t))(Ie || {});
+function q(n, a = (o)=>o) {
+    let o = n.activeOptionIndex !== null ? n.options[n.activeOptionIndex] : null, e = (0, _focusManagementJs.sortByDomNode)(a(n.options.slice()), (t)=>t.dataRef.current.domRef.current), i = o ? e.indexOf(o) : null;
+    return i === -1 && (i = null), {
+        options: e,
+        activeOptionIndex: i
+    };
+}
+let De = {
+    [1] (n) {
+        return n.dataRef.current.disabled || n.comboboxState === 1 ? n : {
+            ...n,
+            activeOptionIndex: null,
+            comboboxState: 1
+        };
+    },
+    [0] (n) {
+        if (n.dataRef.current.disabled || n.comboboxState === 0) return n;
+        let a = n.activeOptionIndex, { isSelected: o  } = n.dataRef.current, e = n.options.findIndex((i)=>o(i.dataRef.current.value));
+        return e !== -1 && (a = e), {
+            ...n,
+            comboboxState: 0,
+            activeOptionIndex: a
+        };
+    },
+    [2] (n, a) {
+        var i;
+        if (n.dataRef.current.disabled || n.dataRef.current.optionsRef.current && !n.dataRef.current.optionsPropsRef.current.static && n.comboboxState === 1) return n;
+        let o = q(n);
+        if (o.activeOptionIndex === null) {
+            let t = o.options.findIndex((p)=>!p.dataRef.current.disabled);
+            t !== -1 && (o.activeOptionIndex = t);
+        }
+        let e = (0, _calculateActiveIndexJs.calculateActiveIndex)(a, {
+            resolveItems: ()=>o.options,
+            resolveActiveIndex: ()=>o.activeOptionIndex,
+            resolveId: (t)=>t.id,
+            resolveDisabled: (t)=>t.dataRef.current.disabled
+        });
+        return {
+            ...n,
+            ...o,
+            activeOptionIndex: e,
+            activationTrigger: (i = a.trigger) != null ? i : 1
+        };
+    },
+    [3]: (n, a)=>{
+        let o = {
+            id: a.id,
+            dataRef: a.dataRef
+        }, e = q(n, (t)=>[
+                ...t,
+                o
+            ]);
+        n.activeOptionIndex === null && n.dataRef.current.isSelected(a.dataRef.current.value) && (e.activeOptionIndex = e.options.indexOf(o));
+        let i = {
+            ...n,
+            ...e,
+            activationTrigger: 1
+        };
+        return n.dataRef.current.__demoMode && n.dataRef.current.value === void 0 && (i.activeOptionIndex = 0), i;
+    },
+    [4]: (n, a)=>{
+        let o = q(n, (e)=>{
+            let i = e.findIndex((t)=>t.id === a.id);
+            return i !== -1 && e.splice(i, 1), e;
+        });
+        return {
+            ...n,
+            ...o,
+            activationTrigger: 1
+        };
     }
+}, X = (0, _react.createContext)(null);
+X.displayName = "ComboboxActionsContext";
+function N(n) {
+    let a = (0, _react.useContext)(X);
+    if (a === null) {
+        let o = new Error(`<${n} /> is missing a parent <Combobox /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(o, N), o;
+    }
+    return a;
+}
+let z = (0, _react.createContext)(null);
+z.displayName = "ComboboxDataContext";
+function k(n) {
+    let a = (0, _react.useContext)(z);
+    if (a === null) {
+        let o = new Error(`<${n} /> is missing a parent <Combobox /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(o, k), o;
+    }
+    return a;
+}
+function Ee(n, a) {
+    return (0, _matchJs.match)(a.type, De, n, a);
+}
+let he = (0, _react.Fragment), Le = (0, _renderJs.forwardRefWithAs)(function(a, o) {
+    let { name: e , value: i , onChange: t , disabled: p = !1 , __demoMode: d = !1 , nullable: r = !1 , multiple: u = !1 , ...C } = a, [f, R] = (0, _react.useReducer)(Ee, {
+        dataRef: (0, _react.createRef)(),
+        comboboxState: d ? 0 : 1,
+        options: [],
+        activeOptionIndex: null,
+        activationTrigger: 1
+    }), g = (0, _react.useRef)(!1), x = (0, _react.useRef)({
+        static: !1,
+        hold: !1
+    }), c = (0, _react.useRef)({
+        displayValue: void 0
+    }), m = (0, _react.useRef)(null), U = (0, _react.useRef)(null), M = (0, _react.useRef)(null), h = (0, _react.useRef)(null), D = (0, _useEventJs.useEvent)((s, b)=>s === b), T = (0, _react.useCallback)((s)=>(0, _matchJs.match)(l.mode, {
+            [1]: ()=>i.some((b)=>D(b, s)),
+            [0]: ()=>D(i, s)
+        }), [
+        i
+    ]), l = (0, _react.useMemo)(()=>({
+            ...f,
+            optionsPropsRef: x,
+            inputPropsRef: c,
+            labelRef: m,
+            inputRef: U,
+            buttonRef: M,
+            optionsRef: h,
+            value: i,
+            disabled: p,
+            mode: u ? 1 : 0,
+            get activeOptionIndex () {
+                if (g.current && f.activeOptionIndex === null && f.options.length > 0) {
+                    let s = f.options.findIndex((b)=>!b.dataRef.current.disabled);
+                    if (s !== -1) return s;
+                }
+                return f.activeOptionIndex;
+            },
+            compare: D,
+            isSelected: T,
+            nullable: r,
+            __demoMode: d
+        }), [
+        i,
+        p,
+        u,
+        r,
+        d,
+        f
+    ]);
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        f.dataRef.current = l;
+    }, [
+        l
+    ]), (0, _useOutsideClickJs.useOutsideClick)([
+        l.buttonRef,
+        l.inputRef,
+        l.optionsRef
+    ], ()=>R({
+            type: 1
+        }), l.comboboxState === 0);
+    let j = (0, _react.useMemo)(()=>({
+            open: l.comboboxState === 0,
+            disabled: p,
+            activeIndex: l.activeOptionIndex,
+            activeOption: l.activeOptionIndex === null ? null : l.options[l.activeOptionIndex].dataRef.current.value
+        }), [
+        l,
+        p
+    ]), v = (0, _react.useCallback)(()=>{
+        var b;
+        if (!l.inputRef.current) return;
+        let s = c.current.displayValue;
+        typeof s == "function" ? l.inputRef.current.value = (b = s(i)) != null ? b : "" : typeof i == "string" ? l.inputRef.current.value = i : l.inputRef.current.value = "";
+    }, [
+        i,
+        l.inputRef,
+        c
+    ]), P = (0, _useEventJs.useEvent)((s)=>{
+        let b = l.options.find((L)=>L.id === s);
+        !b || (K(b.dataRef.current.value), v());
+    }), G = (0, _useEventJs.useEvent)(()=>{
+        if (l.activeOptionIndex !== null) {
+            let { dataRef: s , id: b  } = l.options[l.activeOptionIndex];
+            K(s.current.value), v(), R({
+                type: 2,
+                focus: (0, _calculateActiveIndexJs.Focus).Specific,
+                id: b
+            });
+        }
+    }), oe = (0, _useEventJs.useEvent)(()=>{
+        R({
+            type: 0
+        }), g.current = !0;
+    }), ne = (0, _useEventJs.useEvent)(()=>{
+        R({
+            type: 1
+        }), g.current = !1;
+    }), re = (0, _useEventJs.useEvent)((s, b, L)=>(g.current = !1, s === (0, _calculateActiveIndexJs.Focus).Specific ? R({
+            type: 2,
+            focus: (0, _calculateActiveIndexJs.Focus).Specific,
+            id: b,
+            trigger: L
+        }) : R({
+            type: 2,
+            focus: s,
+            trigger: L
+        }))), ie = (0, _useEventJs.useEvent)((s, b)=>(R({
+            type: 3,
+            id: s,
+            dataRef: b
+        }), ()=>R({
+                type: 4,
+                id: s
+            }))), K = (0, _useEventJs.useEvent)((s)=>(0, _matchJs.match)(l.mode, {
+            [0] () {
+                return t(s);
+            },
+            [1] () {
+                let b = l.value.slice(), L = b.indexOf(s);
+                return L === -1 ? b.push(s) : b.splice(L, 1), t(b);
+            }
+        })), ae = (0, _react.useMemo)(()=>({
+            onChange: K,
+            registerOption: ie,
+            goToOption: re,
+            closeCombobox: ne,
+            openCombobox: oe,
+            selectActiveOption: G,
+            selectOption: P
+        }), []);
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        l.comboboxState === 1 && v();
+    }, [
+        v,
+        l.comboboxState
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(v, [
+        v
+    ]);
+    let le = o === null ? {} : {
+        ref: o
+    };
+    return (0, _reactDefault.default).createElement(X.Provider, {
+        value: ae
+    }, (0, _reactDefault.default).createElement(z.Provider, {
+        value: l
+    }, (0, _reactDefault.default).createElement((0, _openClosedJs.OpenClosedProvider), {
+        value: (0, _matchJs.match)(l.comboboxState, {
+            [0]: (0, _openClosedJs.State).Open,
+            [1]: (0, _openClosedJs.State).Closed
+        })
+    }, e != null && i != null && (0, _formJs.objectToFormEntries)({
+        [e]: i
+    }).map(([s, b])=>(0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+            features: (0, _hiddenJs.Features).Hidden,
+            ...(0, _renderJs.compact)({
+                key: s,
+                as: "input",
+                type: "hidden",
+                hidden: !0,
+                readOnly: !0,
+                name: s,
+                value: b
+            })
+        })), (0, _renderJs.render)({
+        ourProps: le,
+        theirProps: C,
+        slot: j,
+        defaultTag: he,
+        name: "Combobox"
+    }))));
+}), Me = "input", _e = (0, _renderJs.forwardRefWithAs)(function(a, o) {
+    var h, D;
+    let { value: e , onChange: i , displayValue: t , type: p = "text" , ...d } = a, r = k("Combobox.Input"), u = N("Combobox.Input"), C = (0, _useSyncRefsJs.useSyncRefs)(r.inputRef, o), f = r.inputPropsRef, R = `headlessui-combobox-input-${(0, _useIdJs.useId)()}`, g = (0, _useDisposablesJs.useDisposables)();
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        f.current.displayValue = t;
+    }, [
+        t,
+        f
+    ]);
+    let x = (0, _useEventJs.useEvent)((T)=>{
+        switch(T.key){
+            case (0, _keyboardJs.Keys).Backspace:
+            case (0, _keyboardJs.Keys).Delete:
+                if (r.comboboxState !== 0 || r.mode !== 0 || !r.nullable) return;
+                let l = T.currentTarget;
+                g.requestAnimationFrame(()=>{
+                    l.value === "" && (u.onChange(null), r.optionsRef.current && (r.optionsRef.current.scrollTop = 0), u.goToOption((0, _calculateActiveIndexJs.Focus).Nothing));
+                });
+                break;
+            case (0, _keyboardJs.Keys).Enter:
+                if (r.comboboxState !== 0) return;
+                if (T.preventDefault(), T.stopPropagation(), r.activeOptionIndex === null) {
+                    u.closeCombobox();
+                    return;
+                }
+                u.selectActiveOption(), r.mode === 0 && u.closeCombobox();
+                break;
+            case (0, _keyboardJs.Keys).ArrowDown:
+                return T.preventDefault(), T.stopPropagation(), (0, _matchJs.match)(r.comboboxState, {
+                    [0]: ()=>{
+                        u.goToOption((0, _calculateActiveIndexJs.Focus).Next);
+                    },
+                    [1]: ()=>{
+                        u.openCombobox();
+                    }
+                });
+            case (0, _keyboardJs.Keys).ArrowUp:
+                return T.preventDefault(), T.stopPropagation(), (0, _matchJs.match)(r.comboboxState, {
+                    [0]: ()=>{
+                        u.goToOption((0, _calculateActiveIndexJs.Focus).Previous);
+                    },
+                    [1]: ()=>{
+                        u.openCombobox(), g.nextFrame(()=>{
+                            r.value || u.goToOption((0, _calculateActiveIndexJs.Focus).Last);
+                        });
+                    }
+                });
+            case (0, _keyboardJs.Keys).Home:
+            case (0, _keyboardJs.Keys).PageUp:
+                return T.preventDefault(), T.stopPropagation(), u.goToOption((0, _calculateActiveIndexJs.Focus).First);
+            case (0, _keyboardJs.Keys).End:
+            case (0, _keyboardJs.Keys).PageDown:
+                return T.preventDefault(), T.stopPropagation(), u.goToOption((0, _calculateActiveIndexJs.Focus).Last);
+            case (0, _keyboardJs.Keys).Escape:
+                return r.comboboxState !== 0 ? void 0 : (T.preventDefault(), r.optionsRef.current && !r.optionsPropsRef.current.static && T.stopPropagation(), u.closeCombobox());
+            case (0, _keyboardJs.Keys).Tab:
+                if (r.comboboxState !== 0) return;
+                u.selectActiveOption(), u.closeCombobox();
+                break;
+        }
+    }), c = (0, _useEventJs.useEvent)((T)=>{
+        u.openCombobox(), i == null || i(T);
+    }), m = (0, _useComputedJs.useComputed)(()=>{
+        if (!!r.labelRef.current) return [
+            r.labelRef.current.id
+        ].join(" ");
+    }, [
+        r.labelRef.current
+    ]), U = (0, _react.useMemo)(()=>({
+            open: r.comboboxState === 0,
+            disabled: r.disabled
+        }), [
+        r
+    ]), M = {
+        ref: C,
+        id: R,
+        role: "combobox",
+        type: p,
+        "aria-controls": (h = r.optionsRef.current) == null ? void 0 : h.id,
+        "aria-expanded": r.disabled ? void 0 : r.comboboxState === 0,
+        "aria-activedescendant": r.activeOptionIndex === null || (D = r.options[r.activeOptionIndex]) == null ? void 0 : D.id,
+        "aria-multiselectable": r.mode === 1 ? !0 : void 0,
+        "aria-labelledby": m,
+        disabled: r.disabled,
+        onKeyDown: x,
+        onChange: c
+    };
+    return (0, _renderJs.render)({
+        ourProps: M,
+        theirProps: d,
+        slot: U,
+        defaultTag: Me,
+        name: "Combobox.Input"
+    });
+}), Fe = "button", we = (0, _renderJs.forwardRefWithAs)(function(a, o) {
+    var x;
+    let e = k("Combobox.Button"), i = N("Combobox.Button"), t = (0, _useSyncRefsJs.useSyncRefs)(e.buttonRef, o), p = `headlessui-combobox-button-${(0, _useIdJs.useId)()}`, d = (0, _useDisposablesJs.useDisposables)(), r = (0, _useEventJs.useEvent)((c)=>{
+        switch(c.key){
+            case (0, _keyboardJs.Keys).ArrowDown:
+                return c.preventDefault(), c.stopPropagation(), e.comboboxState === 1 && i.openCombobox(), d.nextFrame(()=>{
+                    var m;
+                    return (m = e.inputRef.current) == null ? void 0 : m.focus({
+                        preventScroll: !0
+                    });
+                });
+            case (0, _keyboardJs.Keys).ArrowUp:
+                return c.preventDefault(), c.stopPropagation(), e.comboboxState === 1 && (i.openCombobox(), d.nextFrame(()=>{
+                    e.value || i.goToOption((0, _calculateActiveIndexJs.Focus).Last);
+                })), d.nextFrame(()=>{
+                    var m;
+                    return (m = e.inputRef.current) == null ? void 0 : m.focus({
+                        preventScroll: !0
+                    });
+                });
+            case (0, _keyboardJs.Keys).Escape:
+                return e.comboboxState !== 0 ? void 0 : (c.preventDefault(), e.optionsRef.current && !e.optionsPropsRef.current.static && c.stopPropagation(), i.closeCombobox(), d.nextFrame(()=>{
+                    var m;
+                    return (m = e.inputRef.current) == null ? void 0 : m.focus({
+                        preventScroll: !0
+                    });
+                }));
+            default:
+                return;
+        }
+    }), u = (0, _useEventJs.useEvent)((c)=>{
+        if ((0, _bugsJs.isDisabledReactIssue7711)(c.currentTarget)) return c.preventDefault();
+        e.comboboxState === 0 ? i.closeCombobox() : (c.preventDefault(), i.openCombobox()), d.nextFrame(()=>{
+            var m;
+            return (m = e.inputRef.current) == null ? void 0 : m.focus({
+                preventScroll: !0
+            });
+        });
+    }), C = (0, _useComputedJs.useComputed)(()=>{
+        if (!!e.labelRef.current) return [
+            e.labelRef.current.id,
+            p
+        ].join(" ");
+    }, [
+        e.labelRef.current,
+        p
+    ]), f = (0, _react.useMemo)(()=>({
+            open: e.comboboxState === 0,
+            disabled: e.disabled
+        }), [
+        e
+    ]), R = a, g = {
+        ref: t,
+        id: p,
+        type: (0, _useResolveButtonTypeJs.useResolveButtonType)(a, e.buttonRef),
+        tabIndex: -1,
+        "aria-haspopup": !0,
+        "aria-controls": (x = e.optionsRef.current) == null ? void 0 : x.id,
+        "aria-expanded": e.disabled ? void 0 : e.comboboxState === 0,
+        "aria-labelledby": C,
+        disabled: e.disabled,
+        onClick: u,
+        onKeyDown: r
+    };
+    return (0, _renderJs.render)({
+        ourProps: g,
+        theirProps: R,
+        slot: f,
+        defaultTag: Fe,
+        name: "Combobox.Button"
+    });
+}), ke = "label", Ue = (0, _renderJs.forwardRefWithAs)(function(a, o) {
+    let e = k("Combobox.Label"), i = `headlessui-combobox-label-${(0, _useIdJs.useId)()}`, t = (0, _useSyncRefsJs.useSyncRefs)(e.labelRef, o), p = (0, _useEventJs.useEvent)(()=>{
+        var C;
+        return (C = e.inputRef.current) == null ? void 0 : C.focus({
+            preventScroll: !0
+        });
+    }), d = (0, _react.useMemo)(()=>({
+            open: e.comboboxState === 0,
+            disabled: e.disabled
+        }), [
+        e
+    ]);
+    return (0, _renderJs.render)({
+        ourProps: {
+            ref: t,
+            id: i,
+            onClick: p
+        },
+        theirProps: a,
+        slot: d,
+        defaultTag: ke,
+        name: "Combobox.Label"
+    });
+}), Be = "ul", Ve = (0, _renderJs.Features).RenderStrategy | (0, _renderJs.Features).Static, je = (0, _renderJs.forwardRefWithAs)(function(a, o) {
+    var g;
+    let { hold: e = !1 , ...i } = a, t = k("Combobox.Options"), p = (0, _useSyncRefsJs.useSyncRefs)(t.optionsRef, o), d = `headlessui-combobox-options-${(0, _useIdJs.useId)()}`, r = (0, _openClosedJs.useOpenClosed)(), u = (()=>r !== null ? r === (0, _openClosedJs.State).Open : t.comboboxState === 0)();
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        var x;
+        t.optionsPropsRef.current.static = (x = a.static) != null ? x : !1;
+    }, [
+        t.optionsPropsRef,
+        a.static
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        t.optionsPropsRef.current.hold = e;
+    }, [
+        t.optionsPropsRef,
+        e
+    ]), (0, _useTreeWalkerJs.useTreeWalker)({
+        container: t.optionsRef.current,
+        enabled: t.comboboxState === 0,
+        accept (x) {
+            return x.getAttribute("role") === "option" ? NodeFilter.FILTER_REJECT : x.hasAttribute("role") ? NodeFilter.FILTER_SKIP : NodeFilter.FILTER_ACCEPT;
+        },
+        walk (x) {
+            x.setAttribute("role", "none");
+        }
+    });
+    let C = (0, _useComputedJs.useComputed)(()=>{
+        var x, c, m;
+        return (m = (x = t.labelRef.current) == null ? void 0 : x.id) != null ? m : (c = t.buttonRef.current) == null ? void 0 : c.id;
+    }, [
+        t.labelRef.current,
+        t.buttonRef.current
+    ]), f = (0, _react.useMemo)(()=>({
+            open: t.comboboxState === 0
+        }), [
+        t
+    ]), R = {
+        "aria-activedescendant": t.activeOptionIndex === null || (g = t.options[t.activeOptionIndex]) == null ? void 0 : g.id,
+        "aria-labelledby": C,
+        role: "listbox",
+        id: d,
+        ref: p
+    };
+    return (0, _renderJs.render)({
+        ourProps: R,
+        theirProps: i,
+        slot: f,
+        defaultTag: Be,
+        features: Ve,
+        visible: u,
+        name: "Combobox.Options"
+    });
+}), Ge = "li", He = (0, _renderJs.forwardRefWithAs)(function(a, o) {
+    var l, j;
+    let { disabled: e = !1 , value: i , ...t } = a, p = k("Combobox.Option"), d = N("Combobox.Option"), r = `headlessui-combobox-option-${(0, _useIdJs.useId)()}`, u = p.activeOptionIndex !== null ? p.options[p.activeOptionIndex].id === r : !1, C = p.isSelected(i), f = (0, _react.useRef)(null), R = (0, _useLatestValueJs.useLatestValue)({
+        disabled: e,
+        value: i,
+        domRef: f,
+        textValue: (j = (l = f.current) == null ? void 0 : l.textContent) == null ? void 0 : j.toLowerCase()
+    }), g = (0, _useSyncRefsJs.useSyncRefs)(o, f), x = (0, _useEventJs.useEvent)(()=>d.selectOption(r));
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>d.registerOption(r, R), [
+        R,
+        r
+    ]);
+    let c = (0, _react.useRef)(!p.__demoMode);
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        if (!p.__demoMode) return;
+        let v = (0, _disposablesJs.disposables)();
+        return v.requestAnimationFrame(()=>{
+            c.current = !0;
+        }), v.dispose;
+    }, []), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        if (p.comboboxState !== 0 || !u || !c.current || p.activationTrigger === 0) return;
+        let v = (0, _disposablesJs.disposables)();
+        return v.requestAnimationFrame(()=>{
+            var P, G;
+            (G = (P = f.current) == null ? void 0 : P.scrollIntoView) == null || G.call(P, {
+                block: "nearest"
+            });
+        }), v.dispose;
+    }, [
+        f,
+        u,
+        p.comboboxState,
+        p.activationTrigger,
+        p.activeOptionIndex
+    ]);
+    let m = (0, _useEventJs.useEvent)((v)=>{
+        var P;
+        if (e) return v.preventDefault();
+        x(), p.mode === 0 && (d.closeCombobox(), (P = p.inputRef.current) == null || P.focus({
+            preventScroll: !0
+        }));
+    }), U = (0, _useEventJs.useEvent)(()=>{
+        if (e) return d.goToOption((0, _calculateActiveIndexJs.Focus).Nothing);
+        d.goToOption((0, _calculateActiveIndexJs.Focus).Specific, r);
+    }), M = (0, _useEventJs.useEvent)(()=>{
+        e || u || d.goToOption((0, _calculateActiveIndexJs.Focus).Specific, r, 0);
+    }), h = (0, _useEventJs.useEvent)(()=>{
+        e || !u || p.optionsPropsRef.current.hold || d.goToOption((0, _calculateActiveIndexJs.Focus).Nothing);
+    }), D = (0, _react.useMemo)(()=>({
+            active: u,
+            selected: C,
+            disabled: e
+        }), [
+        u,
+        C,
+        e
+    ]);
+    return (0, _renderJs.render)({
+        ourProps: {
+            id: r,
+            ref: g,
+            role: "option",
+            tabIndex: e === !0 ? void 0 : -1,
+            "aria-disabled": e === !0 ? !0 : void 0,
+            "aria-selected": C === !0 ? !0 : void 0,
+            disabled: void 0,
+            onClick: m,
+            onFocus: U,
+            onPointerMove: M,
+            onMouseMove: M,
+            onPointerLeave: h,
+            onMouseLeave: h
+        },
+        theirProps: t,
+        slot: D,
+        defaultTag: Ge,
+        name: "Combobox.Option"
+    });
+}), Ot = Object.assign(Le, {
+    Input: _e,
+    Button: we,
+    Label: Ue,
+    Options: je,
+    Option: He
+});
+
+},{"react":"21dqq","../../hooks/use-computed.js":"2m5Sl","../../hooks/use-disposables.js":"6QssP","../../hooks/use-event.js":"kEbTP","../../hooks/use-id.js":"9HMMR","../../hooks/use-iso-morphic-effect.js":"5EMFK","../../hooks/use-latest-value.js":"6nuRQ","../../hooks/use-outside-click.js":"bNTTE","../../hooks/use-resolve-button-type.js":"jGJQI","../../hooks/use-sync-refs.js":"67YMZ","../../hooks/use-tree-walker.js":"fQ700","../../utils/calculate-active-index.js":"l9t8E","../../utils/disposables.js":"5m1zj","../../utils/render.js":"6k5Fw","../../utils/bugs.js":"czGU7","../../utils/match.js":"ix3HI","../../utils/form.js":"cXZpR","../../utils/focus-management.js":"aKUTi","../../internal/hidden.js":"1o7Iy","../../internal/open-closed.js":"aw8L5","../keyboard.js":"btpQm","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2m5Sl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useComputed", ()=>i);
+var _react = require("react");
+var _useIsoMorphicEffectJs = require("./use-iso-morphic-effect.js");
+var _useLatestValueJs = require("./use-latest-value.js");
+function i(e, o) {
+    let [u, t] = (0, _react.useState)(e), r = (0, _useLatestValueJs.useLatestValue)(e);
+    return (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>t(r.current), [
+        r,
+        t,
+        ...o
+    ]), u;
+}
+
+},{"react":"21dqq","./use-iso-morphic-effect.js":"5EMFK","./use-latest-value.js":"6nuRQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5EMFK":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useIsoMorphicEffect", ()=>t);
+var _react = require("react");
+let t = typeof window != "undefined" ? (0, _react.useLayoutEffect) : (0, _react.useEffect);
+
+},{"react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6nuRQ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useLatestValue", ()=>s);
+var _react = require("react");
+var _useIsoMorphicEffectJs = require("./use-iso-morphic-effect.js");
+function s(e) {
+    let r = (0, _react.useRef)(e);
+    return (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        r.current = e;
+    }, [
+        e
+    ]), r;
+}
+
+},{"react":"21dqq","./use-iso-morphic-effect.js":"5EMFK","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6QssP":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useDisposables", ()=>p);
+var _react = require("react");
+var _disposablesJs = require("../utils/disposables.js");
+function p() {
+    let [e] = (0, _react.useState)((0, _disposablesJs.disposables));
+    return (0, _react.useEffect)(()=>()=>e.dispose(), [
+        e
+    ]), e;
+}
+
+},{"react":"21dqq","../utils/disposables.js":"5m1zj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5m1zj":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "disposables", ()=>o);
+function o() {
+    let a = [], i = [], n = {
+        enqueue (e) {
+            i.push(e);
+        },
+        addEventListener (e, t, r, s) {
+            return e.addEventListener(t, r, s), n.add(()=>e.removeEventListener(t, r, s));
+        },
+        requestAnimationFrame (...e) {
+            let t = requestAnimationFrame(...e);
+            return n.add(()=>cancelAnimationFrame(t));
+        },
+        nextFrame (...e) {
+            return n.requestAnimationFrame(()=>n.requestAnimationFrame(...e));
+        },
+        setTimeout (...e) {
+            let t = setTimeout(...e);
+            return n.add(()=>clearTimeout(t));
+        },
+        add (e) {
+            return a.push(e), ()=>{
+                let t = a.indexOf(e);
+                if (t >= 0) {
+                    let [r] = a.splice(t, 1);
+                    r();
+                }
+            };
+        },
+        dispose () {
+            for (let e of a.splice(0))e();
+        },
+        async workQueue () {
+            for (let e of i.splice(0))await e();
+        }
+    };
+    return n;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kEbTP":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useEvent", ()=>o);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _useLatestValueJs = require("./use-latest-value.js");
+let o = function(t) {
+    let e = (0, _useLatestValueJs.useLatestValue)(t);
+    return (0, _reactDefault.default).useCallback((...r)=>e.current(...r), [
+        e
+    ]);
 };
 
-},{"react-dom":"j6uA9"}],"j6uA9":[function(require,module,exports) {
+},{"react":"21dqq","./use-latest-value.js":"6nuRQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9HMMR":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useId", ()=>I);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _useIsoMorphicEffectJs = require("./use-iso-morphic-effect.js");
+var _useServerHandoffCompleteJs = require("./use-server-handoff-complete.js");
+var u;
+let l = 0;
+function r() {
+    return ++l;
+}
+let I = (u = (0, _reactDefault.default).useId) != null ? u : function() {
+    let n = (0, _useServerHandoffCompleteJs.useServerHandoffComplete)(), [e, o] = (0, _reactDefault.default).useState(n ? r : null);
+    return (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        e === null && o(r());
+    }, [
+        e
+    ]), e != null ? "" + e : void 0;
+};
+
+},{"react":"21dqq","./use-iso-morphic-effect.js":"5EMFK","./use-server-handoff-complete.js":"9md0G","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9md0G":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useServerHandoffComplete", ()=>a);
+var _react = require("react");
+let r = {
+    serverHandoffComplete: !1
+};
+function a() {
+    let [e, f] = (0, _react.useState)(r.serverHandoffComplete);
+    return (0, _react.useEffect)(()=>{
+        e !== !0 && f(!0);
+    }, [
+        e
+    ]), (0, _react.useEffect)(()=>{
+        r.serverHandoffComplete === !1 && (r.serverHandoffComplete = !0);
+    }, []), e;
+}
+
+},{"react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bNTTE":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useOutsideClick", ()=>L);
+var _react = require("react");
+var _focusManagementJs = require("../utils/focus-management.js");
+var _useWindowEventJs = require("./use-window-event.js");
+function L(f, c, u = !0) {
+    let l = (0, _react.useRef)(!1);
+    (0, _react.useEffect)(()=>{
+        requestAnimationFrame(()=>{
+            l.current = u;
+        });
+    }, [
+        u
+    ]);
+    function i(t, o) {
+        if (!l.current || t.defaultPrevented) return;
+        let E = function r(e) {
+            return typeof e == "function" ? r(e()) : Array.isArray(e) || e instanceof Set ? e : [
+                e
+            ];
+        }(f), n = o(t);
+        if (n !== null && !!n.ownerDocument.documentElement.contains(n)) {
+            for (let r of E){
+                if (r === null) continue;
+                let e = r instanceof HTMLElement ? r : r.current;
+                if (e != null && e.contains(n)) return;
+            }
+            return !(0, _focusManagementJs.isFocusableElement)(n, (0, _focusManagementJs.FocusableMode).Loose) && n.tabIndex !== -1 && t.preventDefault(), c(t, n);
+        }
+    }
+    (0, _useWindowEventJs.useWindowEvent)("click", (t)=>i(t, (o)=>o.target), !0), (0, _useWindowEventJs.useWindowEvent)("blur", (t)=>i(t, ()=>window.document.activeElement instanceof HTMLIFrameElement ? window.document.activeElement : null), !0);
+}
+
+},{"react":"21dqq","../utils/focus-management.js":"aKUTi","./use-window-event.js":"jI1p2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aKUTi":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Focus", ()=>p);
+parcelHelpers.export(exports, "FocusResult", ()=>L);
+parcelHelpers.export(exports, "FocusableMode", ()=>b);
+parcelHelpers.export(exports, "focusElement", ()=>F);
+parcelHelpers.export(exports, "focusIn", ()=>H);
+parcelHelpers.export(exports, "getFocusableElements", ()=>T);
+parcelHelpers.export(exports, "isFocusableElement", ()=>S);
+parcelHelpers.export(exports, "sortByDomNode", ()=>v);
+var _matchJs = require("./match.js");
+var _ownerJs = require("./owner.js");
+let f = [
+    "[contentEditable=true]",
+    "[tabindex]",
+    "a[href]",
+    "area[href]",
+    "button:not([disabled])",
+    "iframe",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "textarea:not([disabled])"
+].map((e)=>`${e}:not([tabindex='-1'])`).join(",");
+var p = ((o)=>(o[o.First = 1] = "First", o[o.Previous = 2] = "Previous", o[o.Next = 4] = "Next", o[o.Last = 8] = "Last", o[o.WrapAround = 16] = "WrapAround", o[o.NoScroll = 32] = "NoScroll", o))(p || {}), L = ((n)=>(n[n.Error = 0] = "Error", n[n.Overflow = 1] = "Overflow", n[n.Success = 2] = "Success", n[n.Underflow = 3] = "Underflow", n))(L || {}), N = ((t)=>(t[t.Previous = -1] = "Previous", t[t.Next = 1] = "Next", t))(N || {});
+function T(e = document.body) {
+    return e == null ? [] : Array.from(e.querySelectorAll(f));
+}
+var b = ((t)=>(t[t.Strict = 0] = "Strict", t[t.Loose = 1] = "Loose", t))(b || {});
+function S(e, r = 0) {
+    var t;
+    return e === ((t = (0, _ownerJs.getOwnerDocument)(e)) == null ? void 0 : t.body) ? !1 : (0, _matchJs.match)(r, {
+        [0] () {
+            return e.matches(f);
+        },
+        [1] () {
+            let l = e;
+            for(; l !== null;){
+                if (l.matches(f)) return !0;
+                l = l.parentElement;
+            }
+            return !1;
+        }
+    });
+}
+function F(e) {
+    e == null || e.focus({
+        preventScroll: !0
+    });
+}
+let M = [
+    "textarea",
+    "input"
+].join(",");
+function h(e) {
+    var r, t;
+    return (t = (r = e == null ? void 0 : e.matches) == null ? void 0 : r.call(e, M)) != null ? t : !1;
+}
+function v(e, r = (t)=>t) {
+    return e.slice().sort((t, l)=>{
+        let n = r(t), i = r(l);
+        if (n === null || i === null) return 0;
+        let o = n.compareDocumentPosition(i);
+        return o & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : o & Node.DOCUMENT_POSITION_PRECEDING ? 1 : 0;
+    });
+}
+function H(e, r, t = !0) {
+    let l = Array.isArray(e) ? e.length > 0 ? e[0].ownerDocument : document : e.ownerDocument, n = Array.isArray(e) ? t ? v(e) : e : T(e), i = l.activeElement, o = (()=>{
+        if (r & 5) return 1;
+        if (r & 10) return -1;
+        throw new Error("Missing Focus.First, Focus.Previous, Focus.Next or Focus.Last");
+    })(), d = (()=>{
+        if (r & 1) return 0;
+        if (r & 2) return Math.max(0, n.indexOf(i)) - 1;
+        if (r & 4) return Math.max(0, n.indexOf(i)) + 1;
+        if (r & 8) return n.length - 1;
+        throw new Error("Missing Focus.First, Focus.Previous, Focus.Next or Focus.Last");
+    })(), m = r & 32 ? {
+        preventScroll: !0
+    } : {}, c = 0, s = n.length, u;
+    do {
+        if (c >= s || c + s <= 0) return 0;
+        let a = d + c;
+        if (r & 16) a = (a + s) % s;
+        else {
+            if (a < 0) return 3;
+            if (a >= s) return 1;
+        }
+        u = n[a], u == null || u.focus(m), c += o;
+    }while (u !== l.activeElement);
+    return r & 6 && h(u) && u.select(), u.hasAttribute("tabindex") || u.setAttribute("tabindex", "0"), 2;
+}
+
+},{"./match.js":"ix3HI","./owner.js":"2hWOn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ix3HI":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "match", ()=>u);
+function u(r, n, ...a) {
+    if (r in n) {
+        let e = n[r];
+        return typeof e == "function" ? e(...a) : e;
+    }
+    let t = new Error(`Tried to handle "${r}" but there is no handler defined. Only defined handlers are: ${Object.keys(n).map((e)=>`"${e}"`).join(", ")}.`);
+    throw Error.captureStackTrace && Error.captureStackTrace(t, u), t;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2hWOn":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "getOwnerDocument", ()=>t);
+function t(n) {
+    return typeof window == "undefined" ? null : n instanceof Node ? n.ownerDocument : n != null && n.hasOwnProperty("current") && n.current instanceof Node ? n.current.ownerDocument : document;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jI1p2":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useWindowEvent", ()=>s);
+var _react = require("react");
+var _useLatestValueJs = require("./use-latest-value.js");
+function s(e, r, n) {
+    let o = (0, _useLatestValueJs.useLatestValue)(r);
+    (0, _react.useEffect)(()=>{
+        function t(i) {
+            o.current(i);
+        }
+        return window.addEventListener(e, t, n), ()=>window.removeEventListener(e, t, n);
+    }, [
+        e,
+        n
+    ]);
+}
+
+},{"react":"21dqq","./use-latest-value.js":"6nuRQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jGJQI":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useResolveButtonType", ()=>s);
+var _react = require("react");
+var _useIsoMorphicEffectJs = require("./use-iso-morphic-effect.js");
+function i(t) {
+    var n;
+    if (t.type) return t.type;
+    let e = (n = t.as) != null ? n : "button";
+    if (typeof e == "string" && e.toLowerCase() === "button") return "button";
+}
+function s(t, e) {
+    let [n, u] = (0, _react.useState)(()=>i(t));
+    return (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        u(i(t));
+    }, [
+        t.type,
+        t.as
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        n || !e.current || e.current instanceof HTMLButtonElement && !e.current.hasAttribute("type") && u("button");
+    }, [
+        n,
+        e
+    ]), n;
+}
+
+},{"react":"21dqq","./use-iso-morphic-effect.js":"5EMFK","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"67YMZ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "optionalRef", ()=>T);
+parcelHelpers.export(exports, "useSyncRefs", ()=>y);
+var _react = require("react");
+var _useEventJs = require("./use-event.js");
+let u = Symbol();
+function T(t, n = !0) {
+    return Object.assign(t, {
+        [u]: n
+    });
+}
+function y(...t) {
+    let n = (0, _react.useRef)(t);
+    (0, _react.useEffect)(()=>{
+        n.current = t;
+    }, [
+        t
+    ]);
+    let c = (0, _useEventJs.useEvent)((e)=>{
+        for (let o of n.current)o != null && (typeof o == "function" ? o(e) : o.current = e);
+    });
+    return t.every((e)=>e == null || (e == null ? void 0 : e[u])) ? void 0 : c;
+}
+
+},{"react":"21dqq","./use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fQ700":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useTreeWalker", ()=>F);
+var _react = require("react");
+var _useIsoMorphicEffectJs = require("./use-iso-morphic-effect.js");
+var _ownerJs = require("../utils/owner.js");
+function F({ container: e , accept: t , walk: r , enabled: c = !0  }) {
+    let o = (0, _react.useRef)(t), l = (0, _react.useRef)(r);
+    (0, _react.useEffect)(()=>{
+        o.current = t, l.current = r;
+    }, [
+        t,
+        r
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        if (!e || !c) return;
+        let n = (0, _ownerJs.getOwnerDocument)(e);
+        if (!n) return;
+        let f = o.current, p = l.current, d = Object.assign((i)=>f(i), {
+            acceptNode: f
+        }), u = n.createTreeWalker(e, NodeFilter.SHOW_ELEMENT, d, !1);
+        for(; u.nextNode();)p(u.currentNode);
+    }, [
+        e,
+        c,
+        o,
+        l
+    ]);
+}
+
+},{"react":"21dqq","./use-iso-morphic-effect.js":"5EMFK","../utils/owner.js":"2hWOn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l9t8E":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Focus", ()=>a);
+parcelHelpers.export(exports, "calculateActiveIndex", ()=>x);
+function f(r) {
+    throw new Error("Unexpected object: " + r);
+}
+var a = ((e)=>(e[e.First = 0] = "First", e[e.Previous = 1] = "Previous", e[e.Next = 2] = "Next", e[e.Last = 3] = "Last", e[e.Specific = 4] = "Specific", e[e.Nothing = 5] = "Nothing", e))(a || {});
+function x(r, n) {
+    let t = n.resolveItems();
+    if (t.length <= 0) return null;
+    let l = n.resolveActiveIndex(), s = l != null ? l : -1, d = (()=>{
+        switch(r.focus){
+            case 0:
+                return t.findIndex((e)=>!n.resolveDisabled(e));
+            case 1:
+                {
+                    let e = t.slice().reverse().findIndex((i, c, u)=>s !== -1 && u.length - c - 1 >= s ? !1 : !n.resolveDisabled(i));
+                    return e === -1 ? e : t.length - 1 - e;
+                }
+            case 2:
+                return t.findIndex((e, i)=>i <= s ? !1 : !n.resolveDisabled(e));
+            case 3:
+                {
+                    let e = t.slice().reverse().findIndex((i)=>!n.resolveDisabled(i));
+                    return e === -1 ? e : t.length - 1 - e;
+                }
+            case 4:
+                return t.findIndex((e)=>n.resolveId(e) === r.id);
+            case 5:
+                return null;
+            default:
+                f(r);
+        }
+    })();
+    return d === -1 ? l : d;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6k5Fw":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Features", ()=>x);
+parcelHelpers.export(exports, "RenderStrategy", ()=>R);
+parcelHelpers.export(exports, "compact", ()=>g);
+parcelHelpers.export(exports, "forwardRefWithAs", ()=>H);
+parcelHelpers.export(exports, "render", ()=>_);
+var _react = require("react");
+var _matchJs = require("./match.js");
+var x = ((n)=>(n[n.None = 0] = "None", n[n.RenderStrategy = 1] = "RenderStrategy", n[n.Static = 2] = "Static", n))(x || {}), R = ((e)=>(e[e.Unmount = 0] = "Unmount", e[e.Hidden = 1] = "Hidden", e))(R || {});
+function _({ ourProps: r , theirProps: t , slot: e , defaultTag: n , features: a , visible: s = !0 , name: l  }) {
+    let o = y(t, r);
+    if (s) return f(o, e, n, l);
+    let d = a != null ? a : 0;
+    if (d & 2) {
+        let { static: i = !1 , ...u } = o;
+        if (i) return f(u, e, n, l);
+    }
+    if (d & 1) {
+        let { unmount: i = !0 , ...u } = o;
+        return (0, _matchJs.match)(i ? 0 : 1, {
+            [0] () {
+                return null;
+            },
+            [1] () {
+                return f({
+                    ...u,
+                    hidden: !0,
+                    style: {
+                        display: "none"
+                    }
+                }, e, n, l);
+            }
+        });
+    }
+    return f(o, e, n, l);
+}
+function f(r, t = {}, e, n) {
+    let { as: a = e , children: s , refName: l = "ref" , ...o } = m(r, [
+        "unmount",
+        "static"
+    ]), d = r.ref !== void 0 ? {
+        [l]: r.ref
+    } : {}, i = typeof s == "function" ? s(t) : s;
+    o.className && typeof o.className == "function" && (o.className = o.className(t));
+    let u = {};
+    if (a === (0, _react.Fragment) && Object.keys(g(o)).length > 0) {
+        if (!(0, _react.isValidElement)(i) || Array.isArray(i) && i.length > 1) throw new Error([
+            'Passing props on "Fragment"!',
+            "",
+            `The current component <${n} /> is rendering a "Fragment".`,
+            "However we need to passthrough the following props:",
+            Object.keys(o).map((p)=>`  - ${p}`).join(`
+`),
+            "",
+            "You can apply a few solutions:",
+            [
+                'Add an `as="..."` prop, to ensure that we render an actual element instead of a "Fragment".',
+                "Render a single element as the child so that we can forward the props onto that element."
+            ].map((p)=>`  - ${p}`).join(`
+`)
+        ].join(`
+`));
+        return (0, _react.cloneElement)(i, Object.assign({}, y(i.props, g(m(o, [
+            "ref"
+        ]))), u, d));
+    }
+    return (0, _react.createElement)(a, Object.assign({}, m(o, [
+        "ref"
+    ]), a !== (0, _react.Fragment) && d, a !== (0, _react.Fragment) && u), i);
+}
+function y(...r) {
+    var n;
+    if (r.length === 0) return {};
+    if (r.length === 1) return r[0];
+    let t = {}, e = {};
+    for (let a2 of r)for(let s1 in a2)s1.startsWith("on") && typeof a2[s1] == "function" ? ((n = e[s1]) != null || (e[s1] = []), e[s1].push(a2[s1])) : t[s1] = a2[s1];
+    if (t.disabled || t["aria-disabled"]) return Object.assign(t, Object.fromEntries(Object.keys(e).map((a)=>[
+            a,
+            void 0
+        ])));
+    for(let a1 in e)Object.assign(t, {
+        [a1] (s, ...l) {
+            let o = e[a1];
+            for (let d of o){
+                if (s.defaultPrevented) return;
+                d(s, ...l);
+            }
+        }
+    });
+    return t;
+}
+function H(r) {
+    var t;
+    return Object.assign((0, _react.forwardRef)(r), {
+        displayName: (t = r.displayName) != null ? t : r.name
+    });
+}
+function g(r) {
+    let t = Object.assign({}, r);
+    for(let e in t)t[e] === void 0 && delete t[e];
+    return t;
+}
+function m(r, t = []) {
+    let e = Object.assign({}, r);
+    for (let n of t)n in e && delete e[n];
+    return e;
+}
+
+},{"react":"21dqq","./match.js":"ix3HI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"czGU7":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "isDisabledReactIssue7711", ()=>r);
+function r(n) {
+    let e = n.parentElement, l = null;
+    for(; e && !(e instanceof HTMLFieldSetElement);)e instanceof HTMLLegendElement && (l = e), e = e.parentElement;
+    let t = (e == null ? void 0 : e.getAttribute("disabled")) === "";
+    return t && i(l) ? !1 : t;
+}
+function i(n) {
+    if (!n) return !1;
+    let e = n.previousElementSibling;
+    for(; e !== null;){
+        if (e instanceof HTMLLegendElement) return !1;
+        e = e.previousElementSibling;
+    }
+    return !0;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cXZpR":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "attemptSubmit", ()=>p);
+parcelHelpers.export(exports, "objectToFormEntries", ()=>e);
+function e(n = {}, r = null, t = []) {
+    for (let [i, o] of Object.entries(n))f(t, s(r, i), o);
+    return t;
+}
+function s(n, r) {
+    return n ? n + "[" + r + "]" : r;
+}
+function f(n, r, t) {
+    if (Array.isArray(t)) for (let [i, o] of t.entries())f(n, s(r, i.toString()), o);
+    else t instanceof Date ? n.push([
+        r,
+        t.toISOString()
+    ]) : typeof t == "boolean" ? n.push([
+        r,
+        t ? "1" : "0"
+    ]) : typeof t == "string" ? n.push([
+        r,
+        t
+    ]) : typeof t == "number" ? n.push([
+        r,
+        `${t}`
+    ]) : t == null ? n.push([
+        r,
+        ""
+    ]) : e(t, r, n);
+}
+function p(n) {
+    var t;
+    let r = (t = n == null ? void 0 : n.form) != null ? t : n.closest("form");
+    if (!!r) {
+        for (let i of r.elements)if (i.tagName === "INPUT" && i.type === "submit" || i.tagName === "BUTTON" && i.type === "submit" || i.nodeName === "INPUT" && i.type === "image") {
+            i.click();
+            return;
+        }
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1o7Iy":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Features", ()=>s);
+parcelHelpers.export(exports, "Hidden", ()=>h);
+var _renderJs = require("../utils/render.js");
+let a = "div";
+var s = ((e)=>(e[e.None = 1] = "None", e[e.Focusable = 2] = "Focusable", e[e.Hidden = 4] = "Hidden", e))(s || {});
+let h = (0, _renderJs.forwardRefWithAs)(function(t, o) {
+    let { features: e = 1 , ...r } = t, d = {
+        ref: o,
+        "aria-hidden": (e & 2) === 2 ? !0 : void 0,
+        style: {
+            position: "absolute",
+            width: 1,
+            height: 1,
+            padding: 0,
+            margin: -1,
+            overflow: "hidden",
+            clip: "rect(0, 0, 0, 0)",
+            whiteSpace: "nowrap",
+            borderWidth: "0",
+            ...(e & 4) === 4 && (e & 2) !== 2 && {
+                display: "none"
+            }
+        }
+    };
+    return (0, _renderJs.render)({
+        ourProps: d,
+        theirProps: r,
+        slot: {},
+        defaultTag: a,
+        name: "Hidden"
+    });
+});
+
+},{"../utils/render.js":"6k5Fw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aw8L5":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "OpenClosedProvider", ()=>C);
+parcelHelpers.export(exports, "State", ()=>p);
+parcelHelpers.export(exports, "useOpenClosed", ()=>s);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+let o = (0, _react.createContext)(null);
+o.displayName = "OpenClosedContext";
+var p = ((e)=>(e[e.Open = 0] = "Open", e[e.Closed = 1] = "Closed", e))(p || {});
+function s() {
+    return (0, _react.useContext)(o);
+}
+function C({ value: t , children: n  }) {
+    return (0, _reactDefault.default).createElement(o.Provider, {
+        value: t
+    }, n);
+}
+
+},{"react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"btpQm":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Keys", ()=>o);
+var o = ((r)=>(r.Space = " ", r.Enter = "Enter", r.Escape = "Escape", r.Backspace = "Backspace", r.Delete = "Delete", r.ArrowLeft = "ArrowLeft", r.ArrowUp = "ArrowUp", r.ArrowRight = "ArrowRight", r.ArrowDown = "ArrowDown", r.Home = "Home", r.End = "End", r.PageUp = "PageUp", r.PageDown = "PageDown", r.Tab = "Tab", r))(o || {});
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h8hJd":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Dialog", ()=>mt);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _matchJs = require("../../utils/match.js");
+var _renderJs = require("../../utils/render.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _keyboardJs = require("../keyboard.js");
+var _bugsJs = require("../../utils/bugs.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _focusTrapJs = require("../../components/focus-trap/focus-trap.js");
+var _useInertOthersJs = require("../../hooks/use-inert-others.js");
+var _portalJs = require("../../components/portal/portal.js");
+var _portalForceRootJs = require("../../internal/portal-force-root.js");
+var _descriptionJs = require("../description/description.js");
+var _openClosedJs = require("../../internal/open-closed.js");
+var _useServerHandoffCompleteJs = require("../../hooks/use-server-handoff-complete.js");
+var _stackContextJs = require("../../internal/stack-context.js");
+var _useOutsideClickJs = require("../../hooks/use-outside-click.js");
+var _ownerJs = require("../../utils/owner.js");
+var _useOwnerJs = require("../../hooks/use-owner.js");
+var _useEventListenerJs = require("../../hooks/use-event-listener.js");
+var _hiddenJs = require("../../internal/hidden.js");
+var _useEventJs = require("../../hooks/use-event.js");
+var be = ((t)=>(t[t.Open = 0] = "Open", t[t.Closed = 1] = "Closed", t))(be || {}), Ce = ((e)=>(e[e.SetTitleId = 0] = "SetTitleId", e))(Ce || {});
+let Oe = {
+    [0] (i, e) {
+        return i.titleId === e.id ? i : {
+            ...i,
+            titleId: e.id
+        };
+    }
+}, M = (0, _react.createContext)(null);
+M.displayName = "DialogContext";
+function L(i) {
+    let e = (0, _react.useContext)(M);
+    if (e === null) {
+        let t = new Error(`<${i} /> is missing a parent <Dialog /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(t, L), t;
+    }
+    return e;
+}
+function Se(i, e) {
+    return (0, _matchJs.match)(e.type, Oe, i, e);
+}
+let Le = "div", we = (0, _renderJs.Features).RenderStrategy | (0, _renderJs.Features).Static, Fe = (0, _renderJs.forwardRefWithAs)(function(e, t) {
+    let { open: o , onClose: n , initialFocus: d , __demoMode: g = !1 , ...c } = e, [m, D] = (0, _react.useState)(0), v = (0, _openClosedJs.useOpenClosed)();
+    o === void 0 && v !== null && (o = (0, _matchJs.match)(v, {
+        [(0, _openClosedJs.State).Open]: !0,
+        [(0, _openClosedJs.State).Closed]: !1
+    }));
+    let a = (0, _react.useRef)(new Set), f = (0, _react.useRef)(null), J = (0, _useSyncRefsJs.useSyncRefs)(f, t), W = (0, _react.useRef)(null), P = (0, _useOwnerJs.useOwnerDocument)(f), B = e.hasOwnProperty("open") || v !== null, G = e.hasOwnProperty("onClose");
+    if (!B && !G) throw new Error("You have to provide an `open` and an `onClose` prop to the `Dialog` component.");
+    if (!B) throw new Error("You provided an `onClose` prop to the `Dialog`, but forgot an `open` prop.");
+    if (!G) throw new Error("You provided an `open` prop to the `Dialog`, but forgot an `onClose` prop.");
+    if (typeof o != "boolean") throw new Error(`You provided an \`open\` prop to the \`Dialog\`, but the value is not a boolean. Received: ${o}`);
+    if (typeof n != "function") throw new Error(`You provided an \`onClose\` prop to the \`Dialog\`, but the value is not a function. Received: ${n}`);
+    let s = o ? 0 : 1, [y, Q] = (0, _react.useReducer)(Se, {
+        titleId: null,
+        descriptionId: null,
+        panelRef: (0, _react.createRef)()
+    }), R = (0, _useEventJs.useEvent)(()=>n(!1)), U = (0, _useEventJs.useEvent)((r)=>Q({
+            type: 0,
+            id: r
+        })), _ = (0, _useServerHandoffCompleteJs.useServerHandoffComplete)() ? g ? !1 : s === 0 : !1, w = m > 1, $ = (0, _react.useContext)(M) !== null, X = w ? "parent" : "leaf";
+    (0, _useInertOthersJs.useInertOthers)(f, w ? _ : !1), (0, _useOutsideClickJs.useOutsideClick)(()=>{
+        var l, p;
+        return [
+            ...Array.from((l = P == null ? void 0 : P.querySelectorAll("body > *, [data-headlessui-portal]")) != null ? l : []).filter((T)=>!(!(T instanceof HTMLElement) || T.contains(W.current) || y.panelRef.current && T.contains(y.panelRef.current))),
+            (p = y.panelRef.current) != null ? p : f.current
+        ];
+    }, R, _ && !w), (0, _useEventListenerJs.useEventListener)(P == null ? void 0 : P.defaultView, "keydown", (r)=>{
+        r.defaultPrevented || r.key === (0, _keyboardJs.Keys).Escape && s === 0 && (w || (r.preventDefault(), r.stopPropagation(), R()));
+    }), (0, _react.useEffect)(()=>{
+        var j;
+        if (s !== 0 || $) return;
+        let r = (0, _ownerJs.getOwnerDocument)(f);
+        if (!r) return;
+        let l = r.documentElement, p = (j = r.defaultView) != null ? j : window, T = l.style.overflow, le = l.style.paddingRight, Y = p.innerWidth - l.clientWidth;
+        if (l.style.overflow = "hidden", Y > 0) {
+            let ne = l.clientWidth - l.offsetWidth, ie = Y - ne;
+            l.style.paddingRight = `${ie}px`;
+        }
+        return ()=>{
+            l.style.overflow = T, l.style.paddingRight = le;
+        };
+    }, [
+        s,
+        $
+    ]), (0, _react.useEffect)(()=>{
+        if (s !== 0 || !f.current) return;
+        let r = new IntersectionObserver((l)=>{
+            for (let p of l)p.boundingClientRect.x === 0 && p.boundingClientRect.y === 0 && p.boundingClientRect.width === 0 && p.boundingClientRect.height === 0 && R();
+        });
+        return r.observe(f.current), ()=>r.disconnect();
+    }, [
+        s,
+        f,
+        R
+    ]);
+    let [Z, ee] = (0, _descriptionJs.useDescriptions)(), te = `headlessui-dialog-${(0, _useIdJs.useId)()}`, oe = (0, _react.useMemo)(()=>[
+            {
+                dialogState: s,
+                close: R,
+                setTitleId: U
+            },
+            y
+        ], [
+        s,
+        y,
+        R,
+        U
+    ]), N = (0, _react.useMemo)(()=>({
+            open: s === 0
+        }), [
+        s
+    ]), re = {
+        ref: J,
+        id: te,
+        role: "dialog",
+        "aria-modal": s === 0 ? !0 : void 0,
+        "aria-labelledby": y.titleId,
+        "aria-describedby": Z
+    };
+    return (0, _reactDefault.default).createElement((0, _stackContextJs.StackProvider), {
+        type: "Dialog",
+        element: f,
+        onUpdate: (0, _useEventJs.useEvent)((r, l, p)=>{
+            l === "Dialog" && (0, _matchJs.match)(r, {
+                [(0, _stackContextJs.StackMessage).Add] () {
+                    a.current.add(p), D((T)=>T + 1);
+                },
+                [(0, _stackContextJs.StackMessage).Remove] () {
+                    a.current.add(p), D((T)=>T - 1);
+                }
+            });
+        })
+    }, (0, _reactDefault.default).createElement((0, _portalForceRootJs.ForcePortalRoot), {
+        force: !0
+    }, (0, _reactDefault.default).createElement((0, _portalJs.Portal), null, (0, _reactDefault.default).createElement(M.Provider, {
+        value: oe
+    }, (0, _reactDefault.default).createElement((0, _portalJs.Portal).Group, {
+        target: f
+    }, (0, _reactDefault.default).createElement((0, _portalForceRootJs.ForcePortalRoot), {
+        force: !1
+    }, (0, _reactDefault.default).createElement(ee, {
+        slot: N,
+        name: "Dialog.Description"
+    }, (0, _reactDefault.default).createElement((0, _focusTrapJs.FocusTrap), {
+        initialFocus: d,
+        containers: a,
+        features: _ ? (0, _matchJs.match)(X, {
+            parent: (0, _focusTrapJs.FocusTrap).features.RestoreFocus,
+            leaf: (0, _focusTrapJs.FocusTrap).features.All & ~(0, _focusTrapJs.FocusTrap).features.FocusLock
+        }) : (0, _focusTrapJs.FocusTrap).features.None
+    }, (0, _renderJs.render)({
+        ourProps: re,
+        theirProps: c,
+        slot: N,
+        defaultTag: Le,
+        features: we,
+        visible: s === 0,
+        name: "Dialog"
+    })))))))), (0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+        features: (0, _hiddenJs.Features).Hidden,
+        ref: W
+    }));
+}), ke = "div", Me = (0, _renderJs.forwardRefWithAs)(function(e, t) {
+    let [{ dialogState: o , close: n  }] = L("Dialog.Overlay"), d = (0, _useSyncRefsJs.useSyncRefs)(t), g = `headlessui-dialog-overlay-${(0, _useIdJs.useId)()}`, c = (0, _useEventJs.useEvent)((a)=>{
+        if (a.target === a.currentTarget) {
+            if ((0, _bugsJs.isDisabledReactIssue7711)(a.currentTarget)) return a.preventDefault();
+            a.preventDefault(), a.stopPropagation(), n();
+        }
+    }), m = (0, _react.useMemo)(()=>({
+            open: o === 0
+        }), [
+        o
+    ]);
+    return (0, _renderJs.render)({
+        ourProps: {
+            ref: d,
+            id: g,
+            "aria-hidden": !0,
+            onClick: c
+        },
+        theirProps: e,
+        slot: m,
+        defaultTag: ke,
+        name: "Dialog.Overlay"
+    });
+}), _e = "div", Ie = (0, _renderJs.forwardRefWithAs)(function(e, t) {
+    let [{ dialogState: o  }, n] = L("Dialog.Backdrop"), d = (0, _useSyncRefsJs.useSyncRefs)(t), g = `headlessui-dialog-backdrop-${(0, _useIdJs.useId)()}`;
+    (0, _react.useEffect)(()=>{
+        if (n.panelRef.current === null) throw new Error("A <Dialog.Backdrop /> component is being used, but a <Dialog.Panel /> component is missing.");
+    }, [
+        n.panelRef
+    ]);
+    let c = (0, _react.useMemo)(()=>({
+            open: o === 0
+        }), [
+        o
+    ]);
+    return (0, _reactDefault.default).createElement((0, _portalForceRootJs.ForcePortalRoot), {
+        force: !0
+    }, (0, _reactDefault.default).createElement((0, _portalJs.Portal), null, (0, _renderJs.render)({
+        ourProps: {
+            ref: d,
+            id: g,
+            "aria-hidden": !0
+        },
+        theirProps: e,
+        slot: c,
+        defaultTag: _e,
+        name: "Dialog.Backdrop"
+    })));
+}), xe = "div", He = (0, _renderJs.forwardRefWithAs)(function(e, t) {
+    let [{ dialogState: o  }, n] = L("Dialog.Panel"), d = (0, _useSyncRefsJs.useSyncRefs)(t, n.panelRef), g = `headlessui-dialog-panel-${(0, _useIdJs.useId)()}`, c = (0, _react.useMemo)(()=>({
+            open: o === 0
+        }), [
+        o
+    ]), m = (0, _useEventJs.useEvent)((a)=>{
+        a.stopPropagation();
+    });
+    return (0, _renderJs.render)({
+        ourProps: {
+            ref: d,
+            id: g,
+            onClick: m
+        },
+        theirProps: e,
+        slot: c,
+        defaultTag: xe,
+        name: "Dialog.Panel"
+    });
+}), We = "h2", Be = (0, _renderJs.forwardRefWithAs)(function(e, t) {
+    let [{ dialogState: o , setTitleId: n  }] = L("Dialog.Title"), d = `headlessui-dialog-title-${(0, _useIdJs.useId)()}`, g = (0, _useSyncRefsJs.useSyncRefs)(t);
+    (0, _react.useEffect)(()=>(n(d), ()=>n(null)), [
+        d,
+        n
+    ]);
+    let c = (0, _react.useMemo)(()=>({
+            open: o === 0
+        }), [
+        o
+    ]);
+    return (0, _renderJs.render)({
+        ourProps: {
+            ref: g,
+            id: d
+        },
+        theirProps: e,
+        slot: c,
+        defaultTag: We,
+        name: "Dialog.Title"
+    });
+}), mt = Object.assign(Fe, {
+    Backdrop: Ie,
+    Panel: He,
+    Overlay: Me,
+    Title: Be,
+    Description: (0, _descriptionJs.Description)
+});
+
+},{"react":"21dqq","../../utils/match.js":"ix3HI","../../utils/render.js":"6k5Fw","../../hooks/use-sync-refs.js":"67YMZ","../keyboard.js":"btpQm","../../utils/bugs.js":"czGU7","../../hooks/use-id.js":"9HMMR","../../components/focus-trap/focus-trap.js":"2524Y","../../hooks/use-inert-others.js":"33jmb","../../components/portal/portal.js":"cvXUT","../../internal/portal-force-root.js":"l2FgA","../description/description.js":"dkQTp","../../internal/open-closed.js":"aw8L5","../../hooks/use-server-handoff-complete.js":"9md0G","../../internal/stack-context.js":"4Niyv","../../hooks/use-outside-click.js":"bNTTE","../../utils/owner.js":"2hWOn","../../hooks/use-owner.js":"fNCTZ","../../hooks/use-event-listener.js":"7rLR4","../../internal/hidden.js":"1o7Iy","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2524Y":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "FocusTrap", ()=>fe);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _renderJs = require("../../utils/render.js");
+var _useServerHandoffCompleteJs = require("../../hooks/use-server-handoff-complete.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _hiddenJs = require("../../internal/hidden.js");
+var _focusManagementJs = require("../../utils/focus-management.js");
+var _matchJs = require("../../utils/match.js");
+var _useEventJs = require("../../hooks/use-event.js");
+var _useTabDirectionJs = require("../../hooks/use-tab-direction.js");
+var _useIsMountedJs = require("../../hooks/use-is-mounted.js");
+var _useOwnerJs = require("../../hooks/use-owner.js");
+var _useEventListenerJs = require("../../hooks/use-event-listener.js");
+var _microTaskJs = require("../../utils/micro-task.js");
+var _useWatchJs = require("../../hooks/use-watch.js");
+let N = "div";
+var F = ((r)=>(r[r.None = 1] = "None", r[r.InitialFocus = 2] = "InitialFocus", r[r.TabLock = 4] = "TabLock", r[r.FocusLock = 8] = "FocusLock", r[r.RestoreFocus = 16] = "RestoreFocus", r[r.All = 30] = "All", r))(F || {});
+let fe = Object.assign((0, _renderJs.forwardRefWithAs)(function(n, e) {
+    let l = (0, _react.useRef)(null), u = (0, _useSyncRefsJs.useSyncRefs)(l, e), { initialFocus: f , containers: r , features: o = 30 , ...c } = n;
+    (0, _useServerHandoffCompleteJs.useServerHandoffComplete)() || (o = 1);
+    let s = (0, _useOwnerJs.useOwnerDocument)(l);
+    V({
+        ownerDocument: s
+    }, Boolean(o & 16));
+    let O = x({
+        ownerDocument: s,
+        container: l,
+        initialFocus: f
+    }, Boolean(o & 2));
+    G({
+        ownerDocument: s,
+        container: l,
+        containers: r,
+        previousActiveElement: O
+    }, Boolean(o & 8));
+    let v = (0, _useTabDirectionJs.useTabDirection)(), p = (0, _useEventJs.useEvent)(()=>{
+        let T = l.current;
+        !T || (0, _matchJs.match)(v.current, {
+            [(0, _useTabDirectionJs.Direction).Forwards]: ()=>(0, _focusManagementJs.focusIn)(T, (0, _focusManagementJs.Focus).First),
+            [(0, _useTabDirectionJs.Direction).Backwards]: ()=>(0, _focusManagementJs.focusIn)(T, (0, _focusManagementJs.Focus).Last)
+        });
+    }), j = {
+        ref: u
+    };
+    return (0, _reactDefault.default).createElement((0, _reactDefault.default).Fragment, null, Boolean(o & 4) && (0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+        as: "button",
+        type: "button",
+        onFocus: p,
+        features: (0, _hiddenJs.Features).Focusable
+    }), (0, _renderJs.render)({
+        ourProps: j,
+        theirProps: c,
+        defaultTag: N,
+        name: "FocusTrap"
+    }), Boolean(o & 4) && (0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+        as: "button",
+        type: "button",
+        onFocus: p,
+        features: (0, _hiddenJs.Features).Focusable
+    }));
+}), {
+    features: F
+});
+function V({ ownerDocument: t  }, n) {
+    let e = (0, _react.useRef)(null);
+    (0, _useEventListenerJs.useEventListener)(t == null ? void 0 : t.defaultView, "focusout", (u)=>{
+        !n || e.current || (e.current = u.target);
+    }, !0), (0, _useWatchJs.useWatch)(()=>{
+        n || ((t == null ? void 0 : t.activeElement) === (t == null ? void 0 : t.body) && (0, _focusManagementJs.focusElement)(e.current), e.current = null);
+    }, [
+        n
+    ]);
+    let l = (0, _react.useRef)(!1);
+    (0, _react.useEffect)(()=>(l.current = !1, ()=>{
+            l.current = !0, (0, _microTaskJs.microTask)(()=>{
+                !l.current || ((0, _focusManagementJs.focusElement)(e.current), e.current = null);
+            });
+        }), []);
+}
+function x({ ownerDocument: t , container: n , initialFocus: e  }, l) {
+    let u = (0, _react.useRef)(null);
+    return (0, _useWatchJs.useWatch)(()=>{
+        if (!l) return;
+        let f = n.current;
+        if (!f) return;
+        let r = t == null ? void 0 : t.activeElement;
+        if (e != null && e.current) {
+            if ((e == null ? void 0 : e.current) === r) {
+                u.current = r;
+                return;
+            }
+        } else if (f.contains(r)) {
+            u.current = r;
+            return;
+        }
+        e != null && e.current ? (0, _focusManagementJs.focusElement)(e.current) : (0, _focusManagementJs.focusIn)(f, (0, _focusManagementJs.Focus).First) === (0, _focusManagementJs.FocusResult).Error && console.warn("There are no focusable elements inside the <FocusTrap />"), u.current = t == null ? void 0 : t.activeElement;
+    }, [
+        l
+    ]), u;
+}
+function G({ ownerDocument: t , container: n , containers: e , previousActiveElement: l  }, u) {
+    let f = (0, _useIsMountedJs.useIsMounted)();
+    (0, _useEventListenerJs.useEventListener)(t == null ? void 0 : t.defaultView, "focus", (r)=>{
+        if (!u || !f.current) return;
+        let o = new Set(e == null ? void 0 : e.current);
+        o.add(n);
+        let c = l.current;
+        if (!c) return;
+        let s = r.target;
+        s && s instanceof HTMLElement ? W(o, s) ? (l.current = s, (0, _focusManagementJs.focusElement)(s)) : (r.preventDefault(), r.stopPropagation(), (0, _focusManagementJs.focusElement)(c)) : (0, _focusManagementJs.focusElement)(l.current);
+    }, !0);
+}
+function W(t, n) {
+    var e;
+    for (let l of t)if ((e = l.current) != null && e.contains(n)) return !0;
+    return !1;
+}
+
+},{"react":"21dqq","../../utils/render.js":"6k5Fw","../../hooks/use-server-handoff-complete.js":"9md0G","../../hooks/use-sync-refs.js":"67YMZ","../../internal/hidden.js":"1o7Iy","../../utils/focus-management.js":"aKUTi","../../utils/match.js":"ix3HI","../../hooks/use-event.js":"kEbTP","../../hooks/use-tab-direction.js":"l2fA6","../../hooks/use-is-mounted.js":"cOwrt","../../hooks/use-owner.js":"fNCTZ","../../hooks/use-event-listener.js":"7rLR4","../../utils/micro-task.js":"jhwzS","../../hooks/use-watch.js":"e5ch4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l2fA6":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Direction", ()=>s);
+parcelHelpers.export(exports, "useTabDirection", ()=>n);
+var _react = require("react");
+var _useWindowEventJs = require("./use-window-event.js");
+var s = ((r)=>(r[r.Forwards = 0] = "Forwards", r[r.Backwards = 1] = "Backwards", r))(s || {});
+function n() {
+    let e = (0, _react.useRef)(0);
+    return (0, _useWindowEventJs.useWindowEvent)("keydown", (o)=>{
+        o.key === "Tab" && (e.current = o.shiftKey ? 1 : 0);
+    }, !0), e;
+}
+
+},{"react":"21dqq","./use-window-event.js":"jI1p2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cOwrt":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useIsMounted", ()=>f);
+var _react = require("react");
+var _useIsoMorphicEffectJs = require("./use-iso-morphic-effect.js");
+function f() {
+    let e = (0, _react.useRef)(!1);
+    return (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>(e.current = !0, ()=>{
+            e.current = !1;
+        }), []), e;
+}
+
+},{"react":"21dqq","./use-iso-morphic-effect.js":"5EMFK","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fNCTZ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useOwnerDocument", ()=>n);
+var _react = require("react");
+var _ownerJs = require("../utils/owner.js");
+function n(...e) {
+    return (0, _react.useMemo)(()=>(0, _ownerJs.getOwnerDocument)(...e), [
+        ...e
+    ]);
+}
+
+},{"react":"21dqq","../utils/owner.js":"2hWOn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7rLR4":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useEventListener", ()=>E);
+var _react = require("react");
+var _useLatestValueJs = require("./use-latest-value.js");
+function E(n, e, a, t) {
+    let i = (0, _useLatestValueJs.useLatestValue)(a);
+    (0, _react.useEffect)(()=>{
+        n = n != null ? n : window;
+        function r(o) {
+            i.current(o);
+        }
+        return n.addEventListener(e, r, t), ()=>n.removeEventListener(e, r, t);
+    }, [
+        n,
+        e,
+        t
+    ]);
+}
+
+},{"react":"21dqq","./use-latest-value.js":"6nuRQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jhwzS":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "microTask", ()=>t);
+function t(e) {
+    typeof queueMicrotask == "function" ? queueMicrotask(e) : Promise.resolve().then(e).catch((o)=>setTimeout(()=>{
+            throw o;
+        }));
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"e5ch4":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useWatch", ()=>m);
+var _react = require("react");
+var _useEventJs = require("./use-event.js");
+function m(o, t) {
+    let r = (0, _react.useRef)([]), e = (0, _useEventJs.useEvent)(o);
+    (0, _react.useEffect)(()=>{
+        for (let [u, f] of t.entries())if (r.current[u] !== f) {
+            let i = e(t);
+            return r.current = t, i;
+        }
+    }, [
+        e,
+        ...t
+    ]);
+}
+
+},{"react":"21dqq","./use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"33jmb":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useInertOthers", ()=>M);
+var _ownerJs = require("../utils/owner.js");
+var _useIsoMorphicEffectJs = require("./use-iso-morphic-effect.js");
+let i = new Set, r = new Map;
+function u(t) {
+    t.setAttribute("aria-hidden", "true"), t.inert = !0;
+}
+function l(t) {
+    let n = r.get(t);
+    !n || (n["aria-hidden"] === null ? t.removeAttribute("aria-hidden") : t.setAttribute("aria-hidden", n["aria-hidden"]), t.inert = n.inert);
+}
+function M(t, n = !0) {
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        if (!n || !t.current) return;
+        let o = t.current, a = (0, _ownerJs.getOwnerDocument)(o);
+        if (!!a) {
+            i.add(o);
+            for (let e1 of r.keys())e1.contains(o) && (l(e1), r.delete(e1));
+            return a.querySelectorAll("body > *").forEach((e)=>{
+                if (e instanceof HTMLElement) {
+                    for (let f of i)if (e.contains(f)) return;
+                    i.size === 1 && (r.set(e, {
+                        "aria-hidden": e.getAttribute("aria-hidden"),
+                        inert: e.inert
+                    }), u(e));
+                }
+            }), ()=>{
+                if (i.delete(o), i.size > 0) a.querySelectorAll("body > *").forEach((e)=>{
+                    if (e instanceof HTMLElement && !r.has(e)) {
+                        for (let f of i)if (e.contains(f)) return;
+                        r.set(e, {
+                            "aria-hidden": e.getAttribute("aria-hidden"),
+                            inert: e.inert
+                        }), u(e);
+                    }
+                });
+                else for (let e3 of r.keys())l(e3), r.delete(e3);
+            };
+        }
+    }, [
+        n
+    ]);
+}
+
+},{"../utils/owner.js":"2hWOn","./use-iso-morphic-effect.js":"5EMFK","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cvXUT":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Portal", ()=>X);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _reactDom = require("react-dom");
+var _renderJs = require("../../utils/render.js");
+var _useIsoMorphicEffectJs = require("../../hooks/use-iso-morphic-effect.js");
+var _portalForceRootJs = require("../../internal/portal-force-root.js");
+var _useServerHandoffCompleteJs = require("../../hooks/use-server-handoff-complete.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _useOwnerJs = require("../../hooks/use-owner.js");
+var _microTaskJs = require("../../utils/micro-task.js");
+function H(i) {
+    let u = (0, _portalForceRootJs.usePortalRoot)(), o = (0, _react.useContext)(E), e = (0, _useOwnerJs.useOwnerDocument)(i), [r, f] = (0, _react.useState)(()=>{
+        if (!u && o !== null || typeof window == "undefined") return null;
+        let n = e == null ? void 0 : e.getElementById("headlessui-portal-root");
+        if (n) return n;
+        if (e === null) return null;
+        let t = e.createElement("div");
+        return t.setAttribute("id", "headlessui-portal-root"), e.body.appendChild(t);
+    });
+    return (0, _react.useEffect)(()=>{
+        r !== null && (e != null && e.body.contains(r) || e == null || e.body.appendChild(r));
+    }, [
+        r,
+        e
+    ]), (0, _react.useEffect)(()=>{
+        u || o !== null && f(o.current);
+    }, [
+        o,
+        f,
+        u
+    ]), r;
+}
+let x = (0, _react.Fragment), _ = (0, _renderJs.forwardRefWithAs)(function(u, o) {
+    let e = u, r = (0, _react.useRef)(null), f = (0, _useSyncRefsJs.useSyncRefs)((0, _useSyncRefsJs.optionalRef)((a)=>{
+        r.current = a;
+    }), o), n = (0, _useOwnerJs.useOwnerDocument)(r), t = H(r), [l] = (0, _react.useState)(()=>{
+        var a;
+        return typeof window == "undefined" ? null : (a = n == null ? void 0 : n.createElement("div")) != null ? a : null;
+    }), A = (0, _useServerHandoffCompleteJs.useServerHandoffComplete)(), p = (0, _react.useRef)(!1);
+    return (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        if (p.current = !1, !(!t || !l)) return t.contains(l) || (l.setAttribute("data-headlessui-portal", ""), t.appendChild(l)), ()=>{
+            p.current = !0, (0, _microTaskJs.microTask)(()=>{
+                var a;
+                !p.current || !t || !l || (t.removeChild(l), t.childNodes.length <= 0 && ((a = t.parentElement) == null || a.removeChild(t)));
+            });
+        };
+    }, [
+        t,
+        l
+    ]), A ? !t || !l ? null : (0, _reactDom.createPortal)((0, _renderJs.render)({
+        ourProps: {
+            ref: f
+        },
+        theirProps: e,
+        defaultTag: x,
+        name: "Portal"
+    }), l) : null;
+}), U = (0, _react.Fragment), E = (0, _react.createContext)(null), j = (0, _renderJs.forwardRefWithAs)(function(u, o) {
+    let { target: e , ...r } = u, n = {
+        ref: (0, _useSyncRefsJs.useSyncRefs)(o)
+    };
+    return (0, _reactDefault.default).createElement(E.Provider, {
+        value: e
+    }, (0, _renderJs.render)({
+        ourProps: n,
+        theirProps: r,
+        defaultTag: U,
+        name: "Popover.Group"
+    }));
+}), X = Object.assign(_, {
+    Group: j
+});
+
+},{"react":"21dqq","react-dom":"j6uA9","../../utils/render.js":"6k5Fw","../../hooks/use-iso-morphic-effect.js":"5EMFK","../../internal/portal-force-root.js":"l2FgA","../../hooks/use-server-handoff-complete.js":"9md0G","../../hooks/use-sync-refs.js":"67YMZ","../../hooks/use-owner.js":"fNCTZ","../../utils/micro-task.js":"jhwzS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"j6uA9":[function(require,module,exports) {
 "use strict";
 function checkDCE() {
     /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") return;
@@ -27252,6 +30706,3207 @@ module.exports = require("./cjs/scheduler.development.js");
     /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
 })();
 
-},{}]},["1xC6H","ShInH","8lqZg"], "8lqZg", "parcelRequire94c2")
+},{}],"l2FgA":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ForcePortalRoot", ()=>P);
+parcelHelpers.export(exports, "usePortalRoot", ()=>l);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+let e = (0, _react.createContext)(!1);
+function l() {
+    return (0, _react.useContext)(e);
+}
+function P(o) {
+    return (0, _reactDefault.default).createElement(e.Provider, {
+        value: o.force
+    }, o.children);
+}
+
+},{"react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dkQTp":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Description", ()=>F);
+parcelHelpers.export(exports, "useDescriptions", ()=>k);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _useIdJs = require("../../hooks/use-id.js");
+var _renderJs = require("../../utils/render.js");
+var _useIsoMorphicEffectJs = require("../../hooks/use-iso-morphic-effect.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _useEventJs = require("../../hooks/use-event.js");
+let d = (0, _react.createContext)(null);
+function u() {
+    let r = (0, _react.useContext)(d);
+    if (r === null) {
+        let t = new Error("You used a <Description /> component, but it is not inside a relevant parent.");
+        throw Error.captureStackTrace && Error.captureStackTrace(t, u), t;
+    }
+    return r;
+}
+function k() {
+    let [r, t] = (0, _react.useState)([]);
+    return [
+        r.length > 0 ? r.join(" ") : void 0,
+        (0, _react.useMemo)(()=>function(e) {
+                let i = (0, _useEventJs.useEvent)((n)=>(t((o)=>[
+                            ...o,
+                            n
+                        ]), ()=>t((o)=>{
+                            let c = o.slice(), p = c.indexOf(n);
+                            return p !== -1 && c.splice(p, 1), c;
+                        }))), s = (0, _react.useMemo)(()=>({
+                        register: i,
+                        slot: e.slot,
+                        name: e.name,
+                        props: e.props
+                    }), [
+                    i,
+                    e.slot,
+                    e.name,
+                    e.props
+                ]);
+                return (0, _reactDefault.default).createElement(d.Provider, {
+                    value: s
+                }, e.children);
+            }, [
+            t
+        ])
+    ];
+}
+let S = "p", F = (0, _renderJs.forwardRefWithAs)(function(t, a) {
+    let e = u(), i = `headlessui-description-${(0, _useIdJs.useId)()}`, s = (0, _useSyncRefsJs.useSyncRefs)(a);
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>e.register(i), [
+        i,
+        e.register
+    ]);
+    let n = t, o = {
+        ref: s,
+        ...e.props,
+        id: i
+    };
+    return (0, _renderJs.render)({
+        ourProps: o,
+        theirProps: n,
+        slot: e.slot || {},
+        defaultTag: S,
+        name: e.name || "Description"
+    });
+});
+
+},{"react":"21dqq","../../hooks/use-id.js":"9HMMR","../../utils/render.js":"6k5Fw","../../hooks/use-iso-morphic-effect.js":"5EMFK","../../hooks/use-sync-refs.js":"67YMZ","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4Niyv":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "StackMessage", ()=>f);
+parcelHelpers.export(exports, "StackProvider", ()=>C);
+parcelHelpers.export(exports, "useStackContext", ()=>x);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _useIsoMorphicEffectJs = require("../hooks/use-iso-morphic-effect.js");
+var _useEventJs = require("../hooks/use-event.js");
+let o = (0, _react.createContext)(()=>{});
+o.displayName = "StackContext";
+var f = ((e)=>(e[e.Add = 0] = "Add", e[e.Remove = 1] = "Remove", e))(f || {});
+function x() {
+    return (0, _react.useContext)(o);
+}
+function C({ children: u , onUpdate: r , type: e , element: n  }) {
+    let c = x(), t = (0, _useEventJs.useEvent)((...a)=>{
+        r == null || r(...a), c(...a);
+    });
+    return (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>(t(0, e, n), ()=>t(1, e, n)), [
+        t,
+        e,
+        n
+    ]), (0, _reactDefault.default).createElement(o.Provider, {
+        value: t
+    }, u);
+}
+
+},{"react":"21dqq","../hooks/use-iso-morphic-effect.js":"5EMFK","../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6xLpd":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Disclosure", ()=>ke);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _matchJs = require("../../utils/match.js");
+var _renderJs = require("../../utils/render.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _keyboardJs = require("../keyboard.js");
+var _bugsJs = require("../../utils/bugs.js");
+var _openClosedJs = require("../../internal/open-closed.js");
+var _useResolveButtonTypeJs = require("../../hooks/use-resolve-button-type.js");
+var _ownerJs = require("../../utils/owner.js");
+var _useEventJs = require("../../hooks/use-event.js");
+var Q = ((o)=>(o[o.Open = 0] = "Open", o[o.Closed = 1] = "Closed", o))(Q || {}), V = ((l)=>(l[l.ToggleDisclosure = 0] = "ToggleDisclosure", l[l.CloseDisclosure = 1] = "CloseDisclosure", l[l.SetButtonId = 2] = "SetButtonId", l[l.SetPanelId = 3] = "SetPanelId", l[l.LinkPanel = 4] = "LinkPanel", l[l.UnlinkPanel = 5] = "UnlinkPanel", l))(V || {});
+let X = {
+    [0]: (e)=>({
+            ...e,
+            disclosureState: (0, _matchJs.match)(e.disclosureState, {
+                [0]: 1,
+                [1]: 0
+            })
+        }),
+    [1]: (e)=>e.disclosureState === 1 ? e : {
+            ...e,
+            disclosureState: 1
+        },
+    [4] (e) {
+        return e.linkedPanel === !0 ? e : {
+            ...e,
+            linkedPanel: !0
+        };
+    },
+    [5] (e) {
+        return e.linkedPanel === !1 ? e : {
+            ...e,
+            linkedPanel: !1
+        };
+    },
+    [2] (e, t) {
+        return e.buttonId === t.buttonId ? e : {
+            ...e,
+            buttonId: t.buttonId
+        };
+    },
+    [3] (e, t) {
+        return e.panelId === t.panelId ? e : {
+            ...e,
+            panelId: t.panelId
+        };
+    }
+}, h = (0, _react.createContext)(null);
+h.displayName = "DisclosureContext";
+function H(e) {
+    let t = (0, _react.useContext)(h);
+    if (t === null) {
+        let o = new Error(`<${e} /> is missing a parent <Disclosure /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(o, H), o;
+    }
+    return t;
+}
+let U = (0, _react.createContext)(null);
+U.displayName = "DisclosureAPIContext";
+function K(e) {
+    let t = (0, _react.useContext)(U);
+    if (t === null) {
+        let o = new Error(`<${e} /> is missing a parent <Disclosure /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(o, K), o;
+    }
+    return t;
+}
+let w = (0, _react.createContext)(null);
+w.displayName = "DisclosurePanelContext";
+function Y() {
+    return (0, _react.useContext)(w);
+}
+function Z(e, t) {
+    return (0, _matchJs.match)(t.type, X, e, t);
+}
+let ee = (0, _react.Fragment), te = (0, _renderJs.forwardRefWithAs)(function(t, o) {
+    let { defaultOpen: n = !1 , ...s } = t, i = `headlessui-disclosure-button-${(0, _useIdJs.useId)()}`, l = `headlessui-disclosure-panel-${(0, _useIdJs.useId)()}`, u = (0, _react.useRef)(null), D = (0, _useSyncRefsJs.useSyncRefs)(o, (0, _useSyncRefsJs.optionalRef)((f)=>{
+        u.current = f;
+    }, t.as === void 0 || t.as === (0, _reactDefault.default).Fragment)), P = (0, _react.useRef)(null), m = (0, _react.useRef)(null), p = (0, _react.useReducer)(Z, {
+        disclosureState: n ? 0 : 1,
+        linkedPanel: !1,
+        buttonRef: m,
+        panelRef: P,
+        buttonId: i,
+        panelId: l
+    }), [{ disclosureState: a  }, c] = p;
+    (0, _react.useEffect)(()=>c({
+            type: 2,
+            buttonId: i
+        }), [
+        i,
+        c
+    ]), (0, _react.useEffect)(()=>c({
+            type: 3,
+            panelId: l
+        }), [
+        l,
+        c
+    ]);
+    let T = (0, _useEventJs.useEvent)((f)=>{
+        c({
+            type: 1
+        });
+        let A = (0, _ownerJs.getOwnerDocument)(u);
+        if (!A) return;
+        let I = (()=>f ? f instanceof HTMLElement ? f : f.current instanceof HTMLElement ? f.current : A.getElementById(i) : A.getElementById(i))();
+        I == null || I.focus();
+    }), C = (0, _react.useMemo)(()=>({
+            close: T
+        }), [
+        T
+    ]), r = (0, _react.useMemo)(()=>({
+            open: a === 0,
+            close: T
+        }), [
+        a,
+        T
+    ]), d = {
+        ref: D
+    };
+    return (0, _reactDefault.default).createElement(h.Provider, {
+        value: p
+    }, (0, _reactDefault.default).createElement(U.Provider, {
+        value: C
+    }, (0, _reactDefault.default).createElement((0, _openClosedJs.OpenClosedProvider), {
+        value: (0, _matchJs.match)(a, {
+            [0]: (0, _openClosedJs.State).Open,
+            [1]: (0, _openClosedJs.State).Closed
+        })
+    }, (0, _renderJs.render)({
+        ourProps: d,
+        theirProps: s,
+        slot: r,
+        defaultTag: ee,
+        name: "Disclosure"
+    }))));
+}), ne = "button", le = (0, _renderJs.forwardRefWithAs)(function(t, o) {
+    let [n, s] = H("Disclosure.Button"), i = Y(), l = i === null ? !1 : i === n.panelId, u = (0, _react.useRef)(null), D = (0, _useSyncRefsJs.useSyncRefs)(u, o, l ? null : n.buttonRef), P = (0, _useEventJs.useEvent)((r)=>{
+        var d;
+        if (l) {
+            if (n.disclosureState === 1) return;
+            switch(r.key){
+                case (0, _keyboardJs.Keys).Space:
+                case (0, _keyboardJs.Keys).Enter:
+                    r.preventDefault(), r.stopPropagation(), s({
+                        type: 0
+                    }), (d = n.buttonRef.current) == null || d.focus();
+                    break;
+            }
+        } else switch(r.key){
+            case (0, _keyboardJs.Keys).Space:
+            case (0, _keyboardJs.Keys).Enter:
+                r.preventDefault(), r.stopPropagation(), s({
+                    type: 0
+                });
+                break;
+        }
+    }), m = (0, _useEventJs.useEvent)((r)=>{
+        switch(r.key){
+            case (0, _keyboardJs.Keys).Space:
+                r.preventDefault();
+                break;
+        }
+    }), p = (0, _useEventJs.useEvent)((r)=>{
+        var d;
+        (0, _bugsJs.isDisabledReactIssue7711)(r.currentTarget) || t.disabled || (l ? (s({
+            type: 0
+        }), (d = n.buttonRef.current) == null || d.focus()) : s({
+            type: 0
+        }));
+    }), a = (0, _react.useMemo)(()=>({
+            open: n.disclosureState === 0
+        }), [
+        n
+    ]), c = (0, _useResolveButtonTypeJs.useResolveButtonType)(t, u), T = t, C = l ? {
+        ref: D,
+        type: c,
+        onKeyDown: P,
+        onClick: p
+    } : {
+        ref: D,
+        id: n.buttonId,
+        type: c,
+        "aria-expanded": t.disabled ? void 0 : n.disclosureState === 0,
+        "aria-controls": n.linkedPanel ? n.panelId : void 0,
+        onKeyDown: P,
+        onKeyUp: m,
+        onClick: p
+    };
+    return (0, _renderJs.render)({
+        ourProps: C,
+        theirProps: T,
+        slot: a,
+        defaultTag: ne,
+        name: "Disclosure.Button"
+    });
+}), oe = "div", re = (0, _renderJs.Features).RenderStrategy | (0, _renderJs.Features).Static, se = (0, _renderJs.forwardRefWithAs)(function(t, o) {
+    let [n, s] = H("Disclosure.Panel"), { close: i  } = K("Disclosure.Panel"), l = (0, _useSyncRefsJs.useSyncRefs)(o, n.panelRef, ()=>{
+        n.linkedPanel || s({
+            type: 4
+        });
+    }), u = (0, _openClosedJs.useOpenClosed)(), D = (()=>u !== null ? u === (0, _openClosedJs.State).Open : n.disclosureState === 0)();
+    (0, _react.useEffect)(()=>()=>s({
+                type: 5
+            }), [
+        s
+    ]), (0, _react.useEffect)(()=>{
+        var a;
+        n.disclosureState === 1 && ((a = t.unmount) != null ? a : !0) && s({
+            type: 5
+        });
+    }, [
+        n.disclosureState,
+        t.unmount,
+        s
+    ]);
+    let P = (0, _react.useMemo)(()=>({
+            open: n.disclosureState === 0,
+            close: i
+        }), [
+        n,
+        i
+    ]), m = t, p = {
+        ref: l,
+        id: n.panelId
+    };
+    return (0, _reactDefault.default).createElement(w.Provider, {
+        value: n.panelId
+    }, (0, _renderJs.render)({
+        ourProps: p,
+        theirProps: m,
+        slot: P,
+        defaultTag: oe,
+        features: re,
+        visible: D,
+        name: "Disclosure.Panel"
+    }));
+}), ke = Object.assign(te, {
+    Button: le,
+    Panel: se
+});
+
+},{"react":"21dqq","../../utils/match.js":"ix3HI","../../utils/render.js":"6k5Fw","../../hooks/use-sync-refs.js":"67YMZ","../../hooks/use-id.js":"9HMMR","../keyboard.js":"btpQm","../../utils/bugs.js":"czGU7","../../internal/open-closed.js":"aw8L5","../../hooks/use-resolve-button-type.js":"jGJQI","../../utils/owner.js":"2hWOn","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8moQv":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Listbox", ()=>rt);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _useDisposablesJs = require("../../hooks/use-disposables.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _useIsoMorphicEffectJs = require("../../hooks/use-iso-morphic-effect.js");
+var _useComputedJs = require("../../hooks/use-computed.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _renderJs = require("../../utils/render.js");
+var _matchJs = require("../../utils/match.js");
+var _disposablesJs = require("../../utils/disposables.js");
+var _keyboardJs = require("../keyboard.js");
+var _calculateActiveIndexJs = require("../../utils/calculate-active-index.js");
+var _bugsJs = require("../../utils/bugs.js");
+var _focusManagementJs = require("../../utils/focus-management.js");
+var _openClosedJs = require("../../internal/open-closed.js");
+var _useResolveButtonTypeJs = require("../../hooks/use-resolve-button-type.js");
+var _useOutsideClickJs = require("../../hooks/use-outside-click.js");
+var _hiddenJs = require("../../internal/hidden.js");
+var _formJs = require("../../utils/form.js");
+var _ownerJs = require("../../utils/owner.js");
+var _useEventJs = require("../../hooks/use-event.js");
+var ce = ((n)=>(n[n.Open = 0] = "Open", n[n.Closed = 1] = "Closed", n))(ce || {}), fe = ((n)=>(n[n.Single = 0] = "Single", n[n.Multi = 1] = "Multi", n))(fe || {}), be = ((n)=>(n[n.Pointer = 0] = "Pointer", n[n.Other = 1] = "Other", n))(be || {}), Te = ((r)=>(r[r.OpenListbox = 0] = "OpenListbox", r[r.CloseListbox = 1] = "CloseListbox", r[r.SetDisabled = 2] = "SetDisabled", r[r.SetOrientation = 3] = "SetOrientation", r[r.GoToOption = 4] = "GoToOption", r[r.Search = 5] = "Search", r[r.ClearSearch = 6] = "ClearSearch", r[r.RegisterOption = 7] = "RegisterOption", r[r.UnregisterOption = 8] = "UnregisterOption", r))(Te || {});
+function H(t, i = (n)=>n) {
+    let n = t.activeOptionIndex !== null ? t.options[t.activeOptionIndex] : null, e = (0, _focusManagementJs.sortByDomNode)(i(t.options.slice()), (p)=>p.dataRef.current.domRef.current), o = n ? e.indexOf(n) : null;
+    return o === -1 && (o = null), {
+        options: e,
+        activeOptionIndex: o
+    };
+}
+let xe = {
+    [1] (t) {
+        return t.disabled || t.listboxState === 1 ? t : {
+            ...t,
+            activeOptionIndex: null,
+            listboxState: 1
+        };
+    },
+    [0] (t) {
+        if (t.disabled || t.listboxState === 0) return t;
+        let i = t.activeOptionIndex, { value: n , mode: e , compare: o  } = t.propsRef.current, p = t.options.findIndex((l)=>{
+            let s = l.dataRef.current.value;
+            return (0, _matchJs.match)(e, {
+                [1]: ()=>n.some((r)=>o(r, s)),
+                [0]: ()=>o(n, s)
+            });
+        });
+        return p !== -1 && (i = p), {
+            ...t,
+            listboxState: 0,
+            activeOptionIndex: i
+        };
+    },
+    [2] (t, i) {
+        return t.disabled === i.disabled ? t : {
+            ...t,
+            disabled: i.disabled
+        };
+    },
+    [3] (t, i) {
+        return t.orientation === i.orientation ? t : {
+            ...t,
+            orientation: i.orientation
+        };
+    },
+    [4] (t, i) {
+        var o;
+        if (t.disabled || t.listboxState === 1) return t;
+        let n = H(t), e = (0, _calculateActiveIndexJs.calculateActiveIndex)(i, {
+            resolveItems: ()=>n.options,
+            resolveActiveIndex: ()=>n.activeOptionIndex,
+            resolveId: (p)=>p.id,
+            resolveDisabled: (p)=>p.dataRef.current.disabled
+        });
+        return {
+            ...t,
+            ...n,
+            searchQuery: "",
+            activeOptionIndex: e,
+            activationTrigger: (o = i.trigger) != null ? o : 1
+        };
+    },
+    [5]: (t, i)=>{
+        if (t.disabled || t.listboxState === 1) return t;
+        let e = t.searchQuery !== "" ? 0 : 1, o = t.searchQuery + i.value.toLowerCase(), l = (t.activeOptionIndex !== null ? t.options.slice(t.activeOptionIndex + e).concat(t.options.slice(0, t.activeOptionIndex + e)) : t.options).find((u)=>{
+            var r;
+            return !u.dataRef.current.disabled && ((r = u.dataRef.current.textValue) == null ? void 0 : r.startsWith(o));
+        }), s = l ? t.options.indexOf(l) : -1;
+        return s === -1 || s === t.activeOptionIndex ? {
+            ...t,
+            searchQuery: o
+        } : {
+            ...t,
+            searchQuery: o,
+            activeOptionIndex: s,
+            activationTrigger: 1
+        };
+    },
+    [6] (t) {
+        return t.disabled || t.listboxState === 1 || t.searchQuery === "" ? t : {
+            ...t,
+            searchQuery: ""
+        };
+    },
+    [7]: (t, i)=>{
+        let n = {
+            id: i.id,
+            dataRef: i.dataRef
+        }, e = H(t, (o)=>[
+                ...o,
+                n
+            ]);
+        if (t.activeOptionIndex === null) {
+            let { value: o , mode: p , compare: l  } = t.propsRef.current, s = i.dataRef.current.value;
+            (0, _matchJs.match)(p, {
+                [1]: ()=>o.some((r)=>l(r, s)),
+                [0]: ()=>l(o, s)
+            }) && (e.activeOptionIndex = e.options.indexOf(n));
+        }
+        return {
+            ...t,
+            ...e
+        };
+    },
+    [8]: (t, i)=>{
+        let n = H(t, (e)=>{
+            let o = e.findIndex((p)=>p.id === i.id);
+            return o !== -1 && e.splice(o, 1), e;
+        });
+        return {
+            ...t,
+            ...n,
+            activationTrigger: 1
+        };
+    }
+}, j = (0, _react.createContext)(null);
+j.displayName = "ListboxContext";
+function w(t) {
+    let i = (0, _react.useContext)(j);
+    if (i === null) {
+        let n = new Error(`<${t} /> is missing a parent <Listbox /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(n, w), n;
+    }
+    return i;
+}
+function ye(t, i) {
+    return (0, _matchJs.match)(i.type, xe, t, i);
+}
+let Oe = (0, _react.Fragment), me = (0, _renderJs.forwardRefWithAs)(function(i, n) {
+    let { value: e , name: o , onChange: p , disabled: l = !1 , horizontal: s = !1 , multiple: u = !1 , ...r } = i;
+    const x = s ? "horizontal" : "vertical";
+    let A = (0, _useSyncRefsJs.useSyncRefs)(n), R = (0, _react.useReducer)(ye, {
+        listboxState: 1,
+        propsRef: {
+            current: {
+                value: e,
+                onChange: p,
+                mode: u ? 1 : 0,
+                compare: (0, _useEventJs.useEvent)((y, m)=>y === m)
+            }
+        },
+        labelRef: (0, _react.createRef)(),
+        buttonRef: (0, _react.createRef)(),
+        optionsRef: (0, _react.createRef)(),
+        disabled: l,
+        orientation: x,
+        options: [],
+        searchQuery: "",
+        activeOptionIndex: null,
+        activationTrigger: 1
+    }), [{ listboxState: b , propsRef: O , optionsRef: T , buttonRef: d  }, a] = R;
+    O.current.value = e, O.current.mode = u ? 1 : 0, (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        O.current.onChange = (y)=>(0, _matchJs.match)(O.current.mode, {
+                [0] () {
+                    return p(y);
+                },
+                [1] () {
+                    let m = O.current.value.slice(), C = m.indexOf(y);
+                    return C === -1 ? m.push(y) : m.splice(C, 1), p(m);
+                }
+            });
+    }, [
+        p,
+        O
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>a({
+            type: 2,
+            disabled: l
+        }), [
+        l
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>a({
+            type: 3,
+            orientation: x
+        }), [
+        x
+    ]), (0, _useOutsideClickJs.useOutsideClick)([
+        d,
+        T
+    ], (y, m)=>{
+        var C;
+        a({
+            type: 1
+        }), (0, _focusManagementJs.isFocusableElement)(m, (0, _focusManagementJs.FocusableMode).Loose) || (y.preventDefault(), (C = d.current) == null || C.focus());
+    }, b === 0);
+    let c = (0, _react.useMemo)(()=>({
+            open: b === 0,
+            disabled: l
+        }), [
+        b,
+        l
+    ]), D = {
+        ref: A
+    };
+    return (0, _reactDefault.default).createElement(j.Provider, {
+        value: R
+    }, (0, _reactDefault.default).createElement((0, _openClosedJs.OpenClosedProvider), {
+        value: (0, _matchJs.match)(b, {
+            [0]: (0, _openClosedJs.State).Open,
+            [1]: (0, _openClosedJs.State).Closed
+        })
+    }, o != null && e != null && (0, _formJs.objectToFormEntries)({
+        [o]: e
+    }).map(([y, m])=>(0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+            features: (0, _hiddenJs.Features).Hidden,
+            ...(0, _renderJs.compact)({
+                key: y,
+                as: "input",
+                type: "hidden",
+                hidden: !0,
+                readOnly: !0,
+                name: y,
+                value: m
+            })
+        })), (0, _renderJs.render)({
+        ourProps: D,
+        theirProps: r,
+        slot: c,
+        defaultTag: Oe,
+        name: "Listbox"
+    })));
+}), ge = "button", Re = (0, _renderJs.forwardRefWithAs)(function(i, n) {
+    var T;
+    let [e, o] = w("Listbox.Button"), p = (0, _useSyncRefsJs.useSyncRefs)(e.buttonRef, n), l = `headlessui-listbox-button-${(0, _useIdJs.useId)()}`, s = (0, _useDisposablesJs.useDisposables)(), u = (0, _useEventJs.useEvent)((d)=>{
+        switch(d.key){
+            case (0, _keyboardJs.Keys).Space:
+            case (0, _keyboardJs.Keys).Enter:
+            case (0, _keyboardJs.Keys).ArrowDown:
+                d.preventDefault(), o({
+                    type: 0
+                }), s.nextFrame(()=>{
+                    e.propsRef.current.value || o({
+                        type: 4,
+                        focus: (0, _calculateActiveIndexJs.Focus).First
+                    });
+                });
+                break;
+            case (0, _keyboardJs.Keys).ArrowUp:
+                d.preventDefault(), o({
+                    type: 0
+                }), s.nextFrame(()=>{
+                    e.propsRef.current.value || o({
+                        type: 4,
+                        focus: (0, _calculateActiveIndexJs.Focus).Last
+                    });
+                });
+                break;
+        }
+    }), r = (0, _useEventJs.useEvent)((d)=>{
+        switch(d.key){
+            case (0, _keyboardJs.Keys).Space:
+                d.preventDefault();
+                break;
+        }
+    }), x = (0, _useEventJs.useEvent)((d)=>{
+        if ((0, _bugsJs.isDisabledReactIssue7711)(d.currentTarget)) return d.preventDefault();
+        e.listboxState === 0 ? (o({
+            type: 1
+        }), s.nextFrame(()=>{
+            var a;
+            return (a = e.buttonRef.current) == null ? void 0 : a.focus({
+                preventScroll: !0
+            });
+        })) : (d.preventDefault(), o({
+            type: 0
+        }));
+    }), A = (0, _useComputedJs.useComputed)(()=>{
+        if (!!e.labelRef.current) return [
+            e.labelRef.current.id,
+            l
+        ].join(" ");
+    }, [
+        e.labelRef.current,
+        l
+    ]), R = (0, _react.useMemo)(()=>({
+            open: e.listboxState === 0,
+            disabled: e.disabled
+        }), [
+        e
+    ]), b = i, O = {
+        ref: p,
+        id: l,
+        type: (0, _useResolveButtonTypeJs.useResolveButtonType)(i, e.buttonRef),
+        "aria-haspopup": !0,
+        "aria-controls": (T = e.optionsRef.current) == null ? void 0 : T.id,
+        "aria-expanded": e.disabled ? void 0 : e.listboxState === 0,
+        "aria-labelledby": A,
+        disabled: e.disabled,
+        onKeyDown: u,
+        onKeyUp: r,
+        onClick: x
+    };
+    return (0, _renderJs.render)({
+        ourProps: O,
+        theirProps: b,
+        slot: R,
+        defaultTag: ge,
+        name: "Listbox.Button"
+    });
+}), Le = "label", ve = (0, _renderJs.forwardRefWithAs)(function(i, n) {
+    let [e] = w("Listbox.Label"), o = `headlessui-listbox-label-${(0, _useIdJs.useId)()}`, p = (0, _useSyncRefsJs.useSyncRefs)(e.labelRef, n), l = (0, _useEventJs.useEvent)(()=>{
+        var x;
+        return (x = e.buttonRef.current) == null ? void 0 : x.focus({
+            preventScroll: !0
+        });
+    }), s = (0, _react.useMemo)(()=>({
+            open: e.listboxState === 0,
+            disabled: e.disabled
+        }), [
+        e
+    ]);
+    return (0, _renderJs.render)({
+        ourProps: {
+            ref: p,
+            id: o,
+            onClick: l
+        },
+        theirProps: i,
+        slot: s,
+        defaultTag: Le,
+        name: "Listbox.Label"
+    });
+}), Se = "ul", Ae = (0, _renderJs.Features).RenderStrategy | (0, _renderJs.Features).Static, he = (0, _renderJs.forwardRefWithAs)(function(i, n) {
+    var d;
+    let [e, o] = w("Listbox.Options"), p = (0, _useSyncRefsJs.useSyncRefs)(e.optionsRef, n), l = `headlessui-listbox-options-${(0, _useIdJs.useId)()}`, s = (0, _useDisposablesJs.useDisposables)(), u = (0, _useDisposablesJs.useDisposables)(), r = (0, _openClosedJs.useOpenClosed)(), x = (()=>r !== null ? r === (0, _openClosedJs.State).Open : e.listboxState === 0)();
+    (0, _react.useEffect)(()=>{
+        var c;
+        let a = e.optionsRef.current;
+        !a || e.listboxState === 0 && a !== ((c = (0, _ownerJs.getOwnerDocument)(a)) == null ? void 0 : c.activeElement) && a.focus({
+            preventScroll: !0
+        });
+    }, [
+        e.listboxState,
+        e.optionsRef
+    ]);
+    let A = (0, _useEventJs.useEvent)((a)=>{
+        switch(u.dispose(), a.key){
+            case (0, _keyboardJs.Keys).Space:
+                if (e.searchQuery !== "") return a.preventDefault(), a.stopPropagation(), o({
+                    type: 5,
+                    value: a.key
+                });
+            case (0, _keyboardJs.Keys).Enter:
+                if (a.preventDefault(), a.stopPropagation(), e.activeOptionIndex !== null) {
+                    let { dataRef: c  } = e.options[e.activeOptionIndex];
+                    e.propsRef.current.onChange(c.current.value);
+                }
+                e.propsRef.current.mode === 0 && (o({
+                    type: 1
+                }), (0, _disposablesJs.disposables)().nextFrame(()=>{
+                    var c;
+                    return (c = e.buttonRef.current) == null ? void 0 : c.focus({
+                        preventScroll: !0
+                    });
+                }));
+                break;
+            case (0, _matchJs.match)(e.orientation, {
+                vertical: (0, _keyboardJs.Keys).ArrowDown,
+                horizontal: (0, _keyboardJs.Keys).ArrowRight
+            }):
+                return a.preventDefault(), a.stopPropagation(), o({
+                    type: 4,
+                    focus: (0, _calculateActiveIndexJs.Focus).Next
+                });
+            case (0, _matchJs.match)(e.orientation, {
+                vertical: (0, _keyboardJs.Keys).ArrowUp,
+                horizontal: (0, _keyboardJs.Keys).ArrowLeft
+            }):
+                return a.preventDefault(), a.stopPropagation(), o({
+                    type: 4,
+                    focus: (0, _calculateActiveIndexJs.Focus).Previous
+                });
+            case (0, _keyboardJs.Keys).Home:
+            case (0, _keyboardJs.Keys).PageUp:
+                return a.preventDefault(), a.stopPropagation(), o({
+                    type: 4,
+                    focus: (0, _calculateActiveIndexJs.Focus).First
+                });
+            case (0, _keyboardJs.Keys).End:
+            case (0, _keyboardJs.Keys).PageDown:
+                return a.preventDefault(), a.stopPropagation(), o({
+                    type: 4,
+                    focus: (0, _calculateActiveIndexJs.Focus).Last
+                });
+            case (0, _keyboardJs.Keys).Escape:
+                return a.preventDefault(), a.stopPropagation(), o({
+                    type: 1
+                }), s.nextFrame(()=>{
+                    var c;
+                    return (c = e.buttonRef.current) == null ? void 0 : c.focus({
+                        preventScroll: !0
+                    });
+                });
+            case (0, _keyboardJs.Keys).Tab:
+                a.preventDefault(), a.stopPropagation();
+                break;
+            default:
+                a.key.length === 1 && (o({
+                    type: 5,
+                    value: a.key
+                }), u.setTimeout(()=>o({
+                        type: 6
+                    }), 350));
+                break;
+        }
+    }), R = (0, _useComputedJs.useComputed)(()=>{
+        var a, c, D;
+        return (D = (a = e.labelRef.current) == null ? void 0 : a.id) != null ? D : (c = e.buttonRef.current) == null ? void 0 : c.id;
+    }, [
+        e.labelRef.current,
+        e.buttonRef.current
+    ]), b = (0, _react.useMemo)(()=>({
+            open: e.listboxState === 0
+        }), [
+        e
+    ]), O = i, T = {
+        "aria-activedescendant": e.activeOptionIndex === null || (d = e.options[e.activeOptionIndex]) == null ? void 0 : d.id,
+        "aria-multiselectable": e.propsRef.current.mode === 1 ? !0 : void 0,
+        "aria-labelledby": R,
+        "aria-orientation": e.orientation,
+        id: l,
+        onKeyDown: A,
+        role: "listbox",
+        tabIndex: 0,
+        ref: p
+    };
+    return (0, _renderJs.render)({
+        ourProps: T,
+        theirProps: O,
+        slot: b,
+        defaultTag: Se,
+        features: Ae,
+        visible: x,
+        name: "Listbox.Options"
+    });
+}), Pe = "li", De = (0, _renderJs.forwardRefWithAs)(function(i, n) {
+    let { disabled: e = !1 , value: o , ...p } = i, [l, s] = w("Listbox.Option"), u = `headlessui-listbox-option-${(0, _useIdJs.useId)()}`, r = l.activeOptionIndex !== null ? l.options[l.activeOptionIndex].id === u : !1, { value: x , compare: A  } = l.propsRef.current, R = (0, _matchJs.match)(l.propsRef.current.mode, {
+        [1]: ()=>x.some((S)=>A(S, o)),
+        [0]: ()=>A(x, o)
+    }), b = (0, _react.useRef)(null), O = (0, _useSyncRefsJs.useSyncRefs)(n, b);
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        if (l.listboxState !== 0 || !r || l.activationTrigger === 0) return;
+        let S = (0, _disposablesJs.disposables)();
+        return S.requestAnimationFrame(()=>{
+            var L, K;
+            (K = (L = b.current) == null ? void 0 : L.scrollIntoView) == null || K.call(L, {
+                block: "nearest"
+            });
+        }), S.dispose;
+    }, [
+        b,
+        r,
+        l.listboxState,
+        l.activationTrigger,
+        l.activeOptionIndex
+    ]);
+    let T = (0, _react.useRef)({
+        disabled: e,
+        value: o,
+        domRef: b
+    });
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        T.current.disabled = e;
+    }, [
+        T,
+        e
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        T.current.value = o;
+    }, [
+        T,
+        o
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        var S, L;
+        T.current.textValue = (L = (S = b.current) == null ? void 0 : S.textContent) == null ? void 0 : L.toLowerCase();
+    }, [
+        T,
+        b
+    ]);
+    let d = (0, _useEventJs.useEvent)(()=>l.propsRef.current.onChange(o));
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>(s({
+            type: 7,
+            id: u,
+            dataRef: T
+        }), ()=>s({
+                type: 8,
+                id: u
+            })), [
+        T,
+        u
+    ]);
+    let a = (0, _useEventJs.useEvent)((S)=>{
+        if (e) return S.preventDefault();
+        d(), l.propsRef.current.mode === 0 && (s({
+            type: 1
+        }), (0, _disposablesJs.disposables)().nextFrame(()=>{
+            var L;
+            return (L = l.buttonRef.current) == null ? void 0 : L.focus({
+                preventScroll: !0
+            });
+        }));
+    }), c = (0, _useEventJs.useEvent)(()=>{
+        if (e) return s({
+            type: 4,
+            focus: (0, _calculateActiveIndexJs.Focus).Nothing
+        });
+        s({
+            type: 4,
+            focus: (0, _calculateActiveIndexJs.Focus).Specific,
+            id: u
+        });
+    }), D = (0, _useEventJs.useEvent)(()=>{
+        e || r || s({
+            type: 4,
+            focus: (0, _calculateActiveIndexJs.Focus).Specific,
+            id: u,
+            trigger: 0
+        });
+    }), y = (0, _useEventJs.useEvent)(()=>{
+        e || !r || s({
+            type: 4,
+            focus: (0, _calculateActiveIndexJs.Focus).Nothing
+        });
+    }), m = (0, _react.useMemo)(()=>({
+            active: r,
+            selected: R,
+            disabled: e
+        }), [
+        r,
+        R,
+        e
+    ]);
+    return (0, _renderJs.render)({
+        ourProps: {
+            id: u,
+            ref: O,
+            role: "option",
+            tabIndex: e === !0 ? void 0 : -1,
+            "aria-disabled": e === !0 ? !0 : void 0,
+            "aria-selected": R === !0 ? !0 : void 0,
+            disabled: void 0,
+            onClick: a,
+            onFocus: c,
+            onPointerMove: D,
+            onMouseMove: D,
+            onPointerLeave: y,
+            onMouseLeave: y
+        },
+        theirProps: p,
+        slot: m,
+        defaultTag: Pe,
+        name: "Listbox.Option"
+    });
+}), rt = Object.assign(me, {
+    Button: Re,
+    Label: ve,
+    Options: he,
+    Option: De
+});
+
+},{"react":"21dqq","../../hooks/use-disposables.js":"6QssP","../../hooks/use-id.js":"9HMMR","../../hooks/use-iso-morphic-effect.js":"5EMFK","../../hooks/use-computed.js":"2m5Sl","../../hooks/use-sync-refs.js":"67YMZ","../../utils/render.js":"6k5Fw","../../utils/match.js":"ix3HI","../../utils/disposables.js":"5m1zj","../keyboard.js":"btpQm","../../utils/calculate-active-index.js":"l9t8E","../../utils/bugs.js":"czGU7","../../utils/focus-management.js":"aKUTi","../../internal/open-closed.js":"aw8L5","../../hooks/use-resolve-button-type.js":"jGJQI","../../hooks/use-outside-click.js":"bNTTE","../../internal/hidden.js":"1o7Iy","../../utils/form.js":"cXZpR","../../utils/owner.js":"2hWOn","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bPwuu":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Menu", ()=>We);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _matchJs = require("../../utils/match.js");
+var _renderJs = require("../../utils/render.js");
+var _disposablesJs = require("../../utils/disposables.js");
+var _useDisposablesJs = require("../../hooks/use-disposables.js");
+var _useIsoMorphicEffectJs = require("../../hooks/use-iso-morphic-effect.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _keyboardJs = require("../keyboard.js");
+var _calculateActiveIndexJs = require("../../utils/calculate-active-index.js");
+var _bugsJs = require("../../utils/bugs.js");
+var _focusManagementJs = require("../../utils/focus-management.js");
+var _useOutsideClickJs = require("../../hooks/use-outside-click.js");
+var _useTreeWalkerJs = require("../../hooks/use-tree-walker.js");
+var _openClosedJs = require("../../internal/open-closed.js");
+var _useResolveButtonTypeJs = require("../../hooks/use-resolve-button-type.js");
+var _useOwnerJs = require("../../hooks/use-owner.js");
+var _useEventJs = require("../../hooks/use-event.js");
+var oe = ((o)=>(o[o.Open = 0] = "Open", o[o.Closed = 1] = "Closed", o))(oe || {}), ae = ((o)=>(o[o.Pointer = 0] = "Pointer", o[o.Other = 1] = "Other", o))(ae || {}), ie = ((a)=>(a[a.OpenMenu = 0] = "OpenMenu", a[a.CloseMenu = 1] = "CloseMenu", a[a.GoToItem = 2] = "GoToItem", a[a.Search = 3] = "Search", a[a.ClearSearch = 4] = "ClearSearch", a[a.RegisterItem = 5] = "RegisterItem", a[a.UnregisterItem = 6] = "UnregisterItem", a))(ie || {});
+function k(t, i = (o)=>o) {
+    let o = t.activeItemIndex !== null ? t.items[t.activeItemIndex] : null, e = (0, _focusManagementJs.sortByDomNode)(i(t.items.slice()), (u)=>u.dataRef.current.domRef.current), n = o ? e.indexOf(o) : null;
+    return n === -1 && (n = null), {
+        items: e,
+        activeItemIndex: n
+    };
+}
+let ue = {
+    [1] (t) {
+        return t.menuState === 1 ? t : {
+            ...t,
+            activeItemIndex: null,
+            menuState: 1
+        };
+    },
+    [0] (t) {
+        return t.menuState === 0 ? t : {
+            ...t,
+            menuState: 0
+        };
+    },
+    [2]: (t, i)=>{
+        var n;
+        let o = k(t), e = (0, _calculateActiveIndexJs.calculateActiveIndex)(i, {
+            resolveItems: ()=>o.items,
+            resolveActiveIndex: ()=>o.activeItemIndex,
+            resolveId: (u)=>u.id,
+            resolveDisabled: (u)=>u.dataRef.current.disabled
+        });
+        return {
+            ...t,
+            ...o,
+            searchQuery: "",
+            activeItemIndex: e,
+            activationTrigger: (n = i.trigger) != null ? n : 1
+        };
+    },
+    [3]: (t, i)=>{
+        let e = t.searchQuery !== "" ? 0 : 1, n = t.searchQuery + i.value.toLowerCase(), s = (t.activeItemIndex !== null ? t.items.slice(t.activeItemIndex + e).concat(t.items.slice(0, t.activeItemIndex + e)) : t.items).find((c)=>{
+            var p;
+            return ((p = c.dataRef.current.textValue) == null ? void 0 : p.startsWith(n)) && !c.dataRef.current.disabled;
+        }), a = s ? t.items.indexOf(s) : -1;
+        return a === -1 || a === t.activeItemIndex ? {
+            ...t,
+            searchQuery: n
+        } : {
+            ...t,
+            searchQuery: n,
+            activeItemIndex: a,
+            activationTrigger: 1
+        };
+    },
+    [4] (t) {
+        return t.searchQuery === "" ? t : {
+            ...t,
+            searchQuery: "",
+            searchActiveItemIndex: null
+        };
+    },
+    [5]: (t, i)=>{
+        let o = k(t, (e)=>[
+                ...e,
+                {
+                    id: i.id,
+                    dataRef: i.dataRef
+                }
+            ]);
+        return {
+            ...t,
+            ...o
+        };
+    },
+    [6]: (t, i)=>{
+        let o = k(t, (e)=>{
+            let n = e.findIndex((u)=>u.id === i.id);
+            return n !== -1 && e.splice(n, 1), e;
+        });
+        return {
+            ...t,
+            ...o,
+            activationTrigger: 1
+        };
+    }
+}, w = (0, _react.createContext)(null);
+w.displayName = "MenuContext";
+function C(t) {
+    let i = (0, _react.useContext)(w);
+    if (i === null) {
+        let o = new Error(`<${t} /> is missing a parent <Menu /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(o, C), o;
+    }
+    return i;
+}
+function se(t, i) {
+    return (0, _matchJs.match)(i.type, ue, t, i);
+}
+let le = (0, _react.Fragment), ce = (0, _renderJs.forwardRefWithAs)(function(i, o) {
+    let e = (0, _react.useReducer)(se, {
+        menuState: 1,
+        buttonRef: (0, _react.createRef)(),
+        itemsRef: (0, _react.createRef)(),
+        items: [],
+        searchQuery: "",
+        activeItemIndex: null,
+        activationTrigger: 1
+    }), [{ menuState: n , itemsRef: u , buttonRef: s  }, a] = e, c = (0, _useSyncRefsJs.useSyncRefs)(o);
+    (0, _useOutsideClickJs.useOutsideClick)([
+        s,
+        u
+    ], (M, R)=>{
+        var T;
+        a({
+            type: 1
+        }), (0, _focusManagementJs.isFocusableElement)(R, (0, _focusManagementJs.FocusableMode).Loose) || (M.preventDefault(), (T = s.current) == null || T.focus());
+    }, n === 0);
+    let p = (0, _react.useMemo)(()=>({
+            open: n === 0
+        }), [
+        n
+    ]), g = i, f = {
+        ref: c
+    };
+    return (0, _reactDefault.default).createElement(w.Provider, {
+        value: e
+    }, (0, _reactDefault.default).createElement((0, _openClosedJs.OpenClosedProvider), {
+        value: (0, _matchJs.match)(n, {
+            [0]: (0, _openClosedJs.State).Open,
+            [1]: (0, _openClosedJs.State).Closed
+        })
+    }, (0, _renderJs.render)({
+        ourProps: f,
+        theirProps: g,
+        slot: p,
+        defaultTag: le,
+        name: "Menu"
+    })));
+}), pe = "button", de = (0, _renderJs.forwardRefWithAs)(function(i, o) {
+    var T;
+    let [e, n] = C("Menu.Button"), u = (0, _useSyncRefsJs.useSyncRefs)(e.buttonRef, o), s = `headlessui-menu-button-${(0, _useIdJs.useId)()}`, a = (0, _useDisposablesJs.useDisposables)(), c = (0, _useEventJs.useEvent)((l)=>{
+        switch(l.key){
+            case (0, _keyboardJs.Keys).Space:
+            case (0, _keyboardJs.Keys).Enter:
+            case (0, _keyboardJs.Keys).ArrowDown:
+                l.preventDefault(), l.stopPropagation(), n({
+                    type: 0
+                }), a.nextFrame(()=>n({
+                        type: 2,
+                        focus: (0, _calculateActiveIndexJs.Focus).First
+                    }));
+                break;
+            case (0, _keyboardJs.Keys).ArrowUp:
+                l.preventDefault(), l.stopPropagation(), n({
+                    type: 0
+                }), a.nextFrame(()=>n({
+                        type: 2,
+                        focus: (0, _calculateActiveIndexJs.Focus).Last
+                    }));
+                break;
+        }
+    }), p = (0, _useEventJs.useEvent)((l)=>{
+        switch(l.key){
+            case (0, _keyboardJs.Keys).Space:
+                l.preventDefault();
+                break;
+        }
+    }), g = (0, _useEventJs.useEvent)((l)=>{
+        if ((0, _bugsJs.isDisabledReactIssue7711)(l.currentTarget)) return l.preventDefault();
+        i.disabled || (e.menuState === 0 ? (n({
+            type: 1
+        }), a.nextFrame(()=>{
+            var b;
+            return (b = e.buttonRef.current) == null ? void 0 : b.focus({
+                preventScroll: !0
+            });
+        })) : (l.preventDefault(), n({
+            type: 0
+        })));
+    }), f = (0, _react.useMemo)(()=>({
+            open: e.menuState === 0
+        }), [
+        e
+    ]), M = i, R = {
+        ref: u,
+        id: s,
+        type: (0, _useResolveButtonTypeJs.useResolveButtonType)(i, e.buttonRef),
+        "aria-haspopup": !0,
+        "aria-controls": (T = e.itemsRef.current) == null ? void 0 : T.id,
+        "aria-expanded": i.disabled ? void 0 : e.menuState === 0,
+        onKeyDown: c,
+        onKeyUp: p,
+        onClick: g
+    };
+    return (0, _renderJs.render)({
+        ourProps: R,
+        theirProps: M,
+        slot: f,
+        defaultTag: pe,
+        name: "Menu.Button"
+    });
+}), me = "div", fe = (0, _renderJs.Features).RenderStrategy | (0, _renderJs.Features).Static, Te = (0, _renderJs.forwardRefWithAs)(function(i, o) {
+    var b, O;
+    let [e, n] = C("Menu.Items"), u = (0, _useSyncRefsJs.useSyncRefs)(e.itemsRef, o), s = (0, _useOwnerJs.useOwnerDocument)(e.itemsRef), a = `headlessui-menu-items-${(0, _useIdJs.useId)()}`, c = (0, _useDisposablesJs.useDisposables)(), p = (0, _openClosedJs.useOpenClosed)(), g = (()=>p !== null ? p === (0, _openClosedJs.State).Open : e.menuState === 0)();
+    (0, _react.useEffect)(()=>{
+        let r = e.itemsRef.current;
+        !r || e.menuState === 0 && r !== (s == null ? void 0 : s.activeElement) && r.focus({
+            preventScroll: !0
+        });
+    }, [
+        e.menuState,
+        e.itemsRef,
+        s
+    ]), (0, _useTreeWalkerJs.useTreeWalker)({
+        container: e.itemsRef.current,
+        enabled: e.menuState === 0,
+        accept (r) {
+            return r.getAttribute("role") === "menuitem" ? NodeFilter.FILTER_REJECT : r.hasAttribute("role") ? NodeFilter.FILTER_SKIP : NodeFilter.FILTER_ACCEPT;
+        },
+        walk (r) {
+            r.setAttribute("role", "none");
+        }
+    });
+    let f = (0, _useEventJs.useEvent)((r)=>{
+        var m, v;
+        switch(c.dispose(), r.key){
+            case (0, _keyboardJs.Keys).Space:
+                if (e.searchQuery !== "") return r.preventDefault(), r.stopPropagation(), n({
+                    type: 3,
+                    value: r.key
+                });
+            case (0, _keyboardJs.Keys).Enter:
+                if (r.preventDefault(), r.stopPropagation(), n({
+                    type: 1
+                }), e.activeItemIndex !== null) {
+                    let { dataRef: A  } = e.items[e.activeItemIndex];
+                    (v = (m = A.current) == null ? void 0 : m.domRef.current) == null || v.click();
+                }
+                (0, _disposablesJs.disposables)().nextFrame(()=>{
+                    var A;
+                    return (A = e.buttonRef.current) == null ? void 0 : A.focus({
+                        preventScroll: !0
+                    });
+                });
+                break;
+            case (0, _keyboardJs.Keys).ArrowDown:
+                return r.preventDefault(), r.stopPropagation(), n({
+                    type: 2,
+                    focus: (0, _calculateActiveIndexJs.Focus).Next
+                });
+            case (0, _keyboardJs.Keys).ArrowUp:
+                return r.preventDefault(), r.stopPropagation(), n({
+                    type: 2,
+                    focus: (0, _calculateActiveIndexJs.Focus).Previous
+                });
+            case (0, _keyboardJs.Keys).Home:
+            case (0, _keyboardJs.Keys).PageUp:
+                return r.preventDefault(), r.stopPropagation(), n({
+                    type: 2,
+                    focus: (0, _calculateActiveIndexJs.Focus).First
+                });
+            case (0, _keyboardJs.Keys).End:
+            case (0, _keyboardJs.Keys).PageDown:
+                return r.preventDefault(), r.stopPropagation(), n({
+                    type: 2,
+                    focus: (0, _calculateActiveIndexJs.Focus).Last
+                });
+            case (0, _keyboardJs.Keys).Escape:
+                r.preventDefault(), r.stopPropagation(), n({
+                    type: 1
+                }), (0, _disposablesJs.disposables)().nextFrame(()=>{
+                    var A;
+                    return (A = e.buttonRef.current) == null ? void 0 : A.focus({
+                        preventScroll: !0
+                    });
+                });
+                break;
+            case (0, _keyboardJs.Keys).Tab:
+                r.preventDefault(), r.stopPropagation();
+                break;
+            default:
+                r.key.length === 1 && (n({
+                    type: 3,
+                    value: r.key
+                }), c.setTimeout(()=>n({
+                        type: 4
+                    }), 350));
+                break;
+        }
+    }), M = (0, _useEventJs.useEvent)((r)=>{
+        switch(r.key){
+            case (0, _keyboardJs.Keys).Space:
+                r.preventDefault();
+                break;
+        }
+    }), R = (0, _react.useMemo)(()=>({
+            open: e.menuState === 0
+        }), [
+        e
+    ]), T = i, l = {
+        "aria-activedescendant": e.activeItemIndex === null || (b = e.items[e.activeItemIndex]) == null ? void 0 : b.id,
+        "aria-labelledby": (O = e.buttonRef.current) == null ? void 0 : O.id,
+        id: a,
+        onKeyDown: f,
+        onKeyUp: M,
+        role: "menu",
+        tabIndex: 0,
+        ref: u
+    };
+    return (0, _renderJs.render)({
+        ourProps: l,
+        theirProps: T,
+        slot: R,
+        defaultTag: me,
+        features: fe,
+        visible: g,
+        name: "Menu.Items"
+    });
+}), Ie = (0, _react.Fragment), ye = (0, _renderJs.forwardRefWithAs)(function(i, o) {
+    let { disabled: e = !1 , ...n } = i, [u, s] = C("Menu.Item"), a = `headlessui-menu-item-${(0, _useIdJs.useId)()}`, c = u.activeItemIndex !== null ? u.items[u.activeItemIndex].id === a : !1, p = (0, _react.useRef)(null), g = (0, _useSyncRefsJs.useSyncRefs)(o, p);
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        if (u.menuState !== 0 || !c || u.activationTrigger === 0) return;
+        let r = (0, _disposablesJs.disposables)();
+        return r.requestAnimationFrame(()=>{
+            var m, v;
+            (v = (m = p.current) == null ? void 0 : m.scrollIntoView) == null || v.call(m, {
+                block: "nearest"
+            });
+        }), r.dispose;
+    }, [
+        p,
+        c,
+        u.menuState,
+        u.activationTrigger,
+        u.activeItemIndex
+    ]);
+    let f = (0, _react.useRef)({
+        disabled: e,
+        domRef: p
+    });
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        f.current.disabled = e;
+    }, [
+        f,
+        e
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        var r, m;
+        f.current.textValue = (m = (r = p.current) == null ? void 0 : r.textContent) == null ? void 0 : m.toLowerCase();
+    }, [
+        f,
+        p
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>(s({
+            type: 5,
+            id: a,
+            dataRef: f
+        }), ()=>s({
+                type: 6,
+                id: a
+            })), [
+        f,
+        a
+    ]);
+    let M = (0, _useEventJs.useEvent)((r)=>{
+        if (e) return r.preventDefault();
+        s({
+            type: 1
+        }), (0, _disposablesJs.disposables)().nextFrame(()=>{
+            var m;
+            return (m = u.buttonRef.current) == null ? void 0 : m.focus({
+                preventScroll: !0
+            });
+        });
+    }), R = (0, _useEventJs.useEvent)(()=>{
+        if (e) return s({
+            type: 2,
+            focus: (0, _calculateActiveIndexJs.Focus).Nothing
+        });
+        s({
+            type: 2,
+            focus: (0, _calculateActiveIndexJs.Focus).Specific,
+            id: a
+        });
+    }), T = (0, _useEventJs.useEvent)(()=>{
+        e || c || s({
+            type: 2,
+            focus: (0, _calculateActiveIndexJs.Focus).Specific,
+            id: a,
+            trigger: 0
+        });
+    }), l = (0, _useEventJs.useEvent)(()=>{
+        e || !c || s({
+            type: 2,
+            focus: (0, _calculateActiveIndexJs.Focus).Nothing
+        });
+    }), b = (0, _react.useMemo)(()=>({
+            active: c,
+            disabled: e
+        }), [
+        c,
+        e
+    ]);
+    return (0, _renderJs.render)({
+        ourProps: {
+            id: a,
+            ref: g,
+            role: "menuitem",
+            tabIndex: e === !0 ? void 0 : -1,
+            "aria-disabled": e === !0 ? !0 : void 0,
+            disabled: void 0,
+            onClick: M,
+            onFocus: R,
+            onPointerMove: T,
+            onMouseMove: T,
+            onPointerLeave: l,
+            onMouseLeave: l
+        },
+        theirProps: n,
+        slot: b,
+        defaultTag: Ie,
+        name: "Menu.Item"
+    });
+}), We = Object.assign(ce, {
+    Button: de,
+    Items: Te,
+    Item: ye
+});
+
+},{"react":"21dqq","../../utils/match.js":"ix3HI","../../utils/render.js":"6k5Fw","../../utils/disposables.js":"5m1zj","../../hooks/use-disposables.js":"6QssP","../../hooks/use-iso-morphic-effect.js":"5EMFK","../../hooks/use-sync-refs.js":"67YMZ","../../hooks/use-id.js":"9HMMR","../keyboard.js":"btpQm","../../utils/calculate-active-index.js":"l9t8E","../../utils/bugs.js":"czGU7","../../utils/focus-management.js":"aKUTi","../../hooks/use-outside-click.js":"bNTTE","../../hooks/use-tree-walker.js":"fQ700","../../internal/open-closed.js":"aw8L5","../../hooks/use-resolve-button-type.js":"jGJQI","../../hooks/use-owner.js":"fNCTZ","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gUcnZ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Popover", ()=>Tt);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _matchJs = require("../../utils/match.js");
+var _renderJs = require("../../utils/render.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _keyboardJs = require("../keyboard.js");
+var _bugsJs = require("../../utils/bugs.js");
+var _focusManagementJs = require("../../utils/focus-management.js");
+var _openClosedJs = require("../../internal/open-closed.js");
+var _useResolveButtonTypeJs = require("../../hooks/use-resolve-button-type.js");
+var _useOutsideClickJs = require("../../hooks/use-outside-click.js");
+var _ownerJs = require("../../utils/owner.js");
+var _useOwnerJs = require("../../hooks/use-owner.js");
+var _useEventListenerJs = require("../../hooks/use-event-listener.js");
+var _hiddenJs = require("../../internal/hidden.js");
+var _useEventJs = require("../../hooks/use-event.js");
+var _useTabDirectionJs = require("../../hooks/use-tab-direction.js");
+var _microTaskJs = require("../../utils/micro-task.js");
+var Ae = ((c)=>(c[c.Open = 0] = "Open", c[c.Closed = 1] = "Closed", c))(Ae || {}), Ce = ((n)=>(n[n.TogglePopover = 0] = "TogglePopover", n[n.ClosePopover = 1] = "ClosePopover", n[n.SetButton = 2] = "SetButton", n[n.SetButtonId = 3] = "SetButtonId", n[n.SetPanel = 4] = "SetPanel", n[n.SetPanelId = 5] = "SetPanelId", n))(Ce || {});
+let Re = {
+    [0]: (r)=>({
+            ...r,
+            popoverState: (0, _matchJs.match)(r.popoverState, {
+                [0]: 1,
+                [1]: 0
+            })
+        }),
+    [1] (r) {
+        return r.popoverState === 1 ? r : {
+            ...r,
+            popoverState: 1
+        };
+    },
+    [2] (r, t) {
+        return r.button === t.button ? r : {
+            ...r,
+            button: t.button
+        };
+    },
+    [3] (r, t) {
+        return r.buttonId === t.buttonId ? r : {
+            ...r,
+            buttonId: t.buttonId
+        };
+    },
+    [4] (r, t) {
+        return r.panel === t.panel ? r : {
+            ...r,
+            panel: t.panel
+        };
+    },
+    [5] (r, t) {
+        return r.panelId === t.panelId ? r : {
+            ...r,
+            panelId: t.panelId
+        };
+    }
+}, ee = (0, _react.createContext)(null);
+ee.displayName = "PopoverContext";
+function J(r) {
+    let t = (0, _react.useContext)(ee);
+    if (t === null) {
+        let c = new Error(`<${r} /> is missing a parent <Popover /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(c, J), c;
+    }
+    return t;
+}
+let te = (0, _react.createContext)(null);
+te.displayName = "PopoverAPIContext";
+function oe(r) {
+    let t = (0, _react.useContext)(te);
+    if (t === null) {
+        let c = new Error(`<${r} /> is missing a parent <Popover /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(c, oe), c;
+    }
+    return t;
+}
+let re = (0, _react.createContext)(null);
+re.displayName = "PopoverGroupContext";
+function ce() {
+    return (0, _react.useContext)(re);
+}
+let ne = (0, _react.createContext)(null);
+ne.displayName = "PopoverPanelContext";
+function Oe() {
+    return (0, _react.useContext)(ne);
+}
+function Le(r, t) {
+    return (0, _matchJs.match)(t.type, Re, r, t);
+}
+let Fe = "div", Ie = (0, _renderJs.forwardRefWithAs)(function(t, c) {
+    var R;
+    let o = `headlessui-popover-button-${(0, _useIdJs.useId)()}`, d = `headlessui-popover-panel-${(0, _useIdJs.useId)()}`, a = (0, _react.useRef)(null), n = (0, _useSyncRefsJs.useSyncRefs)(c, (0, _useSyncRefsJs.optionalRef)((e)=>{
+        a.current = e;
+    })), g = (0, _react.useReducer)(Le, {
+        popoverState: 1,
+        button: null,
+        buttonId: o,
+        panel: null,
+        panelId: d,
+        beforePanelSentinel: (0, _react.createRef)(),
+        afterPanelSentinel: (0, _react.createRef)()
+    }), [{ popoverState: m , button: l , panel: v , beforePanelSentinel: p , afterPanelSentinel: B  }, s] = g, T = (0, _useOwnerJs.useOwnerDocument)((R = a.current) != null ? R : l);
+    (0, _react.useEffect)(()=>s({
+            type: 3,
+            buttonId: o
+        }), [
+        o,
+        s
+    ]), (0, _react.useEffect)(()=>s({
+            type: 5,
+            panelId: d
+        }), [
+        d,
+        s
+    ]);
+    let f = (0, _react.useMemo)(()=>{
+        if (!l || !v) return !1;
+        for (let e of document.querySelectorAll("body > *"))if (Number(e == null ? void 0 : e.contains(l)) ^ Number(e == null ? void 0 : e.contains(v))) return !0;
+        return !1;
+    }, [
+        l,
+        v
+    ]), P = (0, _react.useMemo)(()=>({
+            buttonId: o,
+            panelId: d,
+            close: ()=>s({
+                    type: 1
+                })
+        }), [
+        o,
+        d,
+        s
+    ]), y = ce(), A = y == null ? void 0 : y.registerPopover, L = (0, _useEventJs.useEvent)(()=>{
+        var e;
+        return (e = y == null ? void 0 : y.isFocusWithinPopoverGroup()) != null ? e : (T == null ? void 0 : T.activeElement) && ((l == null ? void 0 : l.contains(T.activeElement)) || (v == null ? void 0 : v.contains(T.activeElement)));
+    });
+    (0, _react.useEffect)(()=>A == null ? void 0 : A(P), [
+        A,
+        P
+    ]), (0, _useEventListenerJs.useEventListener)(T == null ? void 0 : T.defaultView, "focus", (e)=>{
+        var i, S, O, N;
+        m === 0 && (L() || !l || !v || (S = (i = p.current) == null ? void 0 : i.contains) != null && S.call(i, e.target) || (N = (O = B.current) == null ? void 0 : O.contains) != null && N.call(O, e.target) || s({
+            type: 1
+        }));
+    }, !0), (0, _useOutsideClickJs.useOutsideClick)([
+        l,
+        v
+    ], (e, i)=>{
+        s({
+            type: 1
+        }), (0, _focusManagementJs.isFocusableElement)(i, (0, _focusManagementJs.FocusableMode).Loose) || (e.preventDefault(), l == null || l.focus());
+    }, m === 0);
+    let F = (0, _useEventJs.useEvent)((e)=>{
+        s({
+            type: 1
+        });
+        let i = (()=>e ? e instanceof HTMLElement ? e : e.current instanceof HTMLElement ? e.current : l : l)();
+        i == null || i.focus();
+    }), D = (0, _react.useMemo)(()=>({
+            close: F,
+            isPortalled: f
+        }), [
+        F,
+        f
+    ]), u = (0, _react.useMemo)(()=>({
+            open: m === 0,
+            close: F
+        }), [
+        m,
+        F
+    ]), E = t, C = {
+        ref: n
+    };
+    return (0, _reactDefault.default).createElement(ee.Provider, {
+        value: g
+    }, (0, _reactDefault.default).createElement(te.Provider, {
+        value: D
+    }, (0, _reactDefault.default).createElement((0, _openClosedJs.OpenClosedProvider), {
+        value: (0, _matchJs.match)(m, {
+            [0]: (0, _openClosedJs.State).Open,
+            [1]: (0, _openClosedJs.State).Closed
+        })
+    }, (0, _renderJs.render)({
+        ourProps: C,
+        theirProps: E,
+        slot: u,
+        defaultTag: Fe,
+        name: "Popover"
+    }))));
+}), Me = "button", Be = (0, _renderJs.forwardRefWithAs)(function(t, c) {
+    let [o, d] = J("Popover.Button"), { isPortalled: a  } = oe("Popover.Button"), n = (0, _react.useRef)(null), g = `headlessui-focus-sentinel-${(0, _useIdJs.useId)()}`, m = ce(), l = m == null ? void 0 : m.closeOthers, v = Oe(), p = v === null ? !1 : v === o.panelId, B = (0, _useSyncRefsJs.useSyncRefs)(n, c, p ? null : (e)=>d({
+            type: 2,
+            button: e
+        })), s = (0, _useSyncRefsJs.useSyncRefs)(n, c), T = (0, _useOwnerJs.useOwnerDocument)(n), f = (0, _useEventJs.useEvent)((e)=>{
+        var i, S, O;
+        if (p) {
+            if (o.popoverState === 1) return;
+            switch(e.key){
+                case (0, _keyboardJs.Keys).Space:
+                case (0, _keyboardJs.Keys).Enter:
+                    e.preventDefault(), (S = (i = e.target).click) == null || S.call(i), d({
+                        type: 1
+                    }), (O = o.button) == null || O.focus();
+                    break;
+            }
+        } else switch(e.key){
+            case (0, _keyboardJs.Keys).Space:
+            case (0, _keyboardJs.Keys).Enter:
+                e.preventDefault(), e.stopPropagation(), o.popoverState === 1 && (l == null || l(o.buttonId)), d({
+                    type: 0
+                });
+                break;
+            case (0, _keyboardJs.Keys).Escape:
+                if (o.popoverState !== 0) return l == null ? void 0 : l(o.buttonId);
+                if (!n.current || (T == null ? void 0 : T.activeElement) && !n.current.contains(T.activeElement)) return;
+                e.preventDefault(), e.stopPropagation(), d({
+                    type: 1
+                });
+                break;
+        }
+    }), P = (0, _useEventJs.useEvent)((e)=>{
+        p || e.key === (0, _keyboardJs.Keys).Space && e.preventDefault();
+    }), y = (0, _useEventJs.useEvent)((e)=>{
+        var i, S;
+        (0, _bugsJs.isDisabledReactIssue7711)(e.currentTarget) || t.disabled || (p ? (d({
+            type: 1
+        }), (i = o.button) == null || i.focus()) : (e.preventDefault(), e.stopPropagation(), o.popoverState === 1 && (l == null || l(o.buttonId)), d({
+            type: 0
+        }), (S = o.button) == null || S.focus()));
+    }), A = (0, _useEventJs.useEvent)((e)=>{
+        e.preventDefault(), e.stopPropagation();
+    }), L = o.popoverState === 0, F = (0, _react.useMemo)(()=>({
+            open: L
+        }), [
+        L
+    ]), D = (0, _useResolveButtonTypeJs.useResolveButtonType)(t, n), u = t, E = p ? {
+        ref: s,
+        type: D,
+        onKeyDown: f,
+        onClick: y
+    } : {
+        ref: B,
+        id: o.buttonId,
+        type: D,
+        "aria-expanded": t.disabled ? void 0 : o.popoverState === 0,
+        "aria-controls": o.panel ? o.panelId : void 0,
+        onKeyDown: f,
+        onKeyUp: P,
+        onClick: y,
+        onMouseDown: A
+    }, C = (0, _useTabDirectionJs.useTabDirection)(), R = (0, _useEventJs.useEvent)(()=>{
+        let e = o.panel;
+        if (!e) return;
+        function i() {
+            (0, _matchJs.match)(C.current, {
+                [(0, _useTabDirectionJs.Direction).Forwards]: ()=>(0, _focusManagementJs.focusIn)(e, (0, _focusManagementJs.Focus).First),
+                [(0, _useTabDirectionJs.Direction).Backwards]: ()=>(0, _focusManagementJs.focusIn)(e, (0, _focusManagementJs.Focus).Last)
+            });
+        }
+        i();
+    });
+    return (0, _reactDefault.default).createElement((0, _reactDefault.default).Fragment, null, (0, _renderJs.render)({
+        ourProps: E,
+        theirProps: u,
+        slot: F,
+        defaultTag: Me,
+        name: "Popover.Button"
+    }), L && !p && a && (0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+        id: g,
+        features: (0, _hiddenJs.Features).Focusable,
+        as: "button",
+        type: "button",
+        onFocus: R
+    }));
+}), he = "div", De = (0, _renderJs.Features).RenderStrategy | (0, _renderJs.Features).Static, xe = (0, _renderJs.forwardRefWithAs)(function(t, c) {
+    let [{ popoverState: o  }, d] = J("Popover.Overlay"), a = (0, _useSyncRefsJs.useSyncRefs)(c), n = `headlessui-popover-overlay-${(0, _useIdJs.useId)()}`, g = (0, _openClosedJs.useOpenClosed)(), m = (()=>g !== null ? g === (0, _openClosedJs.State).Open : o === 0)(), l = (0, _useEventJs.useEvent)((s)=>{
+        if ((0, _bugsJs.isDisabledReactIssue7711)(s.currentTarget)) return s.preventDefault();
+        d({
+            type: 1
+        });
+    }), v = (0, _react.useMemo)(()=>({
+            open: o === 0
+        }), [
+        o
+    ]);
+    return (0, _renderJs.render)({
+        ourProps: {
+            ref: a,
+            id: n,
+            "aria-hidden": !0,
+            onClick: l
+        },
+        theirProps: t,
+        slot: v,
+        defaultTag: he,
+        features: De,
+        visible: m,
+        name: "Popover.Overlay"
+    });
+}), He = "div", Ge = (0, _renderJs.Features).RenderStrategy | (0, _renderJs.Features).Static, ke = (0, _renderJs.forwardRefWithAs)(function(t, c) {
+    let { focus: o = !1 , ...d } = t, [a, n] = J("Popover.Panel"), { close: g , isPortalled: m  } = oe("Popover.Panel"), l = `headlessui-focus-sentinel-before-${(0, _useIdJs.useId)()}`, v = `headlessui-focus-sentinel-after-${(0, _useIdJs.useId)()}`, p = (0, _react.useRef)(null), B = (0, _useSyncRefsJs.useSyncRefs)(p, c, (u)=>{
+        n({
+            type: 4,
+            panel: u
+        });
+    }), s = (0, _useOwnerJs.useOwnerDocument)(p), T = (0, _openClosedJs.useOpenClosed)(), f = (()=>T !== null ? T === (0, _openClosedJs.State).Open : a.popoverState === 0)(), P = (0, _useEventJs.useEvent)((u)=>{
+        var E;
+        switch(u.key){
+            case (0, _keyboardJs.Keys).Escape:
+                if (a.popoverState !== 0 || !p.current || (s == null ? void 0 : s.activeElement) && !p.current.contains(s.activeElement)) return;
+                u.preventDefault(), u.stopPropagation(), n({
+                    type: 1
+                }), (E = a.button) == null || E.focus();
+                break;
+        }
+    });
+    (0, _react.useEffect)(()=>{
+        var u;
+        t.static || a.popoverState === 1 && ((u = t.unmount) != null ? u : !0) && n({
+            type: 4,
+            panel: null
+        });
+    }, [
+        a.popoverState,
+        t.unmount,
+        t.static,
+        n
+    ]), (0, _react.useEffect)(()=>{
+        if (!o || a.popoverState !== 0 || !p.current) return;
+        let u = s == null ? void 0 : s.activeElement;
+        p.current.contains(u) || (0, _focusManagementJs.focusIn)(p.current, (0, _focusManagementJs.Focus).First);
+    }, [
+        o,
+        p,
+        a.popoverState
+    ]);
+    let y = (0, _react.useMemo)(()=>({
+            open: a.popoverState === 0,
+            close: g
+        }), [
+        a,
+        g
+    ]), A = {
+        ref: B,
+        id: a.panelId,
+        onKeyDown: P,
+        onBlur: o && a.popoverState === 0 ? (u)=>{
+            var C, R, e, i, S;
+            let E = u.relatedTarget;
+            !E || !p.current || (C = p.current) != null && C.contains(E) || (n({
+                type: 1
+            }), (((e = (R = a.beforePanelSentinel.current) == null ? void 0 : R.contains) == null ? void 0 : e.call(R, E)) || ((S = (i = a.afterPanelSentinel.current) == null ? void 0 : i.contains) == null ? void 0 : S.call(i, E))) && E.focus({
+                preventScroll: !0
+            }));
+        } : void 0,
+        tabIndex: -1
+    }, L = (0, _useTabDirectionJs.useTabDirection)(), F = (0, _useEventJs.useEvent)(()=>{
+        let u = p.current;
+        if (!u) return;
+        function E() {
+            (0, _matchJs.match)(L.current, {
+                [(0, _useTabDirectionJs.Direction).Forwards]: ()=>{
+                    (0, _focusManagementJs.focusIn)(u, (0, _focusManagementJs.Focus).First);
+                },
+                [(0, _useTabDirectionJs.Direction).Backwards]: ()=>{
+                    var C;
+                    (C = a.button) == null || C.focus({
+                        preventScroll: !0
+                    });
+                }
+            });
+        }
+        E();
+    }), D = (0, _useEventJs.useEvent)(()=>{
+        let u = p.current;
+        if (!u) return;
+        function E() {
+            (0, _matchJs.match)(L.current, {
+                [(0, _useTabDirectionJs.Direction).Forwards]: ()=>{
+                    var O, N, le;
+                    if (!a.button) return;
+                    let C = (0, _focusManagementJs.getFocusableElements)(), R = C.indexOf(a.button), e = C.slice(0, R + 1), S = [
+                        ...C.slice(R + 1),
+                        ...e
+                    ];
+                    for (let K of S.slice())if (((N = (O = K == null ? void 0 : K.id) == null ? void 0 : O.startsWith) == null ? void 0 : N.call(O, "headlessui-focus-sentinel-")) || ((le = a.panel) == null ? void 0 : le.contains(K))) {
+                        let ae = S.indexOf(K);
+                        ae !== -1 && S.splice(ae, 1);
+                    }
+                    (0, _focusManagementJs.focusIn)(S, (0, _focusManagementJs.Focus).First, !1);
+                },
+                [(0, _useTabDirectionJs.Direction).Backwards]: ()=>(0, _focusManagementJs.focusIn)(u, (0, _focusManagementJs.Focus).Last)
+            });
+        }
+        E();
+    });
+    return (0, _reactDefault.default).createElement(ne.Provider, {
+        value: a.panelId
+    }, f && m && (0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+        id: l,
+        ref: a.beforePanelSentinel,
+        features: (0, _hiddenJs.Features).Focusable,
+        as: "button",
+        type: "button",
+        onFocus: F
+    }), (0, _renderJs.render)({
+        ourProps: A,
+        theirProps: d,
+        slot: y,
+        defaultTag: He,
+        features: Ge,
+        visible: f,
+        name: "Popover.Panel"
+    }), f && m && (0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+        id: v,
+        ref: a.afterPanelSentinel,
+        features: (0, _hiddenJs.Features).Focusable,
+        as: "button",
+        type: "button",
+        onFocus: D
+    }));
+}), _e = "div", we = (0, _renderJs.forwardRefWithAs)(function(t, c) {
+    let o = (0, _react.useRef)(null), d = (0, _useSyncRefsJs.useSyncRefs)(o, c), [a, n] = (0, _react.useState)([]), g = (0, _useEventJs.useEvent)((f)=>{
+        n((P)=>{
+            let y = P.indexOf(f);
+            if (y !== -1) {
+                let A = P.slice();
+                return A.splice(y, 1), A;
+            }
+            return P;
+        });
+    }), m = (0, _useEventJs.useEvent)((f)=>(n((P)=>[
+                ...P,
+                f
+            ]), ()=>g(f))), l = (0, _useEventJs.useEvent)(()=>{
+        var y;
+        let f = (0, _ownerJs.getOwnerDocument)(o);
+        if (!f) return !1;
+        let P = f.activeElement;
+        return (y = o.current) != null && y.contains(P) ? !0 : a.some((A)=>{
+            var L, F;
+            return ((L = f.getElementById(A.buttonId)) == null ? void 0 : L.contains(P)) || ((F = f.getElementById(A.panelId)) == null ? void 0 : F.contains(P));
+        });
+    }), v = (0, _useEventJs.useEvent)((f)=>{
+        for (let P of a)P.buttonId !== f && P.close();
+    }), p = (0, _react.useMemo)(()=>({
+            registerPopover: m,
+            unregisterPopover: g,
+            isFocusWithinPopoverGroup: l,
+            closeOthers: v
+        }), [
+        m,
+        g,
+        l,
+        v
+    ]), B = (0, _react.useMemo)(()=>({}), []), s = t, T = {
+        ref: d
+    };
+    return (0, _reactDefault.default).createElement(re.Provider, {
+        value: p
+    }, (0, _renderJs.render)({
+        ourProps: T,
+        theirProps: s,
+        slot: B,
+        defaultTag: _e,
+        name: "Popover.Group"
+    }));
+}), Tt = Object.assign(Ie, {
+    Button: Be,
+    Overlay: xe,
+    Panel: ke,
+    Group: we
+});
+
+},{"react":"21dqq","../../utils/match.js":"ix3HI","../../utils/render.js":"6k5Fw","../../hooks/use-sync-refs.js":"67YMZ","../../hooks/use-id.js":"9HMMR","../keyboard.js":"btpQm","../../utils/bugs.js":"czGU7","../../utils/focus-management.js":"aKUTi","../../internal/open-closed.js":"aw8L5","../../hooks/use-resolve-button-type.js":"jGJQI","../../hooks/use-outside-click.js":"bNTTE","../../utils/owner.js":"2hWOn","../../hooks/use-owner.js":"fNCTZ","../../hooks/use-event-listener.js":"7rLR4","../../internal/hidden.js":"1o7Iy","../../hooks/use-event.js":"kEbTP","../../hooks/use-tab-direction.js":"l2fA6","../../utils/micro-task.js":"jhwzS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hNdSk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "RadioGroup", ()=>je);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _renderJs = require("../../utils/render.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _matchJs = require("../../utils/match.js");
+var _useIsoMorphicEffectJs = require("../../hooks/use-iso-morphic-effect.js");
+var _keyboardJs = require("../../components/keyboard.js");
+var _focusManagementJs = require("../../utils/focus-management.js");
+var _useFlagsJs = require("../../hooks/use-flags.js");
+var _labelJs = require("../../components/label/label.js");
+var _descriptionJs = require("../../components/description/description.js");
+var _useTreeWalkerJs = require("../../hooks/use-tree-walker.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _hiddenJs = require("../../internal/hidden.js");
+var _formJs = require("../../utils/form.js");
+var _ownerJs = require("../../utils/owner.js");
+var _useEventJs = require("../../hooks/use-event.js");
+var ue = ((t)=>(t[t.RegisterOption = 0] = "RegisterOption", t[t.UnregisterOption = 1] = "UnregisterOption", t))(ue || {});
+let ce = {
+    [0] (n, i) {
+        let t = [
+            ...n.options,
+            {
+                id: i.id,
+                element: i.element,
+                propsRef: i.propsRef
+            }
+        ];
+        return {
+            ...n,
+            options: (0, _focusManagementJs.sortByDomNode)(t, (o)=>o.element.current)
+        };
+    },
+    [1] (n, i) {
+        let t = n.options.slice(), o = n.options.findIndex((T)=>T.id === i.id);
+        return o === -1 ? n : (t.splice(o, 1), {
+            ...n,
+            options: t
+        });
+    }
+}, N = (0, _react.createContext)(null);
+N.displayName = "RadioGroupContext";
+function Q(n) {
+    let i = (0, _react.useContext)(N);
+    if (i === null) {
+        let t = new Error(`<${n} /> is missing a parent <RadioGroup /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(t, Q), t;
+    }
+    return i;
+}
+function fe(n, i) {
+    return (0, _matchJs.match)(i.type, ce, n, i);
+}
+let me = "div", be = (0, _renderJs.forwardRefWithAs)(function(i, t) {
+    let { value: o , name: T , onChange: R , disabled: A = !1 , ...L } = i, u = (0, _useEventJs.useEvent)((e, a)=>e === a), [x, h] = (0, _react.useReducer)(fe, {
+        options: []
+    }), l = x.options, [G, c] = (0, _labelJs.useLabels)(), [y, w] = (0, _descriptionJs.useDescriptions)(), f = `headlessui-radiogroup-${(0, _useIdJs.useId)()}`, g = (0, _react.useRef)(null), I = (0, _useSyncRefsJs.useSyncRefs)(g, t), k = (0, _react.useMemo)(()=>l.find((e)=>!e.propsRef.current.disabled), [
+        l
+    ]), O = (0, _react.useMemo)(()=>l.some((e)=>u(e.propsRef.current.value, o)), [
+        l,
+        o
+    ]), m = (0, _useEventJs.useEvent)((e)=>{
+        var r;
+        if (A || u(e, o)) return !1;
+        let a = (r = l.find((s)=>u(s.propsRef.current.value, e))) == null ? void 0 : r.propsRef.current;
+        return a != null && a.disabled ? !1 : (R(e), !0);
+    });
+    (0, _useTreeWalkerJs.useTreeWalker)({
+        container: g.current,
+        accept (e) {
+            return e.getAttribute("role") === "radio" ? NodeFilter.FILTER_REJECT : e.hasAttribute("role") ? NodeFilter.FILTER_SKIP : NodeFilter.FILTER_ACCEPT;
+        },
+        walk (e) {
+            e.setAttribute("role", "none");
+        }
+    });
+    let S = (0, _useEventJs.useEvent)((e)=>{
+        let a = g.current;
+        if (!a) return;
+        let r = (0, _ownerJs.getOwnerDocument)(a), s = l.filter((p)=>p.propsRef.current.disabled === !1).map((p)=>p.element.current);
+        switch(e.key){
+            case (0, _keyboardJs.Keys).Enter:
+                (0, _formJs.attemptSubmit)(e.currentTarget);
+                break;
+            case (0, _keyboardJs.Keys).ArrowLeft:
+            case (0, _keyboardJs.Keys).ArrowUp:
+                if (e.preventDefault(), e.stopPropagation(), (0, _focusManagementJs.focusIn)(s, (0, _focusManagementJs.Focus).Previous | (0, _focusManagementJs.Focus).WrapAround) === (0, _focusManagementJs.FocusResult).Success) {
+                    let d = l.find((v)=>v.element.current === (r == null ? void 0 : r.activeElement));
+                    d && m(d.propsRef.current.value);
+                }
+                break;
+            case (0, _keyboardJs.Keys).ArrowRight:
+            case (0, _keyboardJs.Keys).ArrowDown:
+                if (e.preventDefault(), e.stopPropagation(), (0, _focusManagementJs.focusIn)(s, (0, _focusManagementJs.Focus).Next | (0, _focusManagementJs.Focus).WrapAround) === (0, _focusManagementJs.FocusResult).Success) {
+                    let d = l.find((v)=>v.element.current === (r == null ? void 0 : r.activeElement));
+                    d && m(d.propsRef.current.value);
+                }
+                break;
+            case (0, _keyboardJs.Keys).Space:
+                {
+                    e.preventDefault(), e.stopPropagation();
+                    let p = l.find((d)=>d.element.current === (r == null ? void 0 : r.activeElement));
+                    p && m(p.propsRef.current.value);
+                }
+                break;
+        }
+    }), C = (0, _useEventJs.useEvent)((e)=>(h({
+            type: 0,
+            ...e
+        }), ()=>h({
+                type: 1,
+                id: e.id
+            }))), _ = (0, _react.useMemo)(()=>({
+            registerOption: C,
+            firstOption: k,
+            containsCheckedOption: O,
+            change: m,
+            disabled: A,
+            value: o,
+            compare: u
+        }), [
+        C,
+        k,
+        O,
+        m,
+        A,
+        o,
+        u
+    ]), M = {
+        ref: I,
+        id: f,
+        role: "radiogroup",
+        "aria-labelledby": G,
+        "aria-describedby": y,
+        onKeyDown: S
+    };
+    return (0, _reactDefault.default).createElement(w, {
+        name: "RadioGroup.Description"
+    }, (0, _reactDefault.default).createElement(c, {
+        name: "RadioGroup.Label"
+    }, (0, _reactDefault.default).createElement(N.Provider, {
+        value: _
+    }, T != null && o != null && (0, _formJs.objectToFormEntries)({
+        [T]: o
+    }).map(([e, a])=>(0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+            features: (0, _hiddenJs.Features).Hidden,
+            ...(0, _renderJs.compact)({
+                key: e,
+                as: "input",
+                type: "radio",
+                checked: a != null,
+                hidden: !0,
+                readOnly: !0,
+                name: e,
+                value: a
+            })
+        })), (0, _renderJs.render)({
+        ourProps: M,
+        theirProps: L,
+        defaultTag: me,
+        name: "RadioGroup"
+    }))));
+});
+var Te = ((t)=>(t[t.Empty = 1] = "Empty", t[t.Active = 2] = "Active", t))(Te || {});
+let Re = "div", ye = (0, _renderJs.forwardRefWithAs)(function(i, t) {
+    let o = (0, _react.useRef)(null), T = (0, _useSyncRefsJs.useSyncRefs)(o, t), R = `headlessui-radiogroup-option-${(0, _useIdJs.useId)()}`, [A, L] = (0, _labelJs.useLabels)(), [u, x] = (0, _descriptionJs.useDescriptions)(), { addFlag: h , removeFlag: l , hasFlag: G  } = (0, _useFlagsJs.useFlags)(1), { value: c , disabled: y = !1 , ...w } = i, f = (0, _react.useRef)({
+        value: c,
+        disabled: y
+    });
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        f.current.value = c;
+    }, [
+        c,
+        f
+    ]), (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        f.current.disabled = y;
+    }, [
+        y,
+        f
+    ]);
+    let { registerOption: g , disabled: I , change: k , firstOption: O , containsCheckedOption: m , value: S , compare: C  } = Q("RadioGroup.Option");
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>g({
+            id: R,
+            element: o,
+            propsRef: f
+        }), [
+        R,
+        g,
+        o,
+        i
+    ]);
+    let _ = (0, _useEventJs.useEvent)(()=>{
+        var v;
+        !k(c) || (h(2), (v = o.current) == null || v.focus());
+    }), M = (0, _useEventJs.useEvent)(()=>h(2)), e = (0, _useEventJs.useEvent)(()=>l(2)), a = (O == null ? void 0 : O.id) === R, r = I || y, s = C(S, c), p = {
+        ref: T,
+        id: R,
+        role: "radio",
+        "aria-checked": s ? "true" : "false",
+        "aria-labelledby": A,
+        "aria-describedby": u,
+        "aria-disabled": r ? !0 : void 0,
+        tabIndex: (()=>r ? -1 : s || !m && a ? 0 : -1)(),
+        onClick: r ? void 0 : _,
+        onFocus: r ? void 0 : M,
+        onBlur: r ? void 0 : e
+    }, d = (0, _react.useMemo)(()=>({
+            checked: s,
+            disabled: r,
+            active: G(2)
+        }), [
+        s,
+        r,
+        G
+    ]);
+    return (0, _reactDefault.default).createElement(x, {
+        name: "RadioGroup.Description"
+    }, (0, _reactDefault.default).createElement(L, {
+        name: "RadioGroup.Label"
+    }, (0, _renderJs.render)({
+        ourProps: p,
+        theirProps: w,
+        slot: d,
+        defaultTag: Re,
+        name: "RadioGroup.Option"
+    })));
+}), je = Object.assign(be, {
+    Option: ye,
+    Label: (0, _labelJs.Label),
+    Description: (0, _descriptionJs.Description)
+});
+
+},{"react":"21dqq","../../utils/render.js":"6k5Fw","../../hooks/use-id.js":"9HMMR","../../utils/match.js":"ix3HI","../../hooks/use-iso-morphic-effect.js":"5EMFK","../../components/keyboard.js":"btpQm","../../utils/focus-management.js":"aKUTi","../../hooks/use-flags.js":"dEliq","../../components/label/label.js":"fPJpq","../../components/description/description.js":"dkQTp","../../hooks/use-tree-walker.js":"fQ700","../../hooks/use-sync-refs.js":"67YMZ","../../internal/hidden.js":"1o7Iy","../../utils/form.js":"cXZpR","../../utils/owner.js":"2hWOn","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dEliq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useFlags", ()=>b);
+var _react = require("react");
+function b(g = 0) {
+    let [r, l] = (0, _react.useState)(g), u = (0, _react.useCallback)((e)=>l((a)=>a | e), [
+        r
+    ]), n = (0, _react.useCallback)((e)=>Boolean(r & e), [
+        r
+    ]), o = (0, _react.useCallback)((e)=>l((a)=>a & ~e), [
+        l
+    ]), s = (0, _react.useCallback)((e)=>l((a)=>a ^ e), [
+        l
+    ]);
+    return {
+        addFlag: u,
+        hasFlag: n,
+        removeFlag: o,
+        toggleFlag: s
+    };
+}
+
+},{"react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fPJpq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Label", ()=>F);
+parcelHelpers.export(exports, "useLabels", ()=>M);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _useIdJs = require("../../hooks/use-id.js");
+var _renderJs = require("../../utils/render.js");
+var _useIsoMorphicEffectJs = require("../../hooks/use-iso-morphic-effect.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _useEventJs = require("../../hooks/use-event.js");
+let u = (0, _react.createContext)(null);
+function c() {
+    let o = (0, _react.useContext)(u);
+    if (o === null) {
+        let t = new Error("You used a <Label /> component, but it is not inside a relevant parent.");
+        throw Error.captureStackTrace && Error.captureStackTrace(t, c), t;
+    }
+    return o;
+}
+function M() {
+    let [o, t] = (0, _react.useState)([]);
+    return [
+        o.length > 0 ? o.join(" ") : void 0,
+        (0, _react.useMemo)(()=>function(e) {
+                let l = (0, _useEventJs.useEvent)((a)=>(t((i)=>[
+                            ...i,
+                            a
+                        ]), ()=>t((i)=>{
+                            let n = i.slice(), d = n.indexOf(a);
+                            return d !== -1 && n.splice(d, 1), n;
+                        }))), r = (0, _react.useMemo)(()=>({
+                        register: l,
+                        slot: e.slot,
+                        name: e.name,
+                        props: e.props
+                    }), [
+                    l,
+                    e.slot,
+                    e.name,
+                    e.props
+                ]);
+                return (0, _reactDefault.default).createElement(u.Provider, {
+                    value: r
+                }, e.children);
+            }, [
+            t
+        ])
+    ];
+}
+let h = "label", F = (0, _renderJs.forwardRefWithAs)(function(t, s) {
+    let { passive: e = !1 , ...l } = t, r = c(), a = `headlessui-label-${(0, _useIdJs.useId)()}`, i = (0, _useSyncRefsJs.useSyncRefs)(s);
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>r.register(a), [
+        a,
+        r.register
+    ]);
+    let n = {
+        ref: i,
+        ...r.props,
+        id: a
+    };
+    return e && ("onClick" in n && delete n.onClick, "onClick" in l && delete l.onClick), (0, _renderJs.render)({
+        ourProps: n,
+        theirProps: l,
+        slot: r.slot || {},
+        defaultTag: h,
+        name: r.name || "Label"
+    });
+});
+
+},{"react":"21dqq","../../hooks/use-id.js":"9HMMR","../../utils/render.js":"6k5Fw","../../hooks/use-iso-morphic-effect.js":"5EMFK","../../hooks/use-sync-refs.js":"67YMZ","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"j277f":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Switch", ()=>ue);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _renderJs = require("../../utils/render.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _keyboardJs = require("../keyboard.js");
+var _bugsJs = require("../../utils/bugs.js");
+var _labelJs = require("../label/label.js");
+var _descriptionJs = require("../description/description.js");
+var _useResolveButtonTypeJs = require("../../hooks/use-resolve-button-type.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _hiddenJs = require("../../internal/hidden.js");
+var _formJs = require("../../utils/form.js");
+var _useEventJs = require("../../hooks/use-event.js");
+let p = (0, _react.createContext)(null);
+p.displayName = "GroupContext";
+let j = (0, _react.Fragment);
+function N(m) {
+    let [n, i] = (0, _react.useState)(null), [r, s] = (0, _labelJs.useLabels)(), [l, c] = (0, _descriptionJs.useDescriptions)(), d = (0, _react.useMemo)(()=>({
+            switch: n,
+            setSwitch: i,
+            labelledby: r,
+            describedby: l
+        }), [
+        n,
+        i,
+        r,
+        l
+    ]), u = {}, e = m;
+    return (0, _reactDefault.default).createElement(c, {
+        name: "Switch.Description"
+    }, (0, _reactDefault.default).createElement(s, {
+        name: "Switch.Label",
+        props: {
+            onClick () {
+                !n || (n.click(), n.focus({
+                    preventScroll: !0
+                }));
+            }
+        }
+    }, (0, _reactDefault.default).createElement(p.Provider, {
+        value: d
+    }, (0, _renderJs.render)({
+        ourProps: u,
+        theirProps: e,
+        defaultTag: j,
+        name: "Switch.Group"
+    }))));
+}
+let $ = "button", q = (0, _renderJs.forwardRefWithAs)(function(n, i) {
+    let { checked: r , onChange: s , name: l , value: c , ...d } = n, u = `headlessui-switch-${(0, _useIdJs.useId)()}`, e = (0, _react.useContext)(p), f = (0, _react.useRef)(null), S = (0, _useSyncRefsJs.useSyncRefs)(f, i, e === null ? null : e.setSwitch), h = (0, _useEventJs.useEvent)(()=>s(!r)), E = (0, _useEventJs.useEvent)((t)=>{
+        if ((0, _bugsJs.isDisabledReactIssue7711)(t.currentTarget)) return t.preventDefault();
+        t.preventDefault(), h();
+    }), w = (0, _useEventJs.useEvent)((t)=>{
+        t.key === (0, _keyboardJs.Keys).Space ? (t.preventDefault(), h()) : t.key === (0, _keyboardJs.Keys).Enter && (0, _formJs.attemptSubmit)(t.currentTarget);
+    }), P = (0, _useEventJs.useEvent)((t)=>t.preventDefault()), v = (0, _react.useMemo)(()=>({
+            checked: r
+        }), [
+        r
+    ]), g = {
+        id: u,
+        ref: S,
+        role: "switch",
+        type: (0, _useResolveButtonTypeJs.useResolveButtonType)(n, f),
+        tabIndex: 0,
+        "aria-checked": r,
+        "aria-labelledby": e == null ? void 0 : e.labelledby,
+        "aria-describedby": e == null ? void 0 : e.describedby,
+        onClick: E,
+        onKeyUp: w,
+        onKeyPress: P
+    };
+    return (0, _reactDefault.default).createElement((0, _reactDefault.default).Fragment, null, l != null && r && (0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+        features: (0, _hiddenJs.Features).Hidden,
+        ...(0, _renderJs.compact)({
+            as: "input",
+            type: "checkbox",
+            hidden: !0,
+            readOnly: !0,
+            checked: r,
+            name: l,
+            value: c
+        })
+    }), (0, _renderJs.render)({
+        ourProps: g,
+        theirProps: d,
+        slot: v,
+        defaultTag: $,
+        name: "Switch"
+    }));
+}), ue = Object.assign(q, {
+    Group: N,
+    Label: (0, _labelJs.Label),
+    Description: (0, _descriptionJs.Description)
+});
+
+},{"react":"21dqq","../../utils/render.js":"6k5Fw","../../hooks/use-id.js":"9HMMR","../keyboard.js":"btpQm","../../utils/bugs.js":"czGU7","../label/label.js":"fPJpq","../description/description.js":"dkQTp","../../hooks/use-resolve-button-type.js":"jGJQI","../../hooks/use-sync-refs.js":"67YMZ","../../internal/hidden.js":"1o7Iy","../../utils/form.js":"cXZpR","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"adwu2":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Tab", ()=>we);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _renderJs = require("../../utils/render.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _matchJs = require("../../utils/match.js");
+var _keyboardJs = require("../../components/keyboard.js");
+var _focusManagementJs = require("../../utils/focus-management.js");
+var _useIsoMorphicEffectJs = require("../../hooks/use-iso-morphic-effect.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _useResolveButtonTypeJs = require("../../hooks/use-resolve-button-type.js");
+var _useLatestValueJs = require("../../hooks/use-latest-value.js");
+var _focusSentinelJs = require("../../internal/focus-sentinel.js");
+var _useEventJs = require("../../hooks/use-event.js");
+var re = ((n)=>(n[n.SetSelectedIndex = 0] = "SetSelectedIndex", n[n.RegisterTab = 1] = "RegisterTab", n[n.UnregisterTab = 2] = "UnregisterTab", n[n.RegisterPanel = 3] = "RegisterPanel", n[n.UnregisterPanel = 4] = "UnregisterPanel", n[n.ForceRerender = 5] = "ForceRerender", n))(re || {});
+let ne = {
+    [0] (e, t) {
+        let r = e.tabs.filter((n)=>{
+            var l;
+            return !((l = n.current) != null && l.hasAttribute("disabled"));
+        });
+        if (t.index < 0) return {
+            ...e,
+            selectedIndex: e.tabs.indexOf(r[0])
+        };
+        if (t.index > e.tabs.length) return {
+            ...e,
+            selectedIndex: e.tabs.indexOf(r[r.length - 1])
+        };
+        let s = e.tabs.slice(0, t.index), d = [
+            ...e.tabs.slice(t.index),
+            ...s
+        ].find((n)=>r.includes(n));
+        return d ? {
+            ...e,
+            selectedIndex: e.tabs.indexOf(d)
+        } : e;
+    },
+    [1] (e, t) {
+        return e.tabs.includes(t.tab) ? e : {
+            ...e,
+            tabs: (0, _focusManagementJs.sortByDomNode)([
+                ...e.tabs,
+                t.tab
+            ], (r)=>r.current)
+        };
+    },
+    [2] (e, t) {
+        return {
+            ...e,
+            tabs: (0, _focusManagementJs.sortByDomNode)(e.tabs.filter((r)=>r !== t.tab), (r)=>r.current)
+        };
+    },
+    [3] (e, t) {
+        return e.panels.includes(t.panel) ? e : {
+            ...e,
+            panels: [
+                ...e.panels,
+                t.panel
+            ]
+        };
+    },
+    [4] (e, t) {
+        return {
+            ...e,
+            panels: e.panels.filter((r)=>r !== t.panel)
+        };
+    },
+    [5] (e) {
+        return {
+            ...e
+        };
+    }
+}, N = (0, _react.createContext)(null);
+N.displayName = "TabsSSRContext";
+function B(e) {
+    let t = (0, _react.useContext)(N);
+    if (t === null) {
+        let r = new Error(`<${e} /> is missing a parent <Tab.Group /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(r, B), r;
+    }
+    return t;
+}
+let K = (0, _react.createContext)(null);
+K.displayName = "TabsDataContext";
+function C(e) {
+    let t = (0, _react.useContext)(K);
+    if (t === null) {
+        let r = new Error(`<${e} /> is missing a parent <Tab.Group /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(r, C), r;
+    }
+    return t;
+}
+let $ = (0, _react.createContext)(null);
+$.displayName = "TabsActionsContext";
+function z(e) {
+    let t = (0, _react.useContext)($);
+    if (t === null) {
+        let r = new Error(`<${e} /> is missing a parent <Tab.Group /> component.`);
+        throw Error.captureStackTrace && Error.captureStackTrace(r, z), r;
+    }
+    return t;
+}
+function ae(e, t) {
+    return (0, _matchJs.match)(t.type, ne, e, t);
+}
+let le = (0, _react.Fragment), oe = (0, _renderJs.forwardRefWithAs)(function(t, r) {
+    let { defaultIndex: s = 0 , vertical: f = !1 , manual: d = !1 , onChange: n , selectedIndex: l = null , ...P } = t;
+    const u = f ? "vertical" : "horizontal", y = d ? "manual" : "auto";
+    let c = (0, _useSyncRefsJs.useSyncRefs)(r), [p, o] = (0, _react.useReducer)(ae, {
+        selectedIndex: l != null ? l : s,
+        tabs: [],
+        panels: []
+    }), b = (0, _react.useMemo)(()=>({
+            selectedIndex: p.selectedIndex
+        }), [
+        p.selectedIndex
+    ]), g = (0, _useLatestValueJs.useLatestValue)(n || (()=>{})), L = (0, _useLatestValueJs.useLatestValue)(p.tabs), x = (0, _react.useMemo)(()=>({
+            orientation: u,
+            activation: y,
+            ...p
+        }), [
+        u,
+        y,
+        p
+    ]), R = (0, _useLatestValueJs.useLatestValue)(p.selectedIndex), h = (0, _react.useMemo)(()=>({
+            registerTab (i) {
+                return o({
+                    type: 1,
+                    tab: i
+                }), ()=>o({
+                        type: 2,
+                        tab: i
+                    });
+            },
+            registerPanel (i) {
+                return o({
+                    type: 3,
+                    panel: i
+                }), ()=>o({
+                        type: 4,
+                        panel: i
+                    });
+            },
+            forceRerender () {
+                o({
+                    type: 5
+                });
+            },
+            change (i) {
+                R.current !== i && g.current(i), R.current = i, o({
+                    type: 0,
+                    index: i
+                });
+            }
+        }), [
+        o
+    ]);
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        o({
+            type: 0,
+            index: l != null ? l : s
+        });
+    }, [
+        l
+    ]);
+    let H = (0, _react.useRef)({
+        tabs: [],
+        panels: []
+    }), w = {
+        ref: c
+    };
+    return (0, _reactDefault.default).createElement(N.Provider, {
+        value: H
+    }, (0, _reactDefault.default).createElement($.Provider, {
+        value: h
+    }, (0, _reactDefault.default).createElement(K.Provider, {
+        value: x
+    }, x.tabs.length <= 0 && (0, _reactDefault.default).createElement((0, _focusSentinelJs.FocusSentinel), {
+        onFocus: ()=>{
+            var i, I;
+            for (let D of L.current)if (((i = D.current) == null ? void 0 : i.tabIndex) === 0) return (I = D.current) == null || I.focus(), !0;
+            return !1;
+        }
+    }), (0, _renderJs.render)({
+        ourProps: w,
+        theirProps: P,
+        slot: b,
+        defaultTag: le,
+        name: "Tabs"
+    }))));
+}), se = "div", ie = (0, _renderJs.forwardRefWithAs)(function(t, r) {
+    let { orientation: s , selectedIndex: f  } = C("Tab.List"), d = (0, _useSyncRefsJs.useSyncRefs)(r);
+    return (0, _renderJs.render)({
+        ourProps: {
+            ref: d,
+            role: "tablist",
+            "aria-orientation": s
+        },
+        theirProps: t,
+        slot: {
+            selectedIndex: f
+        },
+        defaultTag: se,
+        name: "Tabs.List"
+    });
+}), ue = "button", ce = (0, _renderJs.forwardRefWithAs)(function(t, r) {
+    var I, D;
+    let s = `headlessui-tabs-tab-${(0, _useIdJs.useId)()}`, { orientation: f , activation: d , selectedIndex: n , tabs: l , panels: P  } = C("Tab"), u = z("Tab"), y = B("Tab"), c = (0, _react.useRef)(null), p = (0, _useSyncRefsJs.useSyncRefs)(c, r, (a)=>{
+        !a || u.forceRerender();
+    });
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>u.registerTab(c), [
+        u,
+        c
+    ]);
+    let o = y.current.tabs.indexOf(s);
+    o === -1 && (o = y.current.tabs.push(s) - 1);
+    let b = l.indexOf(c);
+    b === -1 && (b = o);
+    let g = b === n, L = (0, _useEventJs.useEvent)((a)=>{
+        let A = l.map((X)=>X.current).filter(Boolean);
+        if (a.key === (0, _keyboardJs.Keys).Space || a.key === (0, _keyboardJs.Keys).Enter) {
+            a.preventDefault(), a.stopPropagation(), u.change(b);
+            return;
+        }
+        switch(a.key){
+            case (0, _keyboardJs.Keys).Home:
+            case (0, _keyboardJs.Keys).PageUp:
+                return a.preventDefault(), a.stopPropagation(), (0, _focusManagementJs.focusIn)(A, (0, _focusManagementJs.Focus).First);
+            case (0, _keyboardJs.Keys).End:
+            case (0, _keyboardJs.Keys).PageDown:
+                return a.preventDefault(), a.stopPropagation(), (0, _focusManagementJs.focusIn)(A, (0, _focusManagementJs.Focus).Last);
+        }
+        if ((0, _matchJs.match)(f, {
+            vertical () {
+                if (a.key === (0, _keyboardJs.Keys).ArrowUp) return (0, _focusManagementJs.focusIn)(A, (0, _focusManagementJs.Focus).Previous | (0, _focusManagementJs.Focus).WrapAround);
+                if (a.key === (0, _keyboardJs.Keys).ArrowDown) return (0, _focusManagementJs.focusIn)(A, (0, _focusManagementJs.Focus).Next | (0, _focusManagementJs.Focus).WrapAround);
+            },
+            horizontal () {
+                if (a.key === (0, _keyboardJs.Keys).ArrowLeft) return (0, _focusManagementJs.focusIn)(A, (0, _focusManagementJs.Focus).Previous | (0, _focusManagementJs.Focus).WrapAround);
+                if (a.key === (0, _keyboardJs.Keys).ArrowRight) return (0, _focusManagementJs.focusIn)(A, (0, _focusManagementJs.Focus).Next | (0, _focusManagementJs.Focus).WrapAround);
+            }
+        })) return a.preventDefault();
+    }), x = (0, _useEventJs.useEvent)(()=>{
+        var a;
+        (a = c.current) == null || a.focus();
+    }), R = (0, _useEventJs.useEvent)(()=>{
+        var a;
+        (a = c.current) == null || a.focus(), u.change(b);
+    }), h = (0, _useEventJs.useEvent)((a)=>{
+        a.preventDefault();
+    }), H = (0, _react.useMemo)(()=>({
+            selected: g
+        }), [
+        g
+    ]), w = t, i = {
+        ref: p,
+        onKeyDown: L,
+        onFocus: d === "manual" ? x : R,
+        onMouseDown: h,
+        onClick: R,
+        id: s,
+        role: "tab",
+        type: (0, _useResolveButtonTypeJs.useResolveButtonType)(t, c),
+        "aria-controls": (D = (I = P[b]) == null ? void 0 : I.current) == null ? void 0 : D.id,
+        "aria-selected": g,
+        tabIndex: g ? 0 : -1
+    };
+    return (0, _renderJs.render)({
+        ourProps: i,
+        theirProps: w,
+        slot: H,
+        defaultTag: ue,
+        name: "Tabs.Tab"
+    });
+}), pe = "div", de = (0, _renderJs.forwardRefWithAs)(function(t, r) {
+    let { selectedIndex: s  } = C("Tab.Panels"), f = (0, _useSyncRefsJs.useSyncRefs)(r), d = (0, _react.useMemo)(()=>({
+            selectedIndex: s
+        }), [
+        s
+    ]);
+    return (0, _renderJs.render)({
+        ourProps: {
+            ref: f
+        },
+        theirProps: t,
+        slot: d,
+        defaultTag: pe,
+        name: "Tabs.Panels"
+    });
+}), fe = "div", be = (0, _renderJs.Features).RenderStrategy | (0, _renderJs.Features).Static, Te = (0, _renderJs.forwardRefWithAs)(function(t, r) {
+    var x, R;
+    let { selectedIndex: s , tabs: f , panels: d  } = C("Tab.Panel"), n = z("Tab.Panel"), l = B("Tab.Panel"), P = `headlessui-tabs-panel-${(0, _useIdJs.useId)()}`, u = (0, _react.useRef)(null), y = (0, _useSyncRefsJs.useSyncRefs)(u, r, (h)=>{
+        !h || n.forceRerender();
+    });
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>n.registerPanel(u), [
+        n,
+        u
+    ]);
+    let c = l.current.panels.indexOf(P);
+    c === -1 && (c = l.current.panels.push(P) - 1);
+    let p = d.indexOf(u);
+    p === -1 && (p = c);
+    let o = p === s, b = (0, _react.useMemo)(()=>({
+            selected: o
+        }), [
+        o
+    ]), g = t, L = {
+        ref: y,
+        id: P,
+        role: "tabpanel",
+        "aria-labelledby": (R = (x = f[p]) == null ? void 0 : x.current) == null ? void 0 : R.id,
+        tabIndex: o ? 0 : -1
+    };
+    return (0, _renderJs.render)({
+        ourProps: L,
+        theirProps: g,
+        slot: b,
+        defaultTag: fe,
+        features: be,
+        visible: o,
+        name: "Tabs.Panel"
+    });
+}), we = Object.assign(ce, {
+    Group: oe,
+    List: ie,
+    Panels: de,
+    Panel: Te
+});
+
+},{"react":"21dqq","../../utils/render.js":"6k5Fw","../../hooks/use-id.js":"9HMMR","../../utils/match.js":"ix3HI","../../components/keyboard.js":"btpQm","../../utils/focus-management.js":"aKUTi","../../hooks/use-iso-morphic-effect.js":"5EMFK","../../hooks/use-sync-refs.js":"67YMZ","../../hooks/use-resolve-button-type.js":"jGJQI","../../hooks/use-latest-value.js":"6nuRQ","../../internal/focus-sentinel.js":"UH3HR","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"UH3HR":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "FocusSentinel", ()=>p);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _hiddenJs = require("./hidden.js");
+function p({ onFocus: n  }) {
+    let [r, o] = (0, _react.useState)(!0);
+    return r ? (0, _reactDefault.default).createElement((0, _hiddenJs.Hidden), {
+        as: "button",
+        type: "button",
+        features: (0, _hiddenJs.Features).Focusable,
+        onFocus: (a)=>{
+            a.preventDefault();
+            let e, u = 50;
+            function t() {
+                if (u-- <= 0) {
+                    e && cancelAnimationFrame(e);
+                    return;
+                }
+                if (n()) {
+                    o(!1), cancelAnimationFrame(e);
+                    return;
+                }
+                e = requestAnimationFrame(t);
+            }
+            e = requestAnimationFrame(t);
+        }
+    }) : null;
+}
+
+},{"react":"21dqq","./hidden.js":"1o7Iy","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gjUKC":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Transition", ()=>We);
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _renderJs = require("../../utils/render.js");
+var _openClosedJs = require("../../internal/open-closed.js");
+var _matchJs = require("../../utils/match.js");
+var _microTaskJs = require("../../utils/micro-task.js");
+var _useIdJs = require("../../hooks/use-id.js");
+var _useIsMountedJs = require("../../hooks/use-is-mounted.js");
+var _useIsoMorphicEffectJs = require("../../hooks/use-iso-morphic-effect.js");
+var _useLatestValueJs = require("../../hooks/use-latest-value.js");
+var _useServerHandoffCompleteJs = require("../../hooks/use-server-handoff-complete.js");
+var _useSyncRefsJs = require("../../hooks/use-sync-refs.js");
+var _useTransitionJs = require("../../hooks/use-transition.js");
+var _useEventJs = require("../../hooks/use-event.js");
+function h(e = "") {
+    return e.split(" ").filter((n)=>n.trim().length > 1);
+}
+let N = (0, _react.createContext)(null);
+N.displayName = "TransitionContext";
+var ge = ((t)=>(t.Visible = "visible", t.Hidden = "hidden", t))(ge || {});
+function ve() {
+    let e = (0, _react.useContext)(N);
+    if (e === null) throw new Error("A <Transition.Child /> is used but it is missing a parent <Transition /> or <Transition.Root />.");
+    return e;
+}
+function Ce() {
+    let e = (0, _react.useContext)(L);
+    if (e === null) throw new Error("A <Transition.Child /> is used but it is missing a parent <Transition /> or <Transition.Root />.");
+    return e;
+}
+let L = (0, _react.createContext)(null);
+L.displayName = "NestingContext";
+function w(e) {
+    return "children" in e ? w(e.children) : e.current.filter(({ state: n  })=>n === "visible").length > 0;
+}
+function Z(e) {
+    let n = (0, _useLatestValueJs.useLatestValue)(e), t = (0, _react.useRef)([]), r = (0, _useIsMountedJs.useIsMounted)(), s = (0, _useEventJs.useEvent)((l, o = (0, _renderJs.RenderStrategy).Hidden)=>{
+        let a = t.current.findIndex(({ id: u  })=>u === l);
+        a !== -1 && ((0, _matchJs.match)(o, {
+            [(0, _renderJs.RenderStrategy).Unmount] () {
+                t.current.splice(a, 1);
+            },
+            [(0, _renderJs.RenderStrategy).Hidden] () {
+                t.current[a].state = "hidden";
+            }
+        }), (0, _microTaskJs.microTask)(()=>{
+            var u;
+            !w(t) && r.current && ((u = n.current) == null || u.call(n));
+        }));
+    }), g = (0, _useEventJs.useEvent)((l)=>{
+        let o = t.current.find(({ id: a  })=>a === l);
+        return o ? o.state !== "visible" && (o.state = "visible") : t.current.push({
+            id: l,
+            state: "visible"
+        }), ()=>s(l, (0, _renderJs.RenderStrategy).Unmount);
+    });
+    return (0, _react.useMemo)(()=>({
+            children: t,
+            register: g,
+            unregister: s
+        }), [
+        g,
+        s,
+        t
+    ]);
+}
+function be() {}
+let Se = [
+    "beforeEnter",
+    "afterEnter",
+    "beforeLeave",
+    "afterLeave"
+];
+function $(e) {
+    var t;
+    let n = {};
+    for (let r of Se)n[r] = (t = e[r]) != null ? t : be;
+    return n;
+}
+function Ee(e) {
+    let n = (0, _react.useRef)($(e));
+    return (0, _react.useEffect)(()=>{
+        n.current = $(e);
+    }, [
+        e
+    ]), n;
+}
+let xe = "div", ee = (0, _renderJs.Features).RenderStrategy, te = (0, _renderJs.forwardRefWithAs)(function(n, t) {
+    let { beforeEnter: r , afterEnter: s , beforeLeave: g , afterLeave: l , enter: o , enterFrom: a , enterTo: u , entered: A , leave: v , leaveFrom: E , leaveTo: x , ...y } = n, d = (0, _react.useRef)(null), D = (0, _useSyncRefsJs.useSyncRefs)(d, t), [i, C] = (0, _react.useState)("visible"), p = y.unmount ? (0, _renderJs.RenderStrategy).Unmount : (0, _renderJs.RenderStrategy).Hidden, { show: b , appear: re , initial: ne  } = ve(), { register: H , unregister: P  } = Ce(), F = (0, _react.useRef)(null), f = (0, _useIdJs.useId)();
+    (0, _react.useEffect)(()=>{
+        if (!!f) return H(f);
+    }, [
+        H,
+        f
+    ]), (0, _react.useEffect)(()=>{
+        if (p === (0, _renderJs.RenderStrategy).Hidden && !!f) {
+            if (b && i !== "visible") {
+                C("visible");
+                return;
+            }
+            (0, _matchJs.match)(i, {
+                ["hidden"]: ()=>P(f),
+                ["visible"]: ()=>H(f)
+            });
+        }
+    }, [
+        i,
+        f,
+        H,
+        P,
+        b,
+        p
+    ]);
+    let ie = (0, _useLatestValueJs.useLatestValue)({
+        enter: h(o),
+        enterFrom: h(a),
+        enterTo: h(u),
+        entered: h(A),
+        leave: h(v),
+        leaveFrom: h(E),
+        leaveTo: h(x)
+    }), se = Ee({
+        beforeEnter: r,
+        afterEnter: s,
+        beforeLeave: g,
+        afterLeave: l
+    }), O = (0, _useServerHandoffCompleteJs.useServerHandoffComplete)();
+    (0, _react.useEffect)(()=>{
+        if (O && i === "visible" && d.current === null) throw new Error("Did you forget to passthrough the `ref` to the actual DOM node?");
+    }, [
+        d,
+        i,
+        O
+    ]);
+    let M = ne && !re, oe = (()=>!O || M || F.current === b ? "idle" : b ? "enter" : "leave")(), _ = (0, _react.useRef)(!1), B = Z(()=>{
+        _.current || (C("hidden"), P(f));
+    });
+    (0, _useTransitionJs.useTransition)({
+        container: d,
+        classes: ie,
+        events: se,
+        direction: oe,
+        onStart: (0, _useLatestValueJs.useLatestValue)(()=>{
+            _.current = !0;
+        }),
+        onStop: (0, _useLatestValueJs.useLatestValue)((ue)=>{
+            _.current = !1, ue === "leave" && !w(B) && (C("hidden"), P(f));
+        })
+    }), (0, _react.useEffect)(()=>{
+        !M || (p === (0, _renderJs.RenderStrategy).Hidden ? F.current = null : F.current = b);
+    }, [
+        b,
+        M,
+        i
+    ]);
+    let le = y, ae = {
+        ref: D
+    };
+    return (0, _reactDefault.default).createElement(L.Provider, {
+        value: B
+    }, (0, _reactDefault.default).createElement((0, _openClosedJs.OpenClosedProvider), {
+        value: (0, _matchJs.match)(i, {
+            ["visible"]: (0, _openClosedJs.State).Open,
+            ["hidden"]: (0, _openClosedJs.State).Closed
+        })
+    }, (0, _renderJs.render)({
+        ourProps: ae,
+        theirProps: le,
+        defaultTag: xe,
+        features: ee,
+        visible: i === "visible",
+        name: "Transition.Child"
+    })));
+}), G = (0, _renderJs.forwardRefWithAs)(function(n, t) {
+    let { show: r , appear: s = !1 , unmount: g , ...l } = n, o = (0, _react.useRef)(null), a = (0, _useSyncRefsJs.useSyncRefs)(o, t);
+    (0, _useServerHandoffCompleteJs.useServerHandoffComplete)();
+    let u = (0, _openClosedJs.useOpenClosed)();
+    if (r === void 0 && u !== null && (r = (0, _matchJs.match)(u, {
+        [(0, _openClosedJs.State).Open]: !0,
+        [(0, _openClosedJs.State).Closed]: !1
+    })), ![
+        !0,
+        !1
+    ].includes(r)) throw new Error("A <Transition /> is used but it is missing a `show={true | false}` prop.");
+    let [A, v] = (0, _react.useState)(r ? "visible" : "hidden"), E = Z(()=>{
+        v("hidden");
+    }), [x, y] = (0, _react.useState)(!0), d = (0, _react.useRef)([
+        r
+    ]);
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        x !== !1 && d.current[d.current.length - 1] !== r && (d.current.push(r), y(!1));
+    }, [
+        d,
+        r
+    ]);
+    let D = (0, _react.useMemo)(()=>({
+            show: r,
+            appear: s,
+            initial: x
+        }), [
+        r,
+        s,
+        x
+    ]);
+    (0, _react.useEffect)(()=>{
+        if (r) v("visible");
+        else if (!w(E)) v("hidden");
+        else {
+            let C = o.current;
+            if (!C) return;
+            let p = C.getBoundingClientRect();
+            p.x === 0 && p.y === 0 && p.width === 0 && p.height === 0 && v("hidden");
+        }
+    }, [
+        r,
+        E
+    ]);
+    let i = {
+        unmount: g
+    };
+    return (0, _reactDefault.default).createElement(L.Provider, {
+        value: E
+    }, (0, _reactDefault.default).createElement(N.Provider, {
+        value: D
+    }, (0, _renderJs.render)({
+        ourProps: {
+            ...i,
+            as: (0, _react.Fragment),
+            children: (0, _reactDefault.default).createElement(te, {
+                ref: a,
+                ...i,
+                ...l
+            })
+        },
+        theirProps: {},
+        defaultTag: (0, _react.Fragment),
+        features: ee,
+        visible: A === "visible",
+        name: "Transition"
+    })));
+}), ye = (0, _renderJs.forwardRefWithAs)(function(n, t) {
+    let r = (0, _react.useContext)(N) !== null, s = (0, _openClosedJs.useOpenClosed)() !== null;
+    return (0, _reactDefault.default).createElement((0, _reactDefault.default).Fragment, null, !r && s ? (0, _reactDefault.default).createElement(G, {
+        ref: t,
+        ...n
+    }) : (0, _reactDefault.default).createElement(te, {
+        ref: t,
+        ...n
+    }));
+}), We = Object.assign(G, {
+    Child: ye,
+    Root: G
+});
+
+},{"react":"21dqq","../../utils/render.js":"6k5Fw","../../internal/open-closed.js":"aw8L5","../../utils/match.js":"ix3HI","../../utils/micro-task.js":"jhwzS","../../hooks/use-id.js":"9HMMR","../../hooks/use-is-mounted.js":"cOwrt","../../hooks/use-iso-morphic-effect.js":"5EMFK","../../hooks/use-latest-value.js":"6nuRQ","../../hooks/use-server-handoff-complete.js":"9md0G","../../hooks/use-sync-refs.js":"67YMZ","../../hooks/use-transition.js":"aIQ4b","../../hooks/use-event.js":"kEbTP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aIQ4b":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "useTransition", ()=>H);
+var _transitionJs = require("../components/transitions/utils/transition.js");
+var _disposablesJs = require("../utils/disposables.js");
+var _matchJs = require("../utils/match.js");
+var _useDisposablesJs = require("./use-disposables.js");
+var _useEventJs = require("./use-event.js");
+var _useIsMountedJs = require("./use-is-mounted.js");
+var _useIsoMorphicEffectJs = require("./use-iso-morphic-effect.js");
+var _useLatestValueJs = require("./use-latest-value.js");
+function H({ container: u , direction: o , classes: c , events: t , onStart: d , onStop: l  }) {
+    let f = (0, _useIsMountedJs.useIsMounted)(), m = (0, _useDisposablesJs.useDisposables)(), e = (0, _useLatestValueJs.useLatestValue)(o), b = (0, _useEventJs.useEvent)(()=>(0, _matchJs.match)(e.current, {
+            enter: ()=>t.current.beforeEnter(),
+            leave: ()=>t.current.beforeLeave(),
+            idle: ()=>{}
+        })), p = (0, _useEventJs.useEvent)(()=>(0, _matchJs.match)(e.current, {
+            enter: ()=>t.current.afterEnter(),
+            leave: ()=>t.current.afterLeave(),
+            idle: ()=>{}
+        }));
+    (0, _useIsoMorphicEffectJs.useIsoMorphicEffect)(()=>{
+        let r = (0, _disposablesJs.disposables)();
+        m.add(r.dispose);
+        let i = u.current;
+        if (!!i && e.current !== "idle" && !!f.current) return r.dispose(), b(), d.current(e.current), r.add((0, _transitionJs.transition)(i, c.current, e.current === "enter", (v)=>{
+            r.dispose(), (0, _matchJs.match)(v, {
+                [(0, _transitionJs.Reason).Ended] () {
+                    p(), l.current(e.current);
+                },
+                [(0, _transitionJs.Reason).Cancelled]: ()=>{}
+            });
+        })), r.dispose;
+    }, [
+        o
+    ]);
+}
+
+},{"../components/transitions/utils/transition.js":"aOAlX","../utils/disposables.js":"5m1zj","../utils/match.js":"ix3HI","./use-disposables.js":"6QssP","./use-event.js":"kEbTP","./use-is-mounted.js":"cOwrt","./use-iso-morphic-effect.js":"5EMFK","./use-latest-value.js":"6nuRQ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aOAlX":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Reason", ()=>T);
+parcelHelpers.export(exports, "transition", ()=>C);
+var _onceJs = require("../../../utils/once.js");
+var _disposablesJs = require("../../../utils/disposables.js");
+var _matchJs = require("../../../utils/match.js");
+function f(t, ...e) {
+    t && e.length > 0 && t.classList.add(...e);
+}
+function g(t, ...e) {
+    t && e.length > 0 && t.classList.remove(...e);
+}
+var T = ((n)=>(n.Ended = "ended", n.Cancelled = "cancelled", n))(T || {});
+function c(t, e) {
+    let n = (0, _disposablesJs.disposables)();
+    if (!t) return n.dispose;
+    let { transitionDuration: d , transitionDelay: a  } = getComputedStyle(t), [s, u] = [
+        d,
+        a
+    ].map((i)=>{
+        let [o = 0] = i.split(",").filter(Boolean).map((r)=>r.includes("ms") ? parseFloat(r) : parseFloat(r) * 1e3).sort((r, l)=>l - r);
+        return o;
+    });
+    if (s + u !== 0) {
+        let i = [];
+        i.push(n.addEventListener(t, "transitionrun", (o)=>{
+            o.target === o.currentTarget && (i.splice(0).forEach((r)=>r()), i.push(n.addEventListener(t, "transitionend", (r)=>{
+                r.target === r.currentTarget && (e("ended"), i.splice(0).forEach((l)=>l()));
+            }), n.addEventListener(t, "transitioncancel", (r)=>{
+                r.target === r.currentTarget && (e("cancelled"), i.splice(0).forEach((l)=>l()));
+            })));
+        }));
+    } else e("ended");
+    return n.add(()=>e("cancelled")), n.dispose;
+}
+function C(t, e, n, d) {
+    let a = n ? "enter" : "leave", s = (0, _disposablesJs.disposables)(), u = d !== void 0 ? (0, _onceJs.once)(d) : ()=>{}, m = (0, _matchJs.match)(a, {
+        enter: ()=>e.enter,
+        leave: ()=>e.leave
+    }), i = (0, _matchJs.match)(a, {
+        enter: ()=>e.enterTo,
+        leave: ()=>e.leaveTo
+    }), o = (0, _matchJs.match)(a, {
+        enter: ()=>e.enterFrom,
+        leave: ()=>e.leaveFrom
+    });
+    return g(t, ...e.enter, ...e.enterTo, ...e.enterFrom, ...e.leave, ...e.leaveFrom, ...e.leaveTo, ...e.entered), f(t, ...m, ...o), s.nextFrame(()=>{
+        g(t, ...o), f(t, ...i), c(t, (r)=>(r === "ended" && (g(t, ...m), f(t, ...e.entered)), u(r)));
+    }), s.dispose;
+}
+
+},{"../../../utils/once.js":"aNJGS","../../../utils/disposables.js":"5m1zj","../../../utils/match.js":"ix3HI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aNJGS":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "once", ()=>l);
+function l(r) {
+    let e = {
+        called: !1
+    };
+    return (...t)=>{
+        if (!e.called) return e.called = !0, r(...t);
+    };
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jYsML":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$1946 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$1946.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ALERT_TYPE", ()=>ALERT_TYPE);
+var _react = require("react");
+var _s = $RefreshSig$();
+const initialState = {
+    message: undefined,
+    type: undefined
+};
+const ALERT_TYPE = {
+    INFO: 0,
+    SUCCESS: 1,
+    WARNING: 2,
+    ERROR: 3,
+    RESET: 4
+};
+function reducer(_, action) {
+    switch(action.type){
+        case ALERT_TYPE.SUCCESS:
+        case ALERT_TYPE.ERROR:
+            return {
+                message: action.payload.message,
+                type: action.type,
+                visible: true
+            };
+        case ALERT_TYPE.RESET:
+            return initialState;
+        default:
+            throw new Error();
+    }
+}
+function useAlert() {
+    _s();
+    const [state, dispatch] = (0, _react.useReducer)(reducer, initialState);
+    return {
+        message: state.message,
+        type: state.type,
+        dispatch
+    };
+}
+exports.default = useAlert;
+_s(useAlert, "6JWkGZ32UPfojeNx+xqn8ZU8A0Q=");
+
+  $parcel$ReactRefreshHelpers$1946.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"2wxwh":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$d133 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$d133.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Success", ()=>Success);
+parcelHelpers.export(exports, "Danger", ()=>Danger);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+const Success = ({ message  })=>{
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+        className: "display mt-2 px-4 py-3 bg-green-100 rounded-md text-sm font-semibold text-green-700 text-justify",
+        children: message
+    }, void 0, false, {
+        fileName: "src/components/alerts.js",
+        lineNumber: 3,
+        columnNumber: 9
+    }, undefined);
+};
+_c = Success;
+const Danger = ({ message  })=>{
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+        className: "display mt-2 px-4 py-3 bg-red-100 rounded-md text-sm font-semibold text-red-700 text-justify",
+        children: message
+    }, void 0, false, {
+        fileName: "src/components/alerts.js",
+        lineNumber: 11,
+        columnNumber: 9
+    }, undefined);
+};
+_c1 = Danger;
+var _c, _c1;
+$RefreshReg$(_c, "Success");
+$RefreshReg$(_c1, "Danger");
+
+  $parcel$ReactRefreshHelpers$d133.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"giSQw":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$07e8 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$07e8.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ACTION", ()=>ACTION);
+var _react = require("react");
+var _s = $RefreshSig$();
+const initialState = {
+    visible: false,
+    sub: undefined,
+    data: undefined
+};
+const ACTION = {
+    SHOW: 0,
+    HIDE: 1
+};
+function reducer(_, action) {
+    switch(action.type){
+        case ACTION.SHOW:
+            return {
+                sub: action.payload.sub,
+                visible: true,
+                data: action.payload?.data
+            };
+        case ACTION.HIDE:
+            return initialState;
+        default:
+            throw new Error();
+    }
+}
+function useModal() {
+    _s();
+    const [state, dispatch] = (0, _react.useReducer)(reducer, initialState);
+    return {
+        ...state,
+        dispatch
+    };
+}
+exports.default = useModal;
+_s(useModal, "6JWkGZ32UPfojeNx+xqn8ZU8A0Q=");
+
+  $parcel$ReactRefreshHelpers$07e8.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"lOjBx":[function(require,module,exports) {
+"use strict";
+var m = require("react-dom");
+var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+exports.createRoot = function(c, o) {
+    i.usingClientEntryPoint = true;
+    try {
+        return m.createRoot(c, o);
+    } finally{
+        i.usingClientEntryPoint = false;
+    }
+};
+exports.hydrateRoot = function(c, h, o) {
+    i.usingClientEntryPoint = true;
+    try {
+        return m.hydrateRoot(c, h, o);
+    } finally{
+        i.usingClientEntryPoint = false;
+    }
+};
+
+},{"react-dom":"j6uA9"}]},["1xC6H","ShInH","8lqZg"], "8lqZg", "parcelRequire94c2")
 
 //# sourceMappingURL=index.975ef6c8.js.map
