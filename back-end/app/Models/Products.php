@@ -13,14 +13,15 @@ class Products extends Model
 
     protected $table = 'products';
 
-    protected $hidden = ['category_id'];
+    protected $hidden = ['category_id', 'isDeleted'];
 
     protected  $fillable =[
         'name',
         'description',
         'price',
         'qty',
-        'category_id'
+        'category_id',
+        'isDeleted'
     ];
 
     public function category()
