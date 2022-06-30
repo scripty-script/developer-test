@@ -17,12 +17,50 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $stock = $request->query('has', 'stocks');
-        if($stock === 'no-stock'){
-            return response()->json(Products::with('category')->where('qty', '<=', 0)->get());
+        $filter = $request->query('filter', 'stocks');
+        $q = $request->query('q');
+
+        if(!empty($q)){
+            if($filter === 'no-stock'){
+               
+                return response()->json(
+                    Products::with('category')
+                    ->where([
+                        ['qty', '<=', 0], 
+                        ['isDeleted', false],
+                        ['name', 'like', '%'.$q.'%']
+                    ])
+                    ->orWhere('description', 'like', '%'.$q.'%')
+                    ->orWhere('price', 'like', '%'.$q.'%')
+                    ->orWhere('qty', 'like', '%'.$q.'%')
+                    ->get()
+                );
+            }
+    
+            return response()->json(
+                    Products::with('category')
+                    ->where([
+                        ['isDeleted', false],
+                        ['name', 'like', '%'.$q.'%']
+                    ])
+                    ->orWhere('description', 'like', '%'.$q.'%')
+                    ->orWhere('price', 'like', '%'.$q.'%')
+                    ->orWhere('qty', 'like', '%'.$q.'%')
+                    ->get()
+            );
         }
 
-        return response()->json(Products::with('category')->get());
+        if($filter === 'no-stock'){
+            return response()->json(
+                Products::with('category')
+                ->where([
+                    ['qty', '<=', 0], 
+                    ['isDeleted', false]
+                ])->get()
+            );
+        }
+
+        return response()->json(Products::with('category')->where('isDeleted', false)->get());
     }
 
     /**
@@ -66,7 +104,8 @@ class ProductController extends Controller
         ]);
 
         $product->save();
-        return response()->json(['message'=>'Product has been added!'], 201);
+        //$product = Products::find($product->id)->with('category')->get();
+        return response()->json(['message'=>'Product has been added!', 'data'=>$product->load('category')], 201);
     }
 
     /**
@@ -77,9 +116,14 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Products::find($id);
+       
+        $product =  Products::with('category')
+                        ->where([
+                            ['id', '=', $id], 
+                            ['isDeleted', false],
+                        ])->first();
 
-         //check if null
+        //check if null
         if ($product == null){
             return  response()->json([ 'message' => 'No product found'], 404);
         }
@@ -107,14 +151,14 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $product = Products::find($id);
+        $product = Products::find($id);
 
-         //check if null
-         if ($product == null){
+        //check if null
+        if ($product == null){
             return  response()->json([ 'message' => 'No product found'], 404);
-         }
+        }
         
-         $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
@@ -130,11 +174,11 @@ class ProductController extends Controller
         $product->name =  $validated['name'];
         $product->description =  $validated['description'];
         $product->price =  $validated['price'];
-        $product->qty =   $validated['qty'];
-        $product->category_id =  $validated['category_id'];
+        $product->qty =  $validated['qty'];
+        $product->category_id = $validated['category_id'];
 
         $product->save();
-        return response()->json(['message'=>'Product has been updated!'], 200);
+        return response()->json(['message'=>'Product has been updated!', 'data'=>$product->load('category')], 200);
     }
 
     /**
@@ -145,6 +189,16 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Products::find($id);
+
+        //check if null
+        if ($product == null){
+            return  response()->json([ 'message' => 'No product found'], 404);
+        }
+
+        $product->isDeleted = true;
+        $product->save();
+
+        return response()->noContent();
     }
 }
