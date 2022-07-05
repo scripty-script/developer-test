@@ -2,22 +2,24 @@
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 import { ref } from "vue";
 import { useProductStore } from '@/stores/products'
-const products = useProductStore();
 
+const products = useProductStore();
 const emit = defineEmits(['close', 'submit']);
-const { show, pid } = defineProps({ show: Boolean, pid: Number });
+const props = defineProps(['show', 'pid']);
 
 const alert = ref({ message: undefined, type: undefined });
 
+
 const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-        const res = await fetch(`http:localhost:8000/api/products/${pid}`, {
+        const res = await fetch(`http://localhost:8000/api/products/${props.pid}`, {
             method: 'DELETE'
         });
 
         if (res.ok) {
-            products.remove(pid);
+            products.remove(props.pid);
             emit('close', true);
         } else {
             throw new Error(res.status);
@@ -31,7 +33,7 @@ const handleSubmit = async (e) => {
 
 
 <template>
-    <TransitionRoot appear :show="show" as="template">
+    <TransitionRoot appear :show="props.show" as="template">
         <Dialog as="div" @close="emit('close', true)" class="relative z-10">
             <TransitionChild as="template" enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100"
                 leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">

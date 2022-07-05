@@ -6,7 +6,7 @@ import { useProductStore } from '@/stores/products'
 const products = useProductStore();
 
 const emit = defineEmits(['close']);
-const { show } = defineProps({ show: Boolean });
+const props = defineProps(['show']);
 
 const alert = ref({ message: undefined, type: undefined });
 
@@ -41,7 +41,7 @@ const handleSubmit = async (e) => {
 
 
 <template>
-    <TransitionRoot appear :show="show" as="template">
+    <TransitionRoot appear :show="props.show" as="template">
         <Dialog as="div" @close="emit('close', true)" class="relative z-10">
             <TransitionChild as="template" enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100"
                 leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
