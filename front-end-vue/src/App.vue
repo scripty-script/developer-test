@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useProductStore } from '@/stores/products'
 import ProductTable from './components/ProductTable.vue'
 import InsertProduct from './components/modals/InsertProduct.vue'
+import UpdateProduct from './components/modals/UpdateProduct.vue'
 import DeleteProduct from './components/modals/DeleteProduct.vue'
 
 import { useCategoryStore } from '@/stores/category'
@@ -10,9 +11,8 @@ import { useCategoryStore } from '@/stores/category'
 const modalRef = ref({
     isOpen: false,
     sub: undefined,
+    data: null
 });
-
-const dataRef = ref({ data: null });
 
 const MODAL_SUB = {
     INSERT: "INSERT",
@@ -23,12 +23,13 @@ const MODAL_SUB = {
 const openModal = (sub, data = null) => {
     modalRef.value.isOpen = true;
     modalRef.value.sub = sub;
-    dataRef.value.data = data;
+    modalRef.value.data = data;
 }
 
 const closeModal = () => {
     modalRef.value.isOpen = false;
     modalRef.value.sub = undefined;
+    modalRef.value.data = null;
 }
 
 const products = useProductStore();
@@ -81,12 +82,15 @@ onMounted(() => {
                         <button class="btn-fill" @click="() => { openModal(MODAL_SUB.INSERT); }">New</button>
                     </div>
                 </div>
-                <ProductTable :products="products.state" @onDelete="(e) => { openModal(MODAL_SUB.DELETE, e);  }" />
+                <ProductTable :products="products.state" @onDelete="(e) => { openModal(MODAL_SUB.DELETE, e); }"
+                    @onUpdate="(e) => { openModal(MODAL_SUB.UPDATE, e); }" />
             </div>
         </section>
     </main>
 
     <InsertProduct :show="modalRef.isOpen && modalRef.sub === MODAL_SUB.INSERT" @close="closeModal" />
-    <DeleteProduct :show="modalRef.isOpen && modalRef.sub === MODAL_SUB.DELETE" :pid="dataRef.data"
+    <UpdateProduct :show="modalRef.isOpen && modalRef.sub === MODAL_SUB.UPDATE" :product="modalRef.data"
+        @close="closeModal" />
+    <DeleteProduct :show="modalRef.isOpen && modalRef.sub === MODAL_SUB.DELETE" :pid="modalRef.data"
         @close="closeModal" />
 </template>
