@@ -26,7 +26,6 @@ const handleSubmit = async (e) => {
             products.update(data.data);
             alert.value.message = data.message;
             alert.value.type = "SUCCESS";
-            e.target.reset();
         } else if (res.status === 400) {
             alert.value.message = await res.json();
             alert.value.type = "ERROR";
