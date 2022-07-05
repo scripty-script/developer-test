@@ -8,6 +8,11 @@ const props = defineProps([
     'name', 'description', 'price', 'qty', 'category'
 ]);
 
+const name = ref(props.name);
+const description = ref(props.description);
+const price = ref(props.price);
+const qty = ref(props.price);
+
 const categories = useCategoryStore();
 const selected = ref(props.category);
 </script>
@@ -17,23 +22,23 @@ const selected = ref(props.category);
         <div>
             <label for="name" class="block font-medium text-gray-700">Name</label>
             <input type="text" name="name" id="name" class="mt-1 block shadow-sm w-full rounded-md capitalize"
-                v-model="props.name" required>
+                v-model="name" required>
         </div>
         <div>
             <label for="description" class="block font-medium text-gray-700">Description</label>
             <textarea name="description" id="description" class="mt-1 block shadow-sm w-full rounded-md min-h-min h-36"
-                v-model="props.description" required></textarea>
+                v-model="description" required></textarea>
         </div>
         <div class="grid grid-cols-2 gap-5">
             <div>
                 <label for="price" class="block font-medium text-gray-700">Price</label>
                 <input type="number" name="price" id="price" class="mt-1 block shadow-sm w-full rounded-md capitalize"
-                    v-model="props.price" required>
+                    v-model="price" required>
             </div>
             <div>
                 <label for="qty" class="block font-medium text-gray-700">Qty</label>
                 <input type="number" name="qty" id="qty" class="mt-1 block shadow-sm w-full rounded-md capitalize"
-                    v-model="props.qty" required />
+                    v-model="qty" required />
             </div>
         </div>
         <!-- category starts here -->
