@@ -3,7 +3,7 @@ const { products } = defineProps({
     products: Array
 })
 
-const emit = defineEmits(['onDelete']);
+const emit = defineEmits(['onDelete', 'onUpdate']);
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const emit = defineEmits(['onDelete']);
                 </tr>
             </thead>
             <tbody>
-                <template v-for="({ id, name, description, price, qty, category }) in products">
+                <template v-for="({ id, name, description, price, qty, category }, i) in products">
                     <tr>
                         <td class="p-2 pl-4">{{ id }}</td>
                         <td class="p-2">{{ name }}</td>
@@ -30,8 +30,10 @@ const emit = defineEmits(['onDelete']);
                         <td class="p-2">{{ qty }}</td>
                         <td class="p-2">{{ category.name }}</td>
                         <td class="p-2 pr-4 space-x-4">
-                            <button class="text-sky-700 font-medium text-sm" tabindex="-1">Edit</button>
-                            <button class="text-red-700 font-medium text-sm" tabindex="-1" @click="emit('onDelete', id)">Delete</button>
+                            <button class="text-sky-700 font-medium text-sm" tabindex="-1"
+                                @click="emit('onUpdate', products[i])">Edit</button>
+                            <button class="text-red-700 font-medium text-sm" tabindex="-1"
+                                @click="emit('onDelete', id)">Delete</button>
                         </td>
                     </tr>
                 </template>
