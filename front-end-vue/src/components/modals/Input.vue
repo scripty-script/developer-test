@@ -4,12 +4,12 @@ import { ref } from 'vue'
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption, } from '@headlessui/vue'
 import { useCategoryStore } from '@/stores/category'
 
-const { name, description, price, qty, category_id } = defineProps({
-    name: String, description: String, price: String, qty: String, category_id: String
-});
+const props = defineProps([
+    'name', 'description', 'price', 'qty', 'category'
+]);
 
 const categories = useCategoryStore();
-const selected = ref(undefined);
+const selected = ref(props.category);
 </script>
 
 <template>
@@ -17,23 +17,23 @@ const selected = ref(undefined);
         <div>
             <label for="name" class="block font-medium text-gray-700">Name</label>
             <input type="text" name="name" id="name" class="mt-1 block shadow-sm w-full rounded-md capitalize"
-                v-model="name" required>
+                v-model="props.name" required>
         </div>
         <div>
             <label for="description" class="block font-medium text-gray-700">Description</label>
             <textarea name="description" id="description" class="mt-1 block shadow-sm w-full rounded-md min-h-min h-36"
-                v-model="description" required></textarea>
+                v-model="props.description" required></textarea>
         </div>
         <div class="grid grid-cols-2 gap-5">
             <div>
                 <label for="price" class="block font-medium text-gray-700">Price</label>
                 <input type="number" name="price" id="price" class="mt-1 block shadow-sm w-full rounded-md capitalize"
-                    v-model="price" required>
+                    v-model="props.price" required>
             </div>
             <div>
                 <label for="qty" class="block font-medium text-gray-700">Qty</label>
                 <input type="number" name="qty" id="qty" class="mt-1 block shadow-sm w-full rounded-md capitalize"
-                    v-model="qty" required />
+                    v-model="props.qty" required />
             </div>
         </div>
         <!-- category starts here -->
@@ -61,8 +61,8 @@ const selected = ref(undefined);
                         leave-to-class="opacity-0">
                         <ListboxOptions
                             class="absolute w-full py-1 mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 text-sm focus:outline-none">
-                            <ListboxOption v-slot="{ active, selected }" v-for="category in categories.state" :key="name"
-                                :value="category" as="template">
+                            <ListboxOption v-slot="{ active, selected }" v-for="category in categories.state"
+                                :key="name" :value="category" as="template">
                                 <li :class="[
                                     active ? 'bg-sky-200' : '',
                                     'relative cursor-default select-none py-2 pl-10 pr-4',
