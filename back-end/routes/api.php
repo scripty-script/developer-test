@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,10 +16,13 @@ use App\Http\Controllers\CategoryController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-/*
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-*/
-Route::resource('products', ProductController::class)->except(['create', 'edit']);
-Route::resource('categories', CategoryController::class)->except(['create', 'edit']);
+
+Route::resource('products', ProductController::class)->except(['create', 'edit'])->middleware('auth:sanctum');
+Route::resource('categories', CategoryController::class)->except(['create', 'edit'])->middleware('auth:sanctum');
+
+Route::post('/login', LoginController::class);
+Route::post('/logout', LogoutController::class);
