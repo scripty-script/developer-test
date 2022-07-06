@@ -15,8 +15,22 @@ const handleSubmit = async (e) => {
     const data = new FormData(e.target);
 
     try {
+        const xsrf = await (async () => {
+            const res = await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+                credentials: 'include'
+            });
+            if (res.ok) {
+                return document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('XSRF-TOKEN='))
+                    ?.split('=')[1];
+            }
+        })();
+
         const res = await fetch('http://localhost:8000/api/products', {
+            credentials: 'include',
             method: 'POST',
+            headers: { 'X-XSRF-TOKEN': decodeURIComponent(xsrf) },
             body: data
         });
 
