@@ -48,7 +48,7 @@ const loadProducts = async (query = undefined || '', filter = undefined) => {
     try {
         let url = 'http://localhost:8000/api/products';
         const params = new URLSearchParams();
-
+    
         if (query !== undefined && query !== '') {
             params.append('q', query);
         }
@@ -59,7 +59,10 @@ const loadProducts = async (query = undefined || '', filter = undefined) => {
 
         url += '?' + params.toString();
 
-        const res = await fetch(url);
+        const res = await fetch(url, {
+            credentials: 'include'
+        });
+
         if (res.ok) {
             const data = await res.json();
             products.reset(data);
@@ -74,7 +77,9 @@ onMounted(() => {
     loadProducts();
     (async () => {
         try {
-            const res = await fetch('http://localhost:8000/api/categories');
+            const res = await fetch('http://localhost:8000/api/categories',{
+                credentials: 'include'
+            });
             if (res.ok) {
                 const data = await res.json();
                 categories.reset(data);
