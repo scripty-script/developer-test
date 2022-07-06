@@ -43,6 +43,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        /*
         $this->renderable(function (Throwable $e, $req) {
             if ($e instanceof MethodNotAllowedHttpException){
                 return response()->json(['message' => 'Method Not Allowed' ], 405);
@@ -64,5 +65,6 @@ class Handler extends ExceptionHandler
 
             return response()->json(['message' => 'Something went wrong!'], 500);
         });
+        */
     }
 }
