@@ -11,7 +11,7 @@ const props = defineProps([
 const name = ref(props.name);
 const description = ref(props.description);
 const price = ref(props.price);
-const qty = ref(props.price);
+const qty = ref(props.qty);
 
 const categories = useCategoryStore();
 const selected = ref(props.category);
