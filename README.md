@@ -1,5 +1,5 @@
 # developer-test
-Developer Test using React and Laravel
+Developer Test using Vue js and Laravel
 
 # Back-end Installation
 
