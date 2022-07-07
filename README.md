@@ -35,5 +35,5 @@ docker-compose up -d
 ```
 3. go to cli of web container and run migration and seed.
 ```
-php artisan migration --seed
+php artisan migrate --seed
 ```
