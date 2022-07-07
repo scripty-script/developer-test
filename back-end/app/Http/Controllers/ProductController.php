@@ -27,7 +27,6 @@ class ProductController extends Controller
                     Products::with('category')
                     ->where([
                         ['qty', '<=', 0], 
-                        ['isDeleted', false],
                         ['name', 'like', '%'.$q.'%']
                     ])
                     ->orWhere('description', 'like', '%'.$q.'%')
@@ -40,7 +39,6 @@ class ProductController extends Controller
             return response()->json(
                     Products::with('category')
                     ->where([
-                        ['isDeleted', false],
                         ['name', 'like', '%'.$q.'%']
                     ])
                     ->orWhere('description', 'like', '%'.$q.'%')
@@ -53,14 +51,12 @@ class ProductController extends Controller
         if($filter === 'no-stock'){
             return response()->json(
                 Products::with('category')
-                ->where([
-                    ['qty', '<=', 0], 
-                    ['isDeleted', false]
-                ])->get()
+                ->where(['qty', '<=', 0 ])
+                ->get()
             );
         }
 
-        return response()->json(Products::with('category')->where('isDeleted', false)->get());
+        return response()->json(Products::with('category')->get());
     }
 
     /**
@@ -104,7 +100,7 @@ class ProductController extends Controller
         ]);
 
         $product->save();
-        //$product = Products::find($product->id)->with('category')->get();
+        
         return response()->json(['message'=>'Product has been added!', 'data'=>$product->load('category')], 201);
     }
 
@@ -118,10 +114,8 @@ class ProductController extends Controller
     {
        
         $product =  Products::with('category')
-                        ->where([
-                            ['id', '=', $id], 
-                            ['isDeleted', false],
-                        ])->first();
+                        ->where(['id', '=', $id])
+                        ->first();
 
         //check if null
         if ($product == null){
@@ -195,9 +189,8 @@ class ProductController extends Controller
         if ($product == null){
             return  response()->json([ 'message' => 'No product found'], 404);
         }
-
-        $product->isDeleted = true;
-        $product->save();
+        
+        $product->delete();
 
         return response()->noContent();
     }

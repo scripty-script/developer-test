@@ -21,8 +21,8 @@ return new class extends Migration
             $table->double('price');
             $table->integer('qty');
             $table->foreignId('category_id')->constrained('category');
-            $table->boolean('isDeleted')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
