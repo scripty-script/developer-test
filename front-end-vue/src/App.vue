@@ -46,7 +46,7 @@ const searchHandler = (e) => {
 
 const loadProducts = async (query = undefined || '', filter = undefined) => {
     try {
-        let url = 'http://localhost:8000/api/products';
+        let url = `${process.env.API_HOST || ''}/api/products`;
         const params = new URLSearchParams();
     
         if (query !== undefined && query !== '') {
@@ -77,7 +77,7 @@ onMounted(() => {
     loadProducts();
     (async () => {
         try {
-            const res = await fetch('http://localhost:8000/api/categories',{
+            const res = await fetch(`${process.env.API_HOST || ''}/api/categories`,{
                 credentials: 'include'
             });
             if (res.ok) {

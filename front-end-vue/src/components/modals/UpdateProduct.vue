@@ -17,7 +17,7 @@ const handleSubmit = async (e) => {
 
     try {
          const xsrf = await (async () => {
-            const res = await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+            const res = await fetch(`${process.env.API_HOST || ''}/sanctum/csrf-cookie`, {
                 credentials: 'include'
             });
             if (res.ok) {
@@ -28,7 +28,7 @@ const handleSubmit = async (e) => {
             }
         })();
 
-        const res = await fetch(`http://localhost:8000/api/products/${props.product.id}?_method=PUT`, {
+        const res = await fetch(`${process.env.API_HOST || ''}/api/products/${props.product.id}?_method=PUT`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'X-XSRF-TOKEN': decodeURIComponent(xsrf) },
