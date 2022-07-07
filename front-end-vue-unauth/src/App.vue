@@ -9,7 +9,7 @@ const submitHandler = async (e) => {
     e.preventDefault();
     try {
         const xsrf = await (async () => {
-            const res = await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+            const res = await fetch(`${process.env.API_HOST || ''}/sanctum/csrf-cookie`, {
                 credentials: 'include'
             });
             if (res.ok) {
@@ -20,7 +20,7 @@ const submitHandler = async (e) => {
             }
         })();
 
-        const res = await fetch('http://localhost:8000/api/login', {
+        const res = await fetch(`${process.env.API_HOST || ''}/api/login`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'X-XSRF-TOKEN': decodeURIComponent(xsrf) },
