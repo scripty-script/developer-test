@@ -17,17 +17,12 @@ make a copy of .env.example
 3. Migrate and Seed
 
 ```
-$ php artisan migrate:fresh --seed
+$ php artisan migrate --seed
 ```
 
 ### Resource end-point
 The resource end-point are <http://localhost:8000/api/products> and <http://localhost:8000/api/categories>
 For searching for a product, add <code>q</code> query param. For filtering, add <code>filter=no-stock</code>.
-
-
-### Note
-All internal server will display <code>{'message': 'Something went wrong!'}</code>, to trace the error you need to present and <code>dev</code> token in query params, 
-for ex <http://localhost:8000/api/products?dev=12344>. By default the dev key is <code>b39c7e3552e0cc956243719a01150eb5b75675c38ee312e36def6eb06cac7e10</code>
 
 ## Using docker
 1. Create and setup .env.production file
